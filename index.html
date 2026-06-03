@@ -84,6 +84,12 @@
         .profile-stats { display: grid; gap: 12px; margin-top: 12px; }
         .profile-stat { display: flex; justify-content: space-between; color: var(--muted); font-size: 13px; }
         .profile-stat strong { color: var(--text); }
+        .packing-list { list-style: disc inside; color: var(--text); margin-top: 8px; padding-left: 18px; }
+        .packing-list li { margin-bottom: 8px; line-height: 1.5; }
+        .trail-activity { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; margin-top: 12px; }
+        .photo-preview { margin-top: 14px; border-radius: 16px; padding: 12px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); }
+        .photo-preview img { width: 100%; border-radius: 14px; display: block; }
+        .photo-preview p { color: var(--muted); font-size: 12px; margin-top: 10px; }
         .map-overlay { position: absolute; left: 18px; top: 18px; z-index: 400; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; width: calc(100% - 36px); max-width: 760px; pointer-events: none; }
         .stat-card { min-height: 76px; padding: 14px 16px; background: rgba(15, 23, 42, 0.92); border: 1px solid rgba(255,255,255,0.06); border-radius: 18px; box-shadow: 0 20px 40px rgba(0,0,0,0.18); }
         .stat-card strong { display: block; font-size: 20px; font-weight: 800; margin-bottom: 6px; }
@@ -158,14 +164,17 @@
                     <div class="explore-section"><h3>🔎 Search</h3><input id="peak-search" class="peak-search" type="search" placeholder="Search peak by name"></div>
                     <div class="explore-section"><h3>⬆️ Elevation</h3><div class="slider-labels"><span id="elev-min">1000m</span><span id="elev-max">8000m</span></div><input id="elev-min-slider" class="range-slider" type="range" min="0" max="8000" value="1000"><input id="elev-max-slider" class="range-slider" type="range" min="0" max="8000" value="8000"></div>
                     <div class="explore-section"><h3>💪 Difficulty</h3><div class="quick-filters"><button class="filter-btn active" data-difficulty="">All</button><button class="filter-btn" data-difficulty="Easy">Easy</button><button class="filter-btn" data-difficulty="Moderate">Moderate</button><button class="filter-btn" data-difficulty="Difficult">Difficult</button><button class="filter-btn" data-difficulty="Extreme">Extreme</button></div></div>
+                    <div class="explore-section"><h3>🎒 What to carry</h3><ul id="packing-list" class="packing-list"><li>Loading suggestions...</li></ul></div>
                     <div class="explore-section"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;"><h3>🏔️ Peaks</h3><button class="btn-secondary" id="reset-filters">Reset filters</button></div><div class="peaks-list" id="peaks-list"><div class="loading"><span class="spinner"></span>Loading peaks...</div></div></div>
                 </div>
             </div>
             <div class="tab-content" id="trail-tab">
                 <div style="display:flex;flex-direction:column;height:100%;gap:0;">
                     <div class="trail-controls">
-                        <div class="trail-buttons"><button class="btn-primary" id="draw-trail-btn">🖊️ Draw</button><button class="btn-secondary" id="clear-trail-btn">🗑️ Clear</button></div>
+                        <div class="trail-buttons"><button class="btn-primary" id="draw-trail-btn">🖊️ Draw</button><button class="btn-secondary" id="clear-trail-btn">🗑️ Clear</button><button class="btn-secondary" id="finish-trail-btn">🏁 Finish</button><button class="btn-secondary" id="upload-photo-btn">📸 Add photo</button><input type="file" accept="image/*" id="trail-photo-input" hidden></div>
                         <div class="trail-info"><div class="trail-info-item"><div class="trail-info-label">Distance</div><div class="trail-info-value" id="trail-distance">0 km</div></div><div class="trail-info-item"><div class="trail-info-label">Elevation</div><div class="trail-info-value" id="trail-elevation">0 m</div></div><div class="trail-info-item"><div class="trail-info-label">Difficulty</div><div class="trail-info-value" id="trail-difficulty">-</div></div></div>
+                        <div class="trail-activity"><div class="trail-info-item"><div class="trail-info-label">Start time</div><div class="trail-info-value" id="trail-start">-</div></div><div class="trail-info-item"><div class="trail-info-label">End time</div><div class="trail-info-value" id="trail-end">-</div></div><div class="trail-info-item"><div class="trail-info-label">Duration</div><div class="trail-info-value" id="trail-duration">-</div></div></div>
+                        <div id="trail-photo-preview" class="photo-preview" hidden></div>
                     </div>
                     <div id="map-trail" style="flex:1;"></div>
                 </div>
@@ -178,8 +187,8 @@
                     <div class="profile-card">
                         <div class="profile-card-header"><div class="profile-avatar">👤</div><div><div id="profile-name" style="font-weight:700;font-size:16px;">Guest Explorer</div><div id="profile-email" style="font-size:12px;color:var(--muted);">Sign in to save trails</div></div></div>
                         <button class="btn-primary" id="login-btn" style="width:100%;">Sign in with Google</button>
-                        <div class="profile-stats"><div class="profile-stat"><span>Peaks loaded</span><strong id="profile-peak-count">0</strong></div><div class="profile-stat"><span>Map status</span><strong id="profile-map-status">Initializing</strong></div><div class="profile-stat"><span>Active district</span><strong id="profile-active-district">All</strong></div></div>
-                        <div style="display:grid;gap:12px;margin-top:16px;"><button class="btn-secondary" id="focus-top-btn">Show highest peak</button><button class="btn-secondary" id="theme-btn">Toggle theme</button></div>
+                        <div class="profile-stats"><div class="profile-stat"><span>Peaks loaded</span><strong id="profile-peak-count">0</strong></div><div class="profile-stat"><span>Map status</span><strong id="profile-map-status">Initializing</strong></div><div class="profile-stat"><span>Active district</span><strong id="profile-active-district">All</strong></div><div class="profile-stat"><span>GPS active</span><strong id="profile-gps-time">0s</strong></div><div class="profile-stat"><span>Share location</span><strong id="profile-share-status">Off</strong></div></div>
+                        <div style="display:grid;gap:12px;margin-top:16px;"><button class="btn-secondary" id="focus-top-btn">Show highest peak</button><button class="btn-secondary" id="theme-btn">Toggle theme</button><button class="btn-secondary" id="toggle-share-btn">Share location</button></div>
                     </div>
                 </div>
             </div>
@@ -195,6 +204,7 @@
                 this.peakMarkers = [];
                 this.trailPoints = [];
                 this.trailLayers = [];
+                this.photoMarkers = [];
                 this.peaksData = [];
                 this.currentDistrict = '';
                 this.currentDifficulty = '';
@@ -203,6 +213,11 @@
                 this.elevationMax = 8000;
                 this.isDrawingTrail = false;
                 this.selectedPeak = null;
+                this.trailStartTime = null;
+                this.trailEndTime = null;
+                this.gpsActiveSeconds = 0;
+                this.gpsTimer = null;
+                this.isLocationSharing = false;
                 this.init();
             }
             async init() {
@@ -251,11 +266,15 @@
                 });
                 document.getElementById('draw-trail-btn').addEventListener('click', () => this.toggleTrailMode());
                 document.getElementById('clear-trail-btn').addEventListener('click', () => this.clearTrail());
+                document.getElementById('finish-trail-btn').addEventListener('click', () => this.finishTrail());
+                document.getElementById('upload-photo-btn').addEventListener('click', () => document.getElementById('trail-photo-input').click());
+                document.getElementById('trail-photo-input').addEventListener('change', e => this.handlePhotoUpload(e));
                 document.getElementById('gps-btn').addEventListener('click', () => this.centerOnLocation());
                 document.getElementById('dark-btn').addEventListener('click', () => this.toggleTheme());
                 document.getElementById('theme-btn').addEventListener('click', () => this.toggleTheme());
                 document.getElementById('login-btn').addEventListener('click', () => this.showToast('Firebase setup required', 'warning'));
                 document.getElementById('focus-top-btn').addEventListener('click', () => this.focusTopPeak());
+                document.getElementById('toggle-share-btn').addEventListener('click', () => this.toggleLocationSharing());
             }
             initMaps() {
                 console.log('[Trek] Init maps');
@@ -432,14 +451,25 @@
                     try { this.mapTrail.removeLayer(l); } catch (e) {}
                 });
                 this.trailLayers = [];
+                this.trailStartTime = null;
+                this.trailEndTime = null;
+                document.getElementById('trail-start').textContent = '-';
+                document.getElementById('trail-end').textContent = '-';
+                document.getElementById('trail-duration').textContent = '-';
+                document.getElementById('trail-photo-preview').hidden = true;
                 this.updateTrailStats();
-                this.showToast('Trail cleared');
+                this.showToast('Trail cleared', 'success');
             }
             toggleTrailMode() {
                 this.isDrawingTrail = !this.isDrawingTrail;
                 const btn = document.getElementById('draw-trail-btn');
                 btn.classList.toggle('active');
-                this.showToast(this.isDrawingTrail ? 'Tap map to add points' : 'Drawing disabled', 'success');
+                if (this.isDrawingTrail && !this.trailStartTime) {
+                    this.trailStartTime = new Date();
+                    document.getElementById('trail-start').textContent = this.trailStartTime.toLocaleTimeString();
+                }
+                this.updateTrailActivity();
+                this.showToast(this.isDrawingTrail ? 'Trail recording started. Tap map to add points.' : 'Trail recording paused.', 'success');
             }
             updateTrailStats() {
                 let dist = 0;
@@ -449,6 +479,18 @@
                 document.getElementById('trail-distance').textContent = `${(dist / 1000).toFixed(2)}km`;
                 document.getElementById('trail-elevation').textContent = `${Math.max(0, Math.round(dist * 0.02))}m`;
                 document.getElementById('trail-difficulty').textContent = dist > 20000 ? 'Extreme' : dist > 12000 ? 'Difficult' : dist > 5000 ? 'Moderate' : '-';
+                this.updateTrailActivity();
+            }
+            updateTrailActivity() {
+                if (this.trailStartTime) {
+                    document.getElementById('trail-start').textContent = this.trailStartTime.toLocaleTimeString();
+                }
+                if (this.trailEndTime) {
+                    document.getElementById('trail-end').textContent = this.trailEndTime.toLocaleTimeString();
+                    document.getElementById('trail-duration').textContent = this.getDurationText(this.trailStartTime, this.trailEndTime);
+                } else if (this.trailStartTime) {
+                    document.getElementById('trail-duration').textContent = this.getDurationText(this.trailStartTime, new Date());
+                }
             }
             loadLeaderboard() {
                 const topPeaks = this.peaksData.slice().sort((a, b) => b.elevation - a.elevation).slice(0, 5);
@@ -465,6 +507,9 @@
                 document.getElementById('profile-peak-count').textContent = this.peaksData.length;
                 document.getElementById('profile-map-status').textContent = this.map ? 'Ready' : 'Loading';
                 document.getElementById('profile-active-district').textContent = this.currentDistrict || 'All';
+                document.getElementById('profile-gps-time').textContent = `${this.gpsActiveSeconds}s`;
+                document.getElementById('profile-share-status').textContent = this.isLocationSharing ? 'On' : 'Off';
+                this.renderPackingList();
             }
             centerOnLocation() {
                 if (!navigator.geolocation) {
@@ -474,7 +519,81 @@
                 navigator.geolocation.getCurrentPosition(pos => {
                     if (this.map) this.map.flyTo([pos.coords.latitude, pos.coords.longitude], 13);
                     this.showToast('Location found', 'success');
-                }, () => this.showToast('Permission denied', 'error'));
+                    this.startGpsTimer();
+                }, () => this.showToast('Permission denied or GPS off', 'error'));
+            }
+            startGpsTimer() {
+                if (this.gpsTimer) return;
+                this.gpsTimer = setInterval(() => {
+                    this.gpsActiveSeconds += 1;
+                    document.getElementById('profile-gps-time').textContent = `${this.gpsActiveSeconds}s`;
+                }, 1000);
+            }
+            stopGpsTimer() {
+                if (this.gpsTimer) {
+                    clearInterval(this.gpsTimer);
+                    this.gpsTimer = null;
+                }
+            }
+            finishTrail() {
+                if (!this.trailPoints.length) {
+                    this.showToast('Start a trail before finishing', 'warning');
+                    return;
+                }
+                this.trailEndTime = new Date();
+                if (!this.trailStartTime) this.trailStartTime = new Date();
+                const duration = this.getDurationText(this.trailStartTime, this.trailEndTime);
+                document.getElementById('trail-end').textContent = this.trailEndTime.toLocaleTimeString();
+                document.getElementById('trail-duration').textContent = duration;
+                this.showToast(`Trail completed in ${duration}`, 'success');
+                this.updateTrailActivity();
+            }
+            handlePhotoUpload(event) {
+                const file = event.target.files[0];
+                if (!file) return;
+                const reader = new FileReader();
+                reader.onload = () => {
+                    const imageUrl = reader.result;
+                    const latlng = this.trailPoints.length ? this.trailPoints[this.trailPoints.length - 1] : (this.mapTrail ? this.mapTrail.getCenter() : null);
+                    if (!latlng) {
+                        this.showToast('Add a trail point first to attach a photo', 'warning');
+                        return;
+                    }
+                    this.addTrailPhotoMarker(latlng, imageUrl, file.name);
+                };
+                reader.readAsDataURL(file);
+            }
+            addTrailPhotoMarker(latlng, imageUrl, label) {
+                const marker = L.marker(latlng).addTo(this.mapTrail);
+                marker.bindPopup(`<div style="max-width:180px;"><strong>${label}</strong><br><img src="${imageUrl}" alt="Trail photo" style="width:100%;border-radius:12px;margin-top:8px;"></div>`);
+                this.photoMarkers.push(marker);
+                document.getElementById('trail-photo-preview').hidden = false;
+                document.getElementById('trail-photo-preview').innerHTML = `<img src="${imageUrl}" alt="Photo preview"><p>Photo added to route. Open the route map marker to view it again.</p>`;
+                this.showToast('Photo attached to trail route', 'success');
+            }
+            toggleLocationSharing() {
+                this.isLocationSharing = !this.isLocationSharing;
+                document.getElementById('profile-share-status').textContent = this.isLocationSharing ? 'On' : 'Off';
+                this.showToast(this.isLocationSharing ? 'Location sharing enabled' : 'Location sharing disabled', 'success');
+            }
+            renderPackingList() {
+                const list = document.getElementById('packing-list');
+                const suggestions = ['Water bottle', 'Warm jacket', 'Snacks', 'Hat and sunglasses', 'First aid kit', 'Trekking shoes'];
+                if (this.currentDifficulty === 'Moderate' || this.currentDifficulty === 'Difficult') {
+                    suggestions.push('Trekking poles', 'Extra warm layers');
+                }
+                if (this.currentDifficulty === 'Extreme') {
+                    suggestions.push('High-altitude gear', 'Emergency shelter', 'Extra batteries');
+                }
+                const filtered = [...new Set(suggestions)].slice(0, 9);
+                list.innerHTML = filtered.map(item => `<li>${item}</li>`).join('');
+            }
+            getDurationText(start, end) {
+                const total = Math.max(0, (end - start) / 1000);
+                const hours = Math.floor(total / 3600);
+                const minutes = Math.floor((total % 3600) / 60);
+                const seconds = Math.floor(total % 60);
+                return `${hours}h ${minutes}m ${seconds}s`;
             }
             switchTab(name) {
                 document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));

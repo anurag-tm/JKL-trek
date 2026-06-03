@@ -1,0 +1,14 @@
+[
+    {
+        "merged": "com.jktrek.explorer.app-merged_res-31:/xml_network_security_config.xml.flat",
+        "source": "com.jktrek.explorer.app-main-33:/xml/network_security_config.xml"
+    },
+    {
+        "merged": "C:\\Users\\anura\\.gradle\\daemon\\8.5\\com.jktrek.explorer.app-merged_res-31:\\xml_network_security_config.xml.flat",
+        "source": "C:\\Users\\anura\\.gradle\\daemon\\8.5\\com.jktrek.explorer.app-main-33:\\xml\\network_security_config.xml"
+    },
+    {
+        "merged": "C:\\Users\\anura\\.gradle\\daemon\\8.5\\com.jktrek.explorer.app-merged_res-31:\\layout_activity_main.xml.flat",
+        "source": "C:\\Users\\anura\\.gradle\\daemon\\8.5\\com.jktrek.explorer.app-main-33:\\layout\\activity_main.xml"
+    }
+]

@@ -33,6 +33,14 @@ Open `http://localhost:8000` in your browser.
 
 Then your app will be available as a GitHub Pages site.
 
+## Android App Wrapper
+
+An Android WebView wrapper is available in the `android-app` folder.
+
+- Open `android-app` in Android Studio.
+- Update `MainActivity.kt` with your published GitHub Pages URL once the site is live.
+- For emulator testing before publishing, the app is configured to load `http://10.0.2.2:8000`.
+
 ## Next step
 
 After publishing the web site, we can build an Android app wrapper that loads the GitHub Pages URL in a WebView.
