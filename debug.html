@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JK Trek Explorer - Debug</title>
+    <style>
+        body { font-family: monospace; background: #0f172a; color: #f1f5f9; padding: 20px; }
+        .status { background: #111827; padding: 15px; border-radius: 8px; margin: 10px 0; border-left: 4px solid #10b981; }
+        .error { border-left-color: #ef4444; }
+        .pending { border-left-color: #f59e0b; }
+        pre { background: #000; padding: 10px; overflow-x: auto; border-radius: 4px; }
+    </style>
+</head>
+<body>
+    <h1>⛰️ JK Trek Explorer - Debug Console</h1>
+    <div id="status-container"></div>
+    <script>
+        function log(message, type = 'info') {
+            const container = document.getElementById('status-container');
+            const div = document.createElement('div');
+            div.className = `status ${type}`;
+            div.textContent = `[${new Date().toLocaleTimeString()}] ${message}`;
+            container.appendChild(div);
+            console.log(message);
+        }
+
+        log('Page loaded. Checking dependencies...', 'pending');
+
+        // Check Leaflet
+        if (typeof L !== 'undefined') {
+            log('✓ Leaflet library loaded', 'info');
+        } else {
+            log('✗ Leaflet not found (missing CDN)', 'error');
+        }
+
+        // Check Firebase
+        if (typeof firebase !== 'undefined') {
+            log('✓ Firebase library loaded', 'info');
+        } else {
+            log('✗ Firebase not found (missing CDN or offline)', 'error');
+        }
+
+        // Check peaks.json
+        fetch('data/peaks.json')
+            .then(r => r.json())
+            .then(data => {
+                log(`✓ Loaded ${data.length} peaks from data/peaks.json`, 'info');
+                const div = document.createElement('div');
+                div.className = 'status';
+                div.innerHTML = '<pre>' + JSON.stringify(data.slice(0, 2), null, 2) + '</pre>';
+                document.getElementById('status-container').appendChild(div);
+            })
+            .catch(err => log(`✗ Cannot load peaks.json: ${err.message}`, 'error'));
+
+        // Check service worker
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.getRegistrations().then(regs => {
+                if (regs.length > 0) {
+                    log(`✓ Service Worker active`, 'info');
+                } else {
+                    log('Service Worker not active yet (will register on next load)', 'pending');
+                }
+            });
+        }
+
+        // Show environment
+        log(`Browser: ${navigator.userAgent.split(' ').slice(-2).join(' ')}`, 'info');
+        log(`Location: ${window.location.href}`, 'info');
+    </script>
+</body>
+</html>

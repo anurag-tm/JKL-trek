@@ -1,0 +1,1589 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#000000">
+    <meta name="description" content="JK Trek Explorer - Discover mountain peaks and plan treks in Jammu & Kashmir and Ladakh">
+    
+    <title>JK Trek Explorer</title>
+    <link rel="manifest" href="manifest.json">
+    <link rel="icon" type="image/png" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⛰️</text></svg>">
+    
+    <!-- Leaflet Maps -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+    
+    <!-- Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/10.5.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.5.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.5.0/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.5.0/firebase-storage.js"></script>
+    
+    <!-- SQLite for offline database -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.8.0/sql-wasm.min.js"></script>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        :root {
+            --primary: #0f172a;
+            --secondary: #1e293b;
+            --accent: #10b981;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+            --success: #10b981;
+            --text: #f1f5f9;
+            --text-muted: #cbd5e1;
+            --border: #334155;
+            --elevation-easy: #22c55e;
+            --elevation-moderate: #eab308;
+            --elevation-difficult: #f97316;
+            --elevation-extreme: #dc2626;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--primary);
+            color: var(--text);
+            overflow: hidden;
+            height: 100vh;
+        }
+        
+        html, body {
+            width: 100%;
+            height: 100%;
+        }
+        
+        /* Main Container */
+        .app-container {
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            background: var(--primary);
+        }
+        
+        .header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            padding: 12px 16px;
+            border-bottom: 1px solid var(--border);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+            z-index: 100;
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 100%;
+        }
+        
+        .header h1 {
+            font-size: 18px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .header-actions {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+        
+        .btn-icon {
+            background: var(--secondary);
+            border: 1px solid var(--border);
+            color: var(--text);
+            width: 36px;
+            height: 36px;
+            border-radius: 6px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            transition: all 0.2s;
+        }
+        
+        .btn-icon:hover {
+            background: var(--accent);
+            border-color: var(--accent);
+        }
+        
+        .btn-icon.active {
+            background: var(--accent);
+            border-color: var(--accent);
+        }
+        
+        /* Tabs */
+        .tabs {
+            display: flex;
+            border-bottom: 1px solid var(--border);
+            background: var(--secondary);
+            padding: 0;
+            gap: 0;
+        }
+        
+        .tab-btn {
+            flex: 1;
+            padding: 12px 8px;
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 600;
+            border-bottom: 2px solid transparent;
+            transition: all 0.3s;
+            text-align: center;
+        }
+        
+        .tab-btn:hover {
+            color: var(--text);
+            background: rgba(16, 185, 129, 0.05);
+        }
+        
+        .tab-btn.active {
+            color: var(--accent);
+            border-bottom-color: var(--accent);
+            background: rgba(16, 185, 129, 0.1);
+        }
+        
+        /* Content Area */
+        .content {
+            flex: 1;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .tab-content {
+            display: none;
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            animation: fadeIn 0.3s;
+        }
+        
+        .tab-content.active {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        /* Map */
+        #map {
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+        
+        .leaflet-control {
+            background: var(--secondary) !important;
+            border: 1px solid var(--border) !important;
+            border-radius: 6px !important;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.3) !important;
+        }
+        
+        .leaflet-control a {
+            color: var(--accent) !important;
+        }
+        
+        .leaflet-control-attribution {
+            background: rgba(15, 23, 42, 0.9) !important;
+            font-size: 11px !important;
+        }
+        
+        /* Explore Tab */
+        .explore-container {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            padding: 12px;
+            overflow-y: auto;
+            height: 100%;
+        }
+        
+        .explore-section {
+            background: var(--secondary);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 12px;
+        }
+        
+        .explore-section h3 {
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--accent);
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .district-select {
+            width: 100%;
+            padding: 8px;
+            background: var(--primary);
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            color: var(--text);
+            font-size: 13px;
+        }
+        
+        .district-select:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.2);
+        }
+        
+        .slider-container {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        
+        .slider-labels {
+            display: flex;
+            justify-content: space-between;
+            font-size: 11px;
+            color: var(--text-muted);
+        }
+        
+        .range-slider {
+            width: 100%;
+            height: 5px;
+            background: var(--primary);
+            border-radius: 3px;
+            outline: none;
+            -webkit-appearance: none;
+        }
+        
+        .range-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 18px;
+            height: 18px;
+            background: var(--accent);
+            cursor: pointer;
+            border-radius: 50%;
+            border: 2px solid var(--primary);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .range-slider::-moz-range-thumb {
+            width: 18px;
+            height: 18px;
+            background: var(--accent);
+            cursor: pointer;
+            border-radius: 50%;
+            border: 2px solid var(--primary);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .quick-filters {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+        }
+        
+        .filter-btn {
+            padding: 8px;
+            background: var(--primary);
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            color: var(--text);
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-align: center;
+            font-weight: 600;
+        }
+        
+        .filter-btn:hover {
+            border-color: var(--accent);
+            background: rgba(16, 185, 129, 0.1);
+        }
+        
+        .filter-btn.active {
+            background: var(--accent);
+            color: var(--primary);
+            border-color: var(--accent);
+        }
+        
+        .peaks-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        
+        .peak-card {
+            background: var(--primary);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 10px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .peak-card:hover {
+            border-color: var(--accent);
+            background: rgba(16, 185, 129, 0.05);
+            transform: translateX(4px);
+        }
+        
+        .peak-card-title {
+            font-weight: 700;
+            font-size: 13px;
+            color: var(--accent);
+            margin-bottom: 4px;
+        }
+        
+        .peak-card-info {
+            display: flex;
+            justify-content: space-between;
+            font-size: 11px;
+            color: var(--text-muted);
+        }
+        
+        .peak-elevation {
+            font-weight: 700;
+            color: var(--text);
+        }
+        
+        /* Trail Tab */
+        .trail-controls {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            padding: 12px;
+            border-bottom: 1px solid var(--border);
+            background: var(--secondary);
+        }
+        
+        .trail-buttons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+        }
+        
+        .btn-primary {
+            padding: 10px 12px;
+            background: var(--accent);
+            border: none;
+            border-radius: 6px;
+            color: var(--primary);
+            font-weight: 700;
+            cursor: pointer;
+            font-size: 12px;
+            transition: all 0.2s;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+        }
+        
+        .btn-secondary {
+            padding: 10px 12px;
+            background: var(--secondary);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            color: var(--text);
+            font-weight: 700;
+            cursor: pointer;
+            font-size: 12px;
+            transition: all 0.2s;
+        }
+        
+        .btn-secondary:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+        
+        .trail-info {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 8px;
+            padding: 8px;
+            background: var(--primary);
+            border-radius: 4px;
+            font-size: 11px;
+            text-align: center;
+        }
+        
+        .trail-info-item {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+        
+        .trail-info-label {
+            color: var(--text-muted);
+            font-size: 10px;
+        }
+        
+        .trail-info-value {
+            color: var(--accent);
+            font-weight: 700;
+            font-size: 12px;
+        }
+        
+        /* People Tab */
+        .people-container {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            padding: 12px;
+            overflow-y: auto;
+        }
+        
+        .friends-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        
+        .friend-card {
+            background: var(--secondary);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 12px;
+            display: flex;
+            gap: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .friend-card:hover {
+            border-color: var(--accent);
+            background: rgba(16, 185, 129, 0.05);
+        }
+        
+        .friend-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--accent);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 16px;
+            flex-shrink: 0;
+        }
+        
+        .friend-info {
+            flex: 1;
+            min-width: 0;
+        }
+        
+        .friend-name {
+            font-weight: 700;
+            font-size: 13px;
+            color: var(--text);
+            margin-bottom: 2px;
+        }
+        
+        .friend-status {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 11px;
+            color: var(--text-muted);
+        }
+        
+        .online-dot {
+            width: 6px;
+            height: 6px;
+            background: var(--success);
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        
+        /* Summit Tab */
+        .summit-container {
+            display: flex;
+            flex-direction: column;
+            padding: 12px;
+            overflow-y: auto;
+            gap: 12px;
+        }
+        
+        .leaderboard {
+            background: var(--secondary);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        
+        .leaderboard-header {
+            background: linear-gradient(135deg, var(--accent), #059669);
+            padding: 12px;
+            color: var(--primary);
+            font-weight: 700;
+            text-align: center;
+        }
+        
+        .leaderboard-list {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .leaderboard-item {
+            padding: 10px 12px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .leaderboard-item:last-child {
+            border-bottom: none;
+        }
+        
+        .leaderboard-item:hover {
+            background: rgba(16, 185, 129, 0.05);
+        }
+        
+        .leaderboard-rank {
+            font-weight: 700;
+            font-size: 16px;
+            color: var(--accent);
+            width: 30px;
+            text-align: center;
+        }
+        
+        .leaderboard-rank.first {
+            color: #fbbf24;
+            font-size: 18px;
+        }
+        
+        .leaderboard-rank.second {
+            color: #a8a8a8;
+            font-size: 18px;
+        }
+        
+        .leaderboard-rank.third {
+            color: #cd7f32;
+            font-size: 18px;
+        }
+        
+        .leaderboard-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: var(--accent);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 14px;
+            flex-shrink: 0;
+        }
+        
+        .leaderboard-info {
+            flex: 1;
+            min-width: 0;
+        }
+        
+        .leaderboard-name {
+            font-weight: 700;
+            font-size: 12px;
+            color: var(--text);
+        }
+        
+        .leaderboard-elevation {
+            font-weight: 700;
+            color: var(--accent);
+            font-size: 13px;
+        }
+        
+        /* Profile Tab */
+        .profile-container {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            padding: 12px;
+            overflow-y: auto;
+        }
+        
+        .profile-card {
+            background: linear-gradient(135deg, var(--secondary), var(--primary));
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 16px;
+            text-align: center;
+        }
+        
+        .profile-avatar-large {
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            background: var(--accent);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 32px;
+            margin: 0 auto 12px;
+            border: 3px solid var(--accent);
+        }
+        
+        .profile-name {
+            font-weight: 700;
+            font-size: 16px;
+            color: var(--text);
+            margin-bottom: 4px;
+        }
+        
+        .profile-email {
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-bottom: 12px;
+        }
+        
+        .profile-stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 8px;
+            margin-top: 12px;
+        }
+        
+        .stat {
+            background: var(--primary);
+            padding: 8px;
+            border-radius: 4px;
+            border: 1px solid var(--border);
+        }
+        
+        .stat-value {
+            font-weight: 700;
+            font-size: 14px;
+            color: var(--accent);
+        }
+        
+        .stat-label {
+            font-size: 10px;
+            color: var(--text-muted);
+            margin-top: 2px;
+        }
+        
+        /* Modals */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            padding: 16px;
+        }
+        
+        .modal.active {
+            display: flex;
+        }
+        
+        .modal-content {
+            background: var(--secondary);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 20px;
+            max-width: 500px;
+            width: 100%;
+            max-height: 80vh;
+            overflow-y: auto;
+            animation: slideUp 0.3s;
+        }
+        
+        @keyframes slideUp {
+            from {
+                transform: translateY(20px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+        
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+            font-weight: 700;
+            font-size: 16px;
+        }
+        
+        .modal-close {
+            background: none;
+            border: none;
+            color: var(--text);
+            font-size: 24px;
+            cursor: pointer;
+            padding: 0;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .form-group {
+            margin-bottom: 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+        
+        .form-label {
+            font-weight: 700;
+            font-size: 12px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .form-input, .form-textarea {
+            padding: 10px;
+            background: var(--primary);
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            color: var(--text);
+            font-size: 13px;
+            font-family: inherit;
+        }
+        
+        .form-input:focus, .form-textarea:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.2);
+        }
+        
+        .form-textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+        
+        /* Toasts */
+        .toast-container {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 2000;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        
+        .toast {
+            background: var(--secondary);
+            border: 1px solid var(--border);
+            border-left: 4px solid var(--accent);
+            border-radius: 6px;
+            padding: 12px 16px;
+            color: var(--text);
+            font-size: 13px;
+            animation: slideIn 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        @keyframes slideIn {
+            from {
+                transform: translateX(400px);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+        
+        .toast.error {
+            border-left-color: var(--danger);
+        }
+        
+        .toast.success {
+            border-left-color: var(--success);
+        }
+        
+        .toast.warning {
+            border-left-color: var(--warning);
+        }
+        
+        /* Spinner */
+        .spinner {
+            width: 20px;
+            height: 20px;
+            border: 2px solid var(--border);
+            border-top-color: var(--accent);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        /* Loading */
+        .loading {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            gap: 12px;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 16px;
+            }
+            
+            .quick-filters {
+                grid-template-columns: 1fr;
+            }
+            
+            .trail-buttons {
+                grid-template-columns: 1fr;
+            }
+            
+            .profile-stats {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+        
+        /* Dark mode already applied */
+        /* Scrollbar styling */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: var(--primary);
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: var(--border);
+            border-radius: 3px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--accent);
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header -->
+        <div class="header">
+            <div class="header-content">
+                <h1>⛰️ JK Trek Explorer</h1>
+                <div class="header-actions">
+                    <button class="btn-icon" id="gps-btn" title="Enable GPS">📍</button>
+                    <button class="btn-icon" id="dark-mode-btn" title="Dark Mode">🌙</button>
+                    <button class="btn-icon" id="menu-btn" title="Menu">☰</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Tabs -->
+        <div class="tabs">
+            <button class="tab-btn active" data-tab="map">🗺️ Map</button>
+            <button class="tab-btn" data-tab="explore">🔍 Explore</button>
+            <button class="tab-btn" data-tab="trail">🛤️ Trail</button>
+            <button class="tab-btn" data-tab="people">👥 People</button>
+            <button class="tab-btn" data-tab="summit">🏆 Summit</button>
+            <button class="tab-btn" data-tab="profile">👤 Me</button>
+        </div>
+        
+        <!-- Content -->
+        <div class="content">
+            <!-- Map Tab -->
+            <div class="tab-content active" id="map-tab">
+                <div id="map"></div>
+            </div>
+            
+            <!-- Explore Tab -->
+            <div class="tab-content" id="explore-tab">
+                <div class="explore-container">
+                    <div class="explore-section">
+                        <h3>📍 Select District</h3>
+                        <select class="district-select" id="district-select">
+                            <option value="">All Districts</option>
+                        </select>
+                    </div>
+                    
+                    <div class="explore-section">
+                        <h3>⬆️ Elevation Range (meters)</h3>
+                        <div class="slider-container">
+                            <div class="slider-labels">
+                                <span id="elev-min">1000m</span>
+                                <span id="elev-max">8000m</span>
+                            </div>
+                            <input type="range" id="elev-min-slider" class="range-slider" min="0" max="8000" value="1000">
+                            <input type="range" id="elev-max-slider" class="range-slider" min="0" max="8000" value="8000">
+                        </div>
+                    </div>
+                    
+                    <div class="explore-section">
+                        <h3>💪 Difficulty</h3>
+                        <div class="quick-filters">
+                            <button class="filter-btn" data-difficulty="Easy">Easy &lt;2500m</button>
+                            <button class="filter-btn" data-difficulty="Moderate">Moderate 2500-3500m</button>
+                            <button class="filter-btn" data-difficulty="Difficult">Difficult 3500-4500m</button>
+                            <button class="filter-btn" data-difficulty="Extreme">Extreme &gt;4500m</button>
+                        </div>
+                    </div>
+                    
+                    <div class="explore-section">
+                        <h3>🏔️ Top Destinations</h3>
+                        <div class="peaks-list" id="peaks-list">
+                            <div class="loading">
+                                <div class="spinner"></div>
+                                <span>Loading peaks...</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Trail Tab -->
+            <div class="tab-content" id="trail-tab">
+                <div style="display: flex; flex-direction: column; height: 100%; gap: 0;">
+                    <div class="trail-controls">
+                        <div class="trail-buttons">
+                            <button class="btn-primary" id="draw-trail-btn">🖊️ Draw Trail</button>
+                            <button class="btn-secondary" id="clear-trail-btn">🗑️ Clear</button>
+                            <button class="btn-secondary" id="import-gpx-btn">📥 Import GPX</button>
+                            <button class="btn-primary" id="save-trail-btn">💾 Save as GPX</button>
+                        </div>
+                        <div class="trail-info" id="trail-info">
+                            <div class="trail-info-item">
+                                <span class="trail-info-label">Distance</span>
+                                <span class="trail-info-value" id="trail-distance">0 km</span>
+                            </div>
+                            <div class="trail-info-item">
+                                <span class="trail-info-label">Elevation Gain</span>
+                                <span class="trail-info-value" id="trail-elevation">0 m</span>
+                            </div>
+                            <div class="trail-info-item">
+                                <span class="trail-info-label">Difficulty</span>
+                                <span class="trail-info-value" id="trail-difficulty">-</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="map-trail" style="flex: 1;"></div>
+                </div>
+            </div>
+            
+            <!-- People Tab -->
+            <div class="tab-content" id="people-tab">
+                <div class="people-container">
+                    <div class="explore-section">
+                        <h3>➕ Add Friend</h3>
+                        <div class="form-group">
+                            <input type="text" class="form-input" id="friend-input" placeholder="Friend's username">
+                            <button class="btn-primary" id="add-friend-btn">Add Friend</button>
+                        </div>
+                    </div>
+                    
+                    <div class="explore-section">
+                        <h3>👥 Friends</h3>
+                        <div class="friends-list" id="friends-list">
+                            <p style="color: var(--text-muted); font-size: 12px;">No friends yet</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Summit Tab -->
+            <div class="tab-content" id="summit-tab">
+                <div class="summit-container">
+                    <div class="leaderboard">
+                        <div class="leaderboard-header">🏔️ Top 10 Achievers in J&K</div>
+                        <div class="leaderboard-list" id="leaderboard-list">
+                            <div class="loading" style="padding: 20px;">
+                                <div class="spinner"></div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="explore-section">
+                        <h3>📝 Log Achievement</h3>
+                        <button class="btn-primary" id="log-achievement-btn" style="width: 100%;">📸 Log Summit</button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Profile Tab -->
+            <div class="tab-content" id="profile-tab">
+                <div class="profile-container">
+                    <div class="profile-card" id="profile-card">
+                        <div class="profile-avatar-large">👤</div>
+                        <div class="profile-name" id="profile-name">Not Logged In</div>
+                        <div class="profile-email" id="profile-email">Sign in to view profile</div>
+                        <button class="btn-primary" id="login-btn" style="width: 100%; margin-top: 12px;">🔐 Sign In with Google</button>
+                    </div>
+                    
+                    <div class="explore-section">
+                        <h3>📊 My Statistics</h3>
+                        <div class="profile-stats">
+                            <div class="stat">
+                                <div class="stat-value" id="my-trails">0</div>
+                                <div class="stat-label">Trails</div>
+                            </div>
+                            <div class="stat">
+                                <div class="stat-value" id="my-summits">0</div>
+                                <div class="stat-label">Summits</div>
+                            </div>
+                            <div class="stat">
+                                <div class="stat-value" id="my-rank">-</div>
+                                <div class="stat-label">Rank</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="explore-section">
+                        <h3>⚙️ Settings</h3>
+                        <div class="form-group">
+                            <label class="form-label">
+                                <input type="checkbox" id="battery-saver" style="margin-right: 8px;">
+                                Battery Saver Mode
+                            </label>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">
+                                <input type="checkbox" id="location-share" style="margin-right: 8px;">
+                                Share Location with Friends
+                            </label>
+                        </div>
+                        <button class="btn-secondary" id="logout-btn" style="width: 100%; display: none; margin-top: 12px;">🚪 Sign Out</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Modals -->
+    <div class="modal" id="login-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span>Sign In</span>
+                <button class="modal-close">×</button>
+            </div>
+            <div style="text-align: center; gap: 12px; display: flex; flex-direction: column;">
+                <button class="btn-primary" id="google-login-btn" style="width: 100%;">🔐 Continue with Google</button>
+                <p style="font-size: 12px; color: var(--text-muted);">Sign in to share achievements and connect with friends</p>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Toast Container -->
+    <div class="toast-container" id="toast-container"></div>
+    
+    <!-- Hidden file input for GPX import -->
+    <input type="file" id="gpx-file-input" accept=".gpx" style="display: none;">
+    
+    <script>
+        // ========================================================================
+        // APP INITIALIZATION
+        // ========================================================================
+        
+        class JKTrekApp {
+            constructor() {
+                this.map = null;
+                this.mapTrail = null;
+                this.db = null;
+                this.user = null;
+                this.trailPoints = [];
+                this.trailMarkers = [];
+                this.firebaseConfig = null;
+                this.currentDistrict = null;
+                this.elevationMin = 1000;
+                this.elevationMax = 8000;
+                this.currentDifficulty = null;
+                
+                this.init();
+            }
+            
+            async init() {
+                this.log("Initializing app...");
+                
+                // Register service worker
+                if ('serviceWorker' in navigator) {
+                    try {
+                        await navigator.serviceWorker.register('service-worker.js');
+                        this.log("Service worker registered");
+                    } catch (e) {
+                        this.log("Service worker registration failed: " + e.message);
+                    }
+                }
+                
+                // Load Firebase config
+                await this.loadFirebaseConfig();
+                
+                // Initialize Firebase
+                this.initFirebase();
+                
+                // Load database
+                await this.loadDatabase();
+                
+                // Setup UI
+                this.setupUI();
+                
+                // Initialize maps
+                this.initMaps();
+                
+                // Load leaderboard
+                await this.loadLeaderboard();
+                
+                this.log("App ready");
+            }
+            
+            async loadFirebaseConfig() {
+                // Fetch or define Firebase config
+                // Replace with your actual Firebase config
+                this.firebaseConfig = {
+                    apiKey: "YOUR_API_KEY",
+                    authDomain: "YOUR_AUTH_DOMAIN.firebaseapp.com",
+                    projectId: "YOUR_PROJECT_ID",
+                    storageBucket: "YOUR_PROJECT_ID.appspot.com",
+                    messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+                    appId: "YOUR_APP_ID"
+                };
+            }
+            
+            initFirebase() {
+                if (this.firebaseConfig.apiKey === "YOUR_API_KEY") {
+                    this.log("Firebase config not set. Update firebase-config.js");
+                    return;
+                }
+                
+                try {
+                    firebase.initializeApp(this.firebaseConfig);
+                    this.auth = firebase.auth();
+                    this.db = firebase.firestore();
+                    this.storage = firebase.storage();
+                    
+                    // Listen for auth changes
+                    this.auth.onAuthStateChanged(user => {
+                        this.user = user;
+                        this.updateProfileUI();
+                        if (user) {
+                            this.syncUserData();
+                        }
+                    });
+                    
+                    this.log("Firebase initialized");
+                } catch (e) {
+                    this.log("Firebase init error: " + e.message);
+                }
+            }
+            
+            async loadDatabase() {
+                try {
+                    // Load peaks.db
+                    const response = await fetch('data/peaks.db');
+                    const buffer = await response.arrayBuffer();
+                    
+                    const SQL = await initSqlJs();
+                    this.sqlDb = new SQL.Database(new Uint8Array(buffer));
+                    
+                    this.log("Database loaded");
+                } catch (e) {
+                    this.log("Database load failed: " + e.message);
+                }
+            }
+            
+            setupUI() {
+                // Tab switching
+                document.querySelectorAll('.tab-btn').forEach(btn => {
+                    btn.addEventListener('click', e => this.switchTab(e.target.dataset.tab));
+                });
+                
+                // Explore filters
+                document.getElementById('district-select').addEventListener('change', e => {
+                    this.currentDistrict = e.target.value;
+                    this.filterPeaks();
+                });
+                
+                document.getElementById('elev-min-slider').addEventListener('input', e => {
+                    this.elevationMin = parseInt(e.target.value);
+                    document.getElementById('elev-min').textContent = this.elevationMin + 'm';
+                    this.filterPeaks();
+                });
+                
+                document.getElementById('elev-max-slider').addEventListener('input', e => {
+                    this.elevationMax = parseInt(e.target.value);
+                    document.getElementById('elev-max').textContent = this.elevationMax + 'm';
+                    this.filterPeaks();
+                });
+                
+                document.querySelectorAll('.filter-btn').forEach(btn => {
+                    btn.addEventListener('click', e => {
+                        document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                        e.target.classList.add('active');
+                        this.currentDifficulty = e.target.dataset.difficulty;
+                        this.filterPeaks();
+                    });
+                });
+                
+                // Trail controls
+                document.getElementById('draw-trail-btn').addEventListener('click', () => this.toggleTrailDraw());
+                document.getElementById('clear-trail-btn').addEventListener('click', () => this.clearTrail());
+                document.getElementById('save-trail-btn').addEventListener('click', () => this.saveTrailAsGPX());
+                document.getElementById('import-gpx-btn').addEventListener('click', () => {
+                    document.getElementById('gpx-file-input').click();
+                });
+                
+                document.getElementById('gpx-file-input').addEventListener('change', e => {
+                    const file = e.target.files[0];
+                    if (file) this.importGPX(file);
+                });
+                
+                // Authentication
+                document.getElementById('login-btn').addEventListener('click', () => this.showLoginModal());
+                document.getElementById('google-login-btn').addEventListener('click', () => this.googleLogin());
+                document.getElementById('logout-btn').addEventListener('click', () => this.logout());
+                
+                // Achievement logging
+                document.getElementById('log-achievement-btn').addEventListener('click', () => this.logAchievement());
+                
+                // Modal close
+                document.querySelectorAll('.modal-close').forEach(btn => {
+                    btn.addEventListener('click', e => e.target.closest('.modal').classList.remove('active'));
+                });
+                
+                // Settings
+                document.getElementById('battery-saver').addEventListener('change', e => {
+                    localStorage.setItem('battery-saver', e.target.checked);
+                });
+                
+                document.getElementById('location-share').addEventListener('change', e => {
+                    localStorage.setItem('location-share', e.target.checked);
+                    if (e.target.checked) this.startLocationTracking();
+                });
+                
+                // Dark mode
+                document.getElementById('dark-mode-btn').addEventListener('click', () => this.toggleDarkMode());
+                
+                // GPS
+                document.getElementById('gps-btn').addEventListener('click', () => this.getGPSLocation());
+                
+                // Load districts
+                this.loadDistricts();
+            }
+            
+            initMaps() {
+                // Main map
+                this.map = L.map('map').setView([33.3, 75.5], 7);
+                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                    attribution: '© OpenStreetMap',
+                    maxZoom: 19
+                }).addTo(this.map);
+                
+                // Trail map
+                this.mapTrail = L.map('map-trail').setView([33.3, 75.5], 7);
+                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                    attribution: '© OpenStreetMap',
+                    maxZoom: 19
+                }).addTo(this.mapTrail);
+                
+                this.mapTrail.on('click', e => this.handleTrailClick(e));
+            }
+            
+            switchTab(tabName) {
+                document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+                document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+                
+                document.getElementById(tabName + '-tab').classList.add('active');
+                document.querySelector(`[data-tab="${tabName}"]`).classList.add('active');
+                
+                // Trigger map resize on map tab
+                if (tabName === 'map' && this.map) {
+                    setTimeout(() => this.map.invalidateSize(), 100);
+                }
+                if (tabName === 'trail' && this.mapTrail) {
+                    setTimeout(() => this.mapTrail.invalidateSize(), 100);
+                }
+            }
+            
+            loadDistricts() {
+                // TODO: Load from database
+                const districts = ['Anantnag', 'Baramulla', 'Budgam', 'Doda', 'Ganderbal', 'Kathua', 'Kargil', 'Kathua', 'Kishtwar', 'Kulmarg', 'Leh', 'Pulwama', 'Rajouri', 'Ramban', 'Reasi', 'Samba', 'Shopian', 'Srinagar', 'Udhampur'];
+                
+                const select = document.getElementById('district-select');
+                districts.forEach(district => {
+                    const option = document.createElement('option');
+                    option.value = district;
+                    option.textContent = district;
+                    select.appendChild(option);
+                });
+            }
+            
+            filterPeaks() {
+                // TODO: Query database and update peaks list
+                this.log(`Filtering: District=${this.currentDistrict}, Elevation=${this.elevationMin}-${this.elevationMax}m, Difficulty=${this.currentDifficulty}`);
+            }
+            
+            handleTrailClick(e) {
+                if (document.getElementById('draw-trail-btn').classList.contains('active')) {
+                    const latlng = e.latlng;
+                    this.addTrailPoint(latlng);
+                }
+            }
+            
+            addTrailPoint(latlng) {
+                this.trailPoints.push(latlng);
+                
+                const marker = L.circleMarker(latlng, {
+                    radius: 5,
+                    fillColor: '#10b981',
+                    color: '#0f172a',
+                    weight: 2,
+                    opacity: 1,
+                    fillOpacity: 0.8
+                }).addTo(this.mapTrail);
+                
+                this.trailMarkers.push(marker);
+                
+                if (this.trailPoints.length > 1) {
+                    const prev = this.trailPoints[this.trailPoints.length - 2];
+                    const polyline = L.polyline([prev, latlng], {
+                        color: '#10b981',
+                        weight: 3,
+                        opacity: 0.8
+                    }).addTo(this.mapTrail);
+                    this.trailMarkers.push(polyline);
+                }
+                
+                this.updateTrailStats();
+            }
+            
+            clearTrail() {
+                this.trailPoints = [];
+                this.trailMarkers.forEach(m => this.mapTrail.removeLayer(m));
+                this.trailMarkers = [];
+                this.updateTrailStats();
+                this.showToast("Trail cleared");
+            }
+            
+            toggleTrailDraw() {
+                const btn = document.getElementById('draw-trail-btn');
+                btn.classList.toggle('active');
+                this.showToast(btn.classList.contains('active') ? "Click map to add trail points" : "Trail drawing disabled");
+            }
+            
+            updateTrailStats() {
+                let distance = 0;
+                for (let i = 1; i < this.trailPoints.length; i++) {
+                    distance += this.trailPoints[i].distanceTo(this.trailPoints[i - 1]);
+                }
+                
+                document.getElementById('trail-distance').textContent = (distance / 1000).toFixed(1) + ' km';
+                
+                // Calculate elevation (dummy for now)
+                document.getElementById('trail-elevation').textContent = Math.floor(Math.random() * 1000) + ' m';
+                document.getElementById('trail-difficulty').textContent = distance > 20000 ? 'Extreme' : distance > 15000 ? 'Difficult' : 'Moderate';
+            }
+            
+            saveTrailAsGPX() {
+                if (this.trailPoints.length === 0) {
+                    this.showToast("No trail points to save", "warning");
+                    return;
+                }
+                
+                // Generate GPX
+                let gpx = '<?xml version="1.0" encoding="UTF-8"?>\n';
+                gpx += '<gpx version="1.1" creator="JK Trek Explorer">\n';
+                gpx += '<trk><trkseg>\n';
+                
+                this.trailPoints.forEach(pt => {
+                    gpx += `<trkpt lat="${pt.lat}" lon="${pt.lng}"><ele>0</ele></trkpt>\n`;
+                });
+                
+                gpx += '</trkseg></trk></gpx>';
+                
+                // Download
+                const blob = new Blob([gpx], { type: 'application/gpx+xml' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'trek-' + new Date().getTime() + '.gpx';
+                a.click();
+                
+                this.showToast("Trail saved as GPX");
+            }
+            
+            importGPX(file) {
+                const reader = new FileReader();
+                reader.onload = e => {
+                    try {
+                        const gpx = e.target.result;
+                        // Parse GPX and add to trail
+                        const parser = new DOMParser();
+                        const xmlDoc = parser.parseFromString(gpx, 'text/xml');
+                        
+                        const trkpts = xmlDoc.querySelectorAll('trkpt');
+                        trkpts.forEach(pt => {
+                            const lat = parseFloat(pt.getAttribute('lat'));
+                            const lng = parseFloat(pt.getAttribute('lng'));
+                            this.addTrailPoint(L.latLng(lat, lng));
+                        });
+                        
+                        this.showToast("Trail imported from GPX");
+                    } catch (err) {
+                        this.showToast("Failed to import GPX: " + err.message, "error");
+                    }
+                };
+                reader.readAsText(file);
+            }
+            
+            async googleLogin() {
+                try {
+                    const provider = new firebase.auth.GoogleAuthProvider();
+                    await this.auth.signInWithPopup(provider);
+                    document.getElementById('login-modal').classList.remove('active');
+                    this.showToast("Signed in successfully");
+                } catch (e) {
+                    this.showToast("Login failed: " + e.message, "error");
+                }
+            }
+            
+            async logout() {
+                try {
+                    await this.auth.signOut();
+                    this.showToast("Signed out");
+                } catch (e) {
+                    this.showToast("Logout failed: " + e.message, "error");
+                }
+            }
+            
+            updateProfileUI() {
+                if (this.user) {
+                    document.getElementById('profile-name').textContent = this.user.displayName || 'User';
+                    document.getElementById('profile-email').textContent = this.user.email;
+                    document.getElementById('login-btn').style.display = 'none';
+                    document.getElementById('logout-btn').style.display = 'block';
+                } else {
+                    document.getElementById('profile-name').textContent = 'Not Logged In';
+                    document.getElementById('profile-email').textContent = 'Sign in to view profile';
+                    document.getElementById('login-btn').style.display = 'block';
+                    document.getElementById('logout-btn').style.display = 'none';
+                }
+            }
+            
+            showLoginModal() {
+                document.getElementById('login-modal').classList.add('active');
+            }
+            
+            logAchievement() {
+                this.showToast("Achievement logging coming soon");
+            }
+            
+            async loadLeaderboard() {
+                // TODO: Load from Firebase
+                const leaderboard = [
+                    { rank: 1, name: 'Vikram', elevation: 7135, peak: 'Nun Peak' },
+                    { rank: 2, name: 'Amir', elevation: 7077, peak: 'Kun Peak' },
+                    { rank: 3, name: 'Priya', elevation: 6742, peak: 'Saltoro' },
+                ];
+                
+                const list = document.getElementById('leaderboard-list');
+                list.innerHTML = '';
+                
+                leaderboard.forEach(item => {
+                    const div = document.createElement('div');
+                    div.className = 'leaderboard-item';
+                    const rankEmoji = item.rank === 1 ? '🥇' : item.rank === 2 ? '🥈' : '🥉';
+                    div.innerHTML = `
+                        <div class="leaderboard-rank">${rankEmoji}</div>
+                        <div class="leaderboard-avatar">${item.name.charAt(0)}</div>
+                        <div class="leaderboard-info">
+                            <div class="leaderboard-name">${item.name}</div>
+                            <div class="leaderboard-elevation">${item.elevation}m - ${item.peak}</div>
+                        </div>
+                    `;
+                    list.appendChild(div);
+                });
+            }
+            
+            getGPSLocation() {
+                if ('geolocation' in navigator) {
+                    navigator.geolocation.getCurrentPosition(position => {
+                        const { latitude, longitude, altitude } = position.coords;
+                        this.map.setView([latitude, longitude], 14);
+                        L.marker([latitude, longitude]).addTo(this.map).bindPopup('Your Location: ' + altitude + 'm');
+                        this.showToast(`Location: ${latitude.toFixed(4)}, ${longitude.toFixed(4)}`);
+                    });
+                }
+            }
+            
+            startLocationTracking() {
+                if ('geolocation' in navigator) {
+                    navigator.geolocation.watchPosition(position => {
+                        if (this.user) {
+                            // Sync to Firebase
+                            this.syncUserData();
+                        }
+                    });
+                }
+            }
+            
+            async syncUserData() {
+                if (!this.user || !this.db) return;
+                // TODO: Sync user data to Firebase
+            }
+            
+            toggleDarkMode() {
+                // Already in dark mode, implement toggle if needed
+                this.showToast("Dark mode is default");
+            }
+            
+            showToast(message, type = 'success') {
+                const container = document.getElementById('toast-container');
+                const toast = document.createElement('div');
+                toast.className = 'toast ' + type;
+                toast.textContent = message;
+                container.appendChild(toast);
+                
+                setTimeout(() => toast.remove(), 3000);
+            }
+            
+            log(message) {
+                console.log('[JK Trek]', message);
+            }
+        }
+        
+        // Initialize app when DOM is ready
+        document.addEventListener('DOMContentLoaded', () => {
+            window.app = new JKTrekApp();
+        });
+    </script>
+</body>
+</html>

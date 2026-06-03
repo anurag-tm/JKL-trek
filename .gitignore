@@ -1,0 +1,16 @@
+# Ignore local data and large artifacts
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.sqlite
+*.db
+*.tif
+*.shp
+*.shx
+*.dbf
+*.prj
+data/tiles/
+.DS_Store
+node_modules/
+.env

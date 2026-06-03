@@ -1,0 +1,2252 @@
+[
+  {
+    "name": "Peak_0",
+    "district": "CHAMBA",
+    "latitude": 3670961.8115427485,
+    "longitude": 651371.5334164177,
+    "elevation": 5821.31494140625,
+    "difficulty": "Extreme",
+    "season": "June - September"
+  },
+  {
+    "name": "Peak_1",
+    "district": "CHAMBA",
+    "latitude": 3670875.559848261,
+    "longitude": 651601.5379350506,
+    "elevation": 5776.96923828125,
+    "difficulty": "Extreme",
+    "season": "June - September"
+  },
+  {
+    "name": "Peak_2",
+    "district": "CHAMBA",
+    "latitude": 3674929.3894891655,
+    "longitude": 644701.4023760643,
+    "elevation": 5750.27978515625,
+    "difficulty": "Extreme",
+    "season": "June - September"
+  },
+  {
+    "name": "Peak_3",
+    "district": "CHAMBA",
+    "latitude": 3671134.3149317233,
+    "longitude": 654792.8506310816,
+    "elevation": 5672.076171875,
+    "difficulty": "Extreme",
+    "season": "June - September"
+  },
+  {
+    "name": "Peak_4",
+    "district": "CHAMBA",
+    "latitude": 3674239.375933267,
+    "longitude": 642516.3594490521,
+    "elevation": 5647.8671875,
+    "difficulty": "Extreme",
+    "season": "June - September"
+  },
+  {
+    "name": "Peak_5",
+    "district": "CHAMBA",
+    "latitude": 3674469.3804519,
+    "longitude": 642918.8673566596,
+    "elevation": 5605.82177734375,
+    "difficulty": "Extreme",
+    "season": "June - September"
+  },
+  {
+    "name": "Peak_6",
+    "district": "CHAMBA",
+    "latitude": 3675360.647961602,
+    "longitude": 645161.4114133301,
+    "elevation": 5598.08642578125,
+    "difficulty": "Extreme",
+    "season": "June - September"
+  },
+  {
+    "name": "Peak_7",
+    "district": "CHAMBA",
+    "latitude": 3673980.620849805,
+    "longitude": 641538.8402448625,
+    "elevation": 5465.685546875,
+    "difficulty": "Extreme",
+    "season": "June - September"
+  },
+  {
+    "name": "Peak_8",
+    "district": "CHAMBA",
+    "latitude": 3674958.140053995,
+    "longitude": 649042.7376652599,
+    "elevation": 5297.89306640625,
+    "difficulty": "Extreme",
+    "season": "June - September"
+  },
+  {
+    "name": "Peak_9",
+    "district": "CHAMBA",
+    "latitude": 3673549.3623773684,
+    "longitude": 649675.2500915002,
+    "elevation": 5240.31201171875,
+    "difficulty": "Extreme",
+    "season": "June - September"
+  },
+  {
+    "name": "Peak_10",
+    "district": "M|RPUR",
+    "latitude": 3717480.225436247,
+    "longitude": 415214.3939101177,
+    "elevation": 1601.98779296875,
+    "difficulty": "Easy",
+    "season": "Year-round"
+  },
+  {
+    "name": "Peak_11",
+    "district": "M|RPUR",
+    "latitude": 3717681.4793900503,
+    "longitude": 414725.6343080228,
+    "elevation": 1600.6632080078125,
+    "difficulty": "Easy",
+    "season": "Year-round"
+  },
+  {
+    "name": "Peak_12",
+    "district": "M|RPUR",
+    "latitude": 3717537.726565905,
+    "longitude": 414926.8882618266,
+    "elevation": 1599.8092041015625,
+    "difficulty": "Easy",
+    "season": "Year-round"
+  },
+  {
+    "name": "Peak_13",
+    "district": "M|RPUR",
+    "latitude": 3704772.4757817807,
+    "longitude": 412224.3351678903,
+    "elevation": 1580.161376953125,
+    "difficulty": "Easy",
+    "season": "Year-round"
+  },
+  {
+    "name": "Peak_14",
+    "district": "M|RPUR",
+    "latitude": 3705376.237643192,
+    "longitude": 412195.5846030612,
+    "elevation": 1570.4437255859375,
+    "difficulty": "Easy",
+    "season": "Year-round"
+  },
+  {
+    "name": "Peak_15",
+    "district": "M|RPUR",
+    "latitude": 3705491.2399025084,
+    "longitude": 412166.8340382321,
+    "elevation": 1557.414306640625,
+    "difficulty": "Easy",
+    "season": "Year-round"
+  },
+  {
+    "name": "Peak_16",
+    "district": "M|RPUR",
+    "latitude": 3694594.775832276,
+    "longitude": 414035.6207521242,
+    "elevation": 1556.577392578125,
+    "difficulty": "Easy",
+    "season": "Year-round"
+  },
+  {
+    "name": "Peak_17",
+    "district": "M|RPUR",
+    "latitude": 3715352.6836388926,
+    "longitude": 414696.8837431937,
+    "elevation": 1554.6566162109375,
+    "difficulty": "Easy",
+    "season": "Year-round"
+  },
+  {
+    "name": "Peak_18",
+    "district": "M|RPUR",
+    "latitude": 3715381.4342037216,
+    "longitude": 414294.37583558616,
+    "elevation": 1552.6412353515625,
+    "difficulty": "Easy",
+    "season": "Year-round"
+  },
+  {
+    "name": "Peak_19",
+    "district": "M|RPUR",
+    "latitude": 3715381.4342037216,
+    "longitude": 414581.88148387725,
+    "elevation": 1549.6817626953125,
+    "difficulty": "Easy",
+    "season": "Year-round"
+  },
+  {
+    "name": "Peak_20",
+    "district": "MUZAFFAR>B>D",
+    "latitude": 3884952.2655658056,
+    "longitude": 451152.5999465037,
+    "elevation": 6113.875,
+    "difficulty": "Extreme",
+    "season": "June - September"
+  },
+  {
+    "name": "Peak_21",
+    "district": "MUZAFFAR>B>D",
+    "latitude": 3883773.4924078123,
+    "longitude": 455378.93297638267,
+    "elevation": 5714.18212890625,
+    "difficulty": "Extreme",
+    "season": "June - September"
+  },
+  {
+    "name": "Peak_22",
+    "district": "MUZAFFAR>B>D",
+    "latitude": 3884693.510482344,
+    "longitude": 447472.52764837776,
+    "elevation": 5709.81787109375,
+    "difficulty": "Extreme",
+    "season": "June - September"
+  },
+  {
+    "name": "Peak_23",
+    "district": "MUZAFFAR>B>D",
+    "latitude": 3885469.7757327296,
+    "longitude": 450807.59316855436,
+    "elevation": 5708.4697265625,
+    "difficulty": "Extreme",
+    "season": "June - September"
+  },
+  {
+    "name": "Peak_24",
+    "district": "MUZAFFAR>B>D",
+    "latitude": 3885354.773473413,
+    "longitude": 452561.37762313004,
+    "elevation": 5702.7705078125,
+    "difficulty": "Extreme",
+    "season": "June - September"
+  },
+  {
+    "name": "Peak_25",
+    "district": "MUZAFFAR>B>D",
+    "latitude": 3886648.548890723,
+    "longitude": 448162.5412042764,
+    "elevation": 5675.56494140625,
+    "difficulty": "Extreme",
+    "season": "June - September"
+  },
+  {
+    "name": "Peak_26",
+    "district": "MUZAFFAR>B>D",
+    "latitude": 3884894.7644361476,
+    "longitude": 447472.52764837776,
+    "elevation": 5655.0869140625,
+    "difficulty": "Extreme",
+    "season": "June - September"
+  },
+  {
+    "name": "Peak_27",
+    "district": "MUZAFFAR>B>D",
+    "latitude": 3883485.986759521,
+    "longitude": 455235.1801522372,
+    "elevation": 5654.90869140625,
+    "difficulty": "Extreme",
+    "season": "June - September"
+  },
+  {
+    "name": "Peak_28",
+    "district": "MUZAFFAR>B>D",
+    "latitude": 3885182.2700844384,
+    "longitude": 452906.3844010793,
+    "elevation": 5651.21630859375,
+    "difficulty": "Extreme",
+    "season": "June - September"
+  },
+  {
+    "name": "Peak_29",
+    "district": "MUZAFFAR>B>D",
+    "latitude": 3885527.276862388,
+    "longitude": 452331.37310449715,
+    "elevation": 5642.45166015625,
+    "difficulty": "Extreme",
+    "season": "June - September"
+  },
+  {
+    "name": "Peak_30",
+    "district": "P@NCH",
+    "latitude": 3726795.408440878,
+    "longitude": 457362.7219495912,
+    "elevation": 4724.8984375,
+    "difficulty": "Extreme",
+    "season": "June - September"
+  },
+  {
+    "name": "Peak_31",
+    "district": "P@NCH",
+    "latitude": 3726680.4061815618,
+    "longitude": 457563.975903395,
+    "elevation": 4693.8720703125,
+    "difficulty": "Extreme",
+    "season": "June - September"
+  },
+  {
+    "name": "Peak_32",
+    "district": "P@NCH",
+    "latitude": 3729526.7120996434,
+    "longitude": 455148.92845774983,
+    "elevation": 4685.283203125,
+    "difficulty": "Extreme",
+    "season": "June - September"
+  },
+  {
+    "name": "Peak_33",
+    "district": "P@NCH",
+    "latitude": 3729354.2087106686,
+    "longitude": 455177.67902257893,
+    "elevation": 4648.986328125,
+    "difficulty": "Extreme",
+    "season": "June - September"
+  },
+  {
+    "name": "Peak_34",
+    "district": "P@NCH",
+    "latitude": 3728434.190636137,
+    "longitude": 457103.9668661292,
+    "elevation": 4619.9638671875,
+    "difficulty": "Extreme",
+    "season": "June - September"
+  },
+  {
+    "name": "Peak_35",
+    "district": "P@NCH",
+    "latitude": 3735363.0767599526,
+    "longitude": 449312.56379744073,
+    "elevation": 4618.97021484375,
+    "difficulty": "Extreme",
+    "season": "June - September"
+  },
+  {
+    "name": "Peak_36",
+    "district": "P@NCH",
+    "latitude": 3729210.4558865232,
+    "longitude": 455493.9352356992,
+    "elevation": 4617.76220703125,
+    "difficulty": "Extreme",
+    "season": "June - September"
+  },
+  {
+    "name": "Peak_37",
+    "district": "P@NCH",
+    "latitude": 3728462.941200966,
+    "longitude": 456787.710653009,
+    "elevation": 4607.8447265625,
+    "difficulty": "Extreme",
+    "season": "June - September"
+  },
+  {
+    "name": "Peak_38",
+    "district": "P@NCH",
+    "latitude": 3726421.6510980995,
+    "longitude": 457650.2275978823,
+    "elevation": 4605.19775390625,
+    "difficulty": "Extreme",
+    "season": "June - September"
+  },
+  {
+    "name": "Peak_39",
+    "district": "P@NCH",
+    "latitude": 3728261.6872471627,
+    "longitude": 455867.69257847755,
+    "elevation": 4598.0,
+    "difficulty": "Extreme",
+    "season": "June - September"
+  },
+  {
+    "name": "Peak_40",
+    "district": "ANANTN>G",
+    "latitude": 3778517.674568445,
+    "longitude": 550428.3003014165,
+    "elevation": 5407.79052734375,
+    "difficulty": "Extreme",
+    "season": "June - September"
+  },
+  {
+    "name": "Peak_41",
+    "district": "ANANTN>G",
+    "latitude": 3780501.4635416535,
+    "longitude": 530187.9026617239,
+    "elevation": 5404.46484375,
+    "difficulty": "Extreme",
+    "season": "June - September"
+  },
+  {
+    "name": "Peak_42",
+    "district": "ANANTN>G",
+    "latitude": 3778661.4273925903,
+    "longitude": 550572.0531255621,
+    "elevation": 5368.20556640625,
+    "difficulty": "Extreme",
+    "season": "June - September"
+  },
+  {
+    "name": "Peak_43",
+    "district": "ANANTN>G",
+    "latitude": 3778632.6768277613,
+    "longitude": 550572.0531255621,
+    "elevation": 5368.20556640625,
+    "difficulty": "Extreme",
+    "season": "June - September"
+  },
+  {
+    "name": "Peak_44",
+    "district": "ANANTN>G",
+    "latitude": 3778833.930781565,
+    "longitude": 549709.5361806888,
+    "elevation": 5215.46728515625,
+    "difficulty": "Extreme",
+    "season": "June - September"
+  },
+  {
+    "name": "Peak_45",
+    "district": "ANANTN>G",
+    "latitude": 3778747.6790870777,
+    "longitude": 549939.5406993217,
+    "elevation": 5200.31396484375,
+    "difficulty": "Extreme",
+    "season": "June - September"
+  },
+  {
+    "name": "Peak_46",
+    "district": "ANANTN>G",
+    "latitude": 3780185.207328533,
+    "longitude": 530044.1498375784,
+    "elevation": 5185.4736328125,
+    "difficulty": "Extreme",
+    "season": "June - September"
+  },
+  {
+    "name": "Peak_47",
+    "district": "ANANTN>G",
+    "latitude": 3785734.0663405512,
+    "longitude": 551175.8149869733,
+    "elevation": 5183.6552734375,
+    "difficulty": "Extreme",
+    "season": "June - September"
+  },
+  {
+    "name": "Peak_48",
+    "district": "ANANTN>G",
+    "latitude": 3787114.0934523484,
+    "longitude": 544994.443548715,
+    "elevation": 5166.5146484375,
+    "difficulty": "Extreme",
+    "season": "June - September"
+  },
+  {
+    "name": "Peak_49",
+    "district": "ANANTN>G",
+    "latitude": 3766586.1901643644,
+    "longitude": 546604.4751791451,
+    "elevation": 5118.07666015625,
+    "difficulty": "Extreme",
+    "season": "June - September"
+  },
+  {
+    "name": "Peak_50",
+    "district": "B>RAM@LA",
+    "latitude": 3752182.157184981,
+    "longitude": 446150.00166623876,
+    "elevation": 4514.9873046875,
+    "difficulty": "Extreme",
+    "season": "June - September"
+  },
+  {
+    "name": "Peak_51",
+    "district": "B>RAM@LA",
+    "latitude": 3752412.161703614,
+    "longitude": 446523.75900901714,
+    "elevation": 4492.20556640625,
+    "difficulty": "Difficult",
+    "season": "May - October"
+  },
+  {
+    "name": "Peak_52",
+    "district": "B>RAM@LA",
+    "latitude": 3752182.157184981,
+    "longitude": 446322.5050552134,
+    "elevation": 4488.3583984375,
+    "difficulty": "Difficult",
+    "season": "May - October"
+  },
+  {
+    "name": "Peak_53",
+    "district": "B>RAM@LA",
+    "latitude": 3752584.6650925884,
+    "longitude": 446926.26691662474,
+    "elevation": 4440.73779296875,
+    "difficulty": "Difficult",
+    "season": "May - October"
+  },
+  {
+    "name": "Peak_54",
+    "district": "B>RAM@LA",
+    "latitude": 3752728.4179167342,
+    "longitude": 446897.5163517956,
+    "elevation": 4394.115234375,
+    "difficulty": "Difficult",
+    "season": "May - October"
+  },
+  {
+    "name": "Peak_55",
+    "district": "B>RAM@LA",
+    "latitude": 3753677.186556095,
+    "longitude": 446897.5163517956,
+    "elevation": 4388.31982421875,
+    "difficulty": "Difficult",
+    "season": "May - October"
+  },
+  {
+    "name": "Peak_56",
+    "district": "B>RAM@LA",
+    "latitude": 3788062.862091709,
+    "longitude": 410499.3012781438,
+    "elevation": 4387.69873046875,
+    "difficulty": "Difficult",
+    "season": "May - October"
+  },
+  {
+    "name": "Peak_57",
+    "district": "B>RAM@LA",
+    "latitude": 3753245.928083658,
+    "longitude": 446610.0107035045,
+    "elevation": 4374.9462890625,
+    "difficulty": "Difficult",
+    "season": "May - October"
+  },
+  {
+    "name": "Peak_58",
+    "district": "B>RAM@LA",
+    "latitude": 3754367.2001119936,
+    "longitude": 446610.0107035045,
+    "elevation": 4362.353515625,
+    "difficulty": "Difficult",
+    "season": "May - October"
+  },
+  {
+    "name": "Peak_59",
+    "district": "B>RAM@LA",
+    "latitude": 3753907.1910747276,
+    "longitude": 447098.7703055993,
+    "elevation": 4343.0146484375,
+    "difficulty": "Difficult",
+    "season": "May - October"
+  },
+  {
+    "name": "Peak_60",
+    "district": "KATHUA",
+    "latitude": 3636691.1382664507,
+    "longitude": 564746.0815863127,
+    "elevation": 4200.95947265625,
+    "difficulty": "Difficult",
+    "season": "May - October"
+  },
+  {
+    "name": "Peak_61",
+    "district": "KATHUA",
+    "latitude": 3636173.6280995267,
+    "longitude": 565119.8389290911,
+    "elevation": 4127.87744140625,
+    "difficulty": "Difficult",
+    "season": "May - October"
+  },
+  {
+    "name": "Peak_62",
+    "district": "KATHUA",
+    "latitude": 3634477.3447746094,
+    "longitude": 564803.5827159709,
+    "elevation": 4000.22412109375,
+    "difficulty": "Difficult",
+    "season": "May - October"
+  },
+  {
+    "name": "Peak_63",
+    "district": "KATHUA",
+    "latitude": 3632953.5648386665,
+    "longitude": 565522.3468366987,
+    "elevation": 3964.8564453125,
+    "difficulty": "Difficult",
+    "season": "May - October"
+  },
+  {
+    "name": "Peak_64",
+    "district": "KATHUA",
+    "latitude": 3635656.1179326028,
+    "longitude": 566298.6120870847,
+    "elevation": 3958.86572265625,
+    "difficulty": "Difficult",
+    "season": "May - October"
+  },
+  {
+    "name": "Peak_65",
+    "district": "KATHUA",
+    "latitude": 3632809.812014521,
+    "longitude": 565752.3513553315,
+    "elevation": 3951.2392578125,
+    "difficulty": "Difficult",
+    "season": "May - October"
+  },
+  {
+    "name": "Peak_66",
+    "district": "KATHUA",
+    "latitude": 3632752.310884863,
+    "longitude": 565896.1041794771,
+    "elevation": 3944.736083984375,
+    "difficulty": "Difficult",
+    "season": "May - October"
+  },
+  {
+    "name": "Peak_67",
+    "district": "KATHUA",
+    "latitude": 3632522.30636623,
+    "longitude": 565896.1041794771,
+    "elevation": 3918.40576171875,
+    "difficulty": "Difficult",
+    "season": "May - October"
+  },
+  {
+    "name": "Peak_68",
+    "district": "KATHUA",
+    "latitude": 3635023.6055063624,
+    "longitude": 566528.6166057175,
+    "elevation": 3843.1123046875,
+    "difficulty": "Difficult",
+    "season": "May - October"
+  },
+  {
+    "name": "Peak_69",
+    "district": "KATHUA",
+    "latitude": 3634851.102117388,
+    "longitude": 566614.8683002049,
+    "elevation": 3836.79833984375,
+    "difficulty": "Difficult",
+    "season": "May - October"
+  },
+  {
+    "name": "Peak_70",
+    "district": "UDHAMPUR",
+    "latitude": 3636403.63261816,
+    "longitude": 563826.0635117812,
+    "elevation": 4333.88720703125,
+    "difficulty": "Difficult",
+    "season": "May - October"
+  },
+  {
+    "name": "Peak_71",
+    "district": "UDHAMPUR",
+    "latitude": 3636806.140525767,
+    "longitude": 563711.0612524648,
+    "elevation": 4301.6298828125,
+    "difficulty": "Difficult",
+    "season": "May - October"
+  },
+  {
+    "name": "Peak_72",
+    "district": "UDHAMPUR",
+    "latitude": 3637294.900127862,
+    "longitude": 563078.5488262244,
+    "elevation": 4265.42431640625,
+    "difficulty": "Difficult",
+    "season": "May - October"
+  },
+  {
+    "name": "Peak_73",
+    "district": "UDHAMPUR",
+    "latitude": 3636288.630358843,
+    "longitude": 563452.3061690028,
+    "elevation": 4253.263671875,
+    "difficulty": "Difficult",
+    "season": "May - October"
+  },
+  {
+    "name": "Peak_74",
+    "district": "UDHAMPUR",
+    "latitude": 3637064.8956092293,
+    "longitude": 563107.2993910535,
+    "elevation": 4251.75830078125,
+    "difficulty": "Difficult",
+    "season": "May - October"
+  },
+  {
+    "name": "Peak_75",
+    "district": "UDHAMPUR",
+    "latitude": 3636892.3922202545,
+    "longitude": 563251.052215199,
+    "elevation": 4227.638671875,
+    "difficulty": "Difficult",
+    "season": "May - October"
+  },
+  {
+    "name": "Peak_76",
+    "district": "UDHAMPUR",
+    "latitude": 3637927.4125541025,
+    "longitude": 563136.0499558826,
+    "elevation": 4212.60498046875,
+    "difficulty": "Difficult",
+    "season": "May - October"
+  },
+  {
+    "name": "Peak_77",
+    "district": "UDHAMPUR",
+    "latitude": 3636087.37640504,
+    "longitude": 562762.2926131042,
+    "elevation": 4182.6474609375,
+    "difficulty": "Difficult",
+    "season": "May - October"
+  },
+  {
+    "name": "Peak_78",
+    "district": "UDHAMPUR",
+    "latitude": 3636173.6280995267,
+    "longitude": 563049.7982613953,
+    "elevation": 4182.4208984375,
+    "difficulty": "Difficult",
+    "season": "May - October"
+  },
+  {
+    "name": "Peak_79",
+    "district": "UDHAMPUR",
+    "latitude": 3636173.6280995267,
+    "longitude": 562963.546566908,
+    "elevation": 4182.3330078125,
+    "difficulty": "Difficult",
+    "season": "May - October"
+  },
+  {
+    "name": "Peak_80",
+    "district": "BADG>M",
+    "latitude": 3734586.8115095664,
+    "longitude": 450606.3392147506,
+    "elevation": 4732.83642578125,
+    "difficulty": "Extreme",
+    "season": "June - September"
+  },
+  {
+    "name": "Peak_81",
+    "district": "BADG>M",
+    "latitude": 3734356.8069909336,
+    "longitude": 450606.3392147506,
+    "elevation": 4691.71826171875,
+    "difficulty": "Extreme",
+    "season": "June - September"
+  },
+  {
+    "name": "Peak_82",
+    "district": "BADG>M",
+    "latitude": 3726967.9118298525,
+    "longitude": 457995.2343758316,
+    "elevation": 4678.88818359375,
+    "difficulty": "Extreme",
+    "season": "June - September"
+  },
+  {
+    "name": "Peak_83",
+    "district": "BADG>M",
+    "latitude": 3726939.1612650235,
+    "longitude": 457995.2343758316,
+    "elevation": 4678.88818359375,
+    "difficulty": "Extreme",
+    "season": "June - September"
+  },
+  {
+    "name": "Peak_84",
+    "district": "BADG>M",
+    "latitude": 3729095.453627207,
+    "longitude": 455867.69257847755,
+    "elevation": 4602.70068359375,
+    "difficulty": "Extreme",
+    "season": "June - September"
+  },
+  {
+    "name": "Peak_85",
+    "district": "BADG>M",
+    "latitude": 3751865.9009718606,
+    "longitude": 447300.0242594031,
+    "elevation": 4583.8544921875,
+    "difficulty": "Extreme",
+    "season": "June - September"
+  },
+  {
+    "name": "Peak_86",
+    "district": "BADG>M",
+    "latitude": 3730705.4852576368,
+    "longitude": 456902.71291232546,
+    "elevation": 4583.7802734375,
+    "difficulty": "Extreme",
+    "season": "June - September"
+  },
+  {
+    "name": "Peak_87",
+    "district": "BADG>M",
+    "latitude": 3730791.736952124,
+    "longitude": 456873.96234749636,
+    "elevation": 4578.69873046875,
+    "difficulty": "Extreme",
+    "season": "June - September"
+  },
+  {
+    "name": "Peak_88",
+    "district": "BADG>M",
+    "latitude": 3751808.3998422027,
+    "longitude": 447558.7793428651,
+    "elevation": 4578.60888671875,
+    "difficulty": "Extreme",
+    "season": "June - September"
+  },
+  {
+    "name": "Peak_89",
+    "district": "BADG>M",
+    "latitude": 3727974.1815988715,
+    "longitude": 457678.97816271137,
+    "elevation": 4562.2509765625,
+    "difficulty": "Extreme",
+    "season": "June - September"
+  },
+  {
+    "name": "Peak_90",
+    "district": "BANDIPURA",
+    "latitude": 3821873.526330741,
+    "longitude": 533522.9681819004,
+    "elevation": 5285.77734375,
+    "difficulty": "Extreme",
+    "season": "June - September"
+  },
+  {
+    "name": "Peak_91",
+    "district": "BANDIPURA",
+    "latitude": 3820234.744135482,
+    "longitude": 533609.2198763879,
+    "elevation": 5214.69580078125,
+    "difficulty": "Extreme",
+    "season": "June - September"
+  },
+  {
+    "name": "Peak_92",
+    "district": "BANDIPURA",
+    "latitude": 3810603.3049177304,
+    "longitude": 530216.653226553,
+    "elevation": 5193.181640625,
+    "difficulty": "Extreme",
+    "season": "June - September"
+  },
+  {
+    "name": "Peak_93",
+    "district": "BANDIPURA",
+    "latitude": 3808590.7653796924,
+    "longitude": 533551.7187467297,
+    "elevation": 5165.1845703125,
+    "difficulty": "Extreme",
+    "season": "June - September"
+  },
+  {
+    "name": "Peak_94",
+    "district": "BANDIPURA",
+    "latitude": 3810459.5520935846,
+    "longitude": 530446.6577451859,
+    "elevation": 5148.744140625,
+    "difficulty": "Extreme",
+    "season": "June - September"
+  },
+  {
+    "name": "Peak_95",
+    "district": "BANDIPURA",
+    "latitude": 3820752.2543024058,
+    "longitude": 533407.9659225841,
+    "elevation": 5148.640625,
+    "difficulty": "Extreme",
+    "season": "June - September"
+  },
+  {
+    "name": "Peak_96",
+    "district": "BANDIPURA",
+    "latitude": 3810919.5611308506,
+    "longitude": 530072.9004024074,
+    "elevation": 5148.56298828125,
+    "difficulty": "Extreme",
+    "season": "June - September"
+  },
+  {
+    "name": "Peak_97",
+    "district": "BANDIPURA",
+    "latitude": 3810804.558871534,
+    "longitude": 530101.6509672366,
+    "elevation": 5137.0400390625,
+    "difficulty": "Extreme",
+    "season": "June - September"
+  },
+  {
+    "name": "Peak_98",
+    "district": "BANDIPURA",
+    "latitude": 3806578.225841655,
+    "longitude": 491604.64466105984,
+    "elevation": 5116.6455078125,
+    "difficulty": "Extreme",
+    "season": "June - September"
+  },
+  {
+    "name": "Peak_99",
+    "district": "BANDIPURA",
+    "latitude": 3811293.3184736287,
+    "longitude": 530561.6600045024,
+    "elevation": 5069.2470703125,
+    "difficulty": "Extreme",
+    "season": "June - September"
+  },
+  {
+    "name": "Peak_100",
+    "district": "GANDERBAL",
+    "latitude": 3787286.596841323,
+    "longitude": 545368.2008914934,
+    "elevation": 5249.94970703125,
+    "difficulty": "Extreme",
+    "season": "June - September"
+  },
+  {
+    "name": "Peak_101",
+    "district": "GANDERBAL",
+    "latitude": 3802783.1512842127,
+    "longitude": 535420.5054606218,
+    "elevation": 5201.84326171875,
+    "difficulty": "Extreme",
+    "season": "June - September"
+  },
+  {
+    "name": "Peak_102",
+    "district": "GANDERBAL",
+    "latitude": 3787171.5945820063,
+    "longitude": 545195.6975025188,
+    "elevation": 5194.3916015625,
+    "difficulty": "Extreme",
+    "season": "June - September"
+  },
+  {
+    "name": "Peak_103",
+    "district": "GANDERBAL",
+    "latitude": 3805543.205507807,
+    "longitude": 533752.9727005335,
+    "elevation": 5173.63525390625,
+    "difficulty": "Extreme",
+    "season": "June - September"
+  },
+  {
+    "name": "Peak_104",
+    "district": "GANDERBAL",
+    "latitude": 3798010.5575225805,
+    "longitude": 535679.2605440837,
+    "elevation": 5097.2080078125,
+    "difficulty": "Extreme",
+    "season": "June - September"
+  },
+  {
+    "name": "Peak_105",
+    "district": "GANDERBAL",
+    "latitude": 3797751.8024391187,
+    "longitude": 535017.9975530142,
+    "elevation": 5076.90576171875,
+    "difficulty": "Extreme",
+    "season": "June - September"
+  },
+  {
+    "name": "Peak_106",
+    "district": "GANDERBAL",
+    "latitude": 3797608.049614973,
+    "longitude": 536110.5190165204,
+    "elevation": 5070.0654296875,
+    "difficulty": "Extreme",
+    "season": "June - September"
+  },
+  {
+    "name": "Peak_107",
+    "district": "GANDERBAL",
+    "latitude": 3797723.0518742893,
+    "longitude": 536024.267322033,
+    "elevation": 5062.57373046875,
+    "difficulty": "Extreme",
+    "season": "June - September"
+  },
+  {
+    "name": "Peak_108",
+    "district": "GANDERBAL",
+    "latitude": 3803128.158062162,
+    "longitude": 534902.9952936978,
+    "elevation": 5047.36181640625,
+    "difficulty": "Extreme",
+    "season": "June - September"
+  },
+  {
+    "name": "Peak_109",
+    "district": "GANDERBAL",
+    "latitude": 3800166.849884764,
+    "longitude": 534557.9885157484,
+    "elevation": 5045.3046875,
+    "difficulty": "Extreme",
+    "season": "June - September"
+  },
+  {
+    "name": "Peak_110",
+    "district": "KULG>M",
+    "latitude": 3713081.389017393,
+    "longitude": 467540.42189909576,
+    "elevation": 4654.1025390625,
+    "difficulty": "Extreme",
+    "season": "June - September"
+  },
+  {
+    "name": "Peak_111",
+    "district": "KULG>M",
+    "latitude": 3705462.489337679,
+    "longitude": 483726.989897884,
+    "elevation": 4634.23876953125,
+    "difficulty": "Extreme",
+    "season": "June - September"
+  },
+  {
+    "name": "Peak_112",
+    "district": "KULG>M",
+    "latitude": 3725789.138671859,
+    "longitude": 457650.2275978823,
+    "elevation": 4567.1943359375,
+    "difficulty": "Extreme",
+    "season": "June - September"
+  },
+  {
+    "name": "Peak_113",
+    "district": "KULG>M",
+    "latitude": 3725875.3903663466,
+    "longitude": 457678.97816271137,
+    "elevation": 4564.97265625,
+    "difficulty": "Extreme",
+    "season": "June - September"
+  },
+  {
+    "name": "Peak_114",
+    "district": "KULG>M",
+    "latitude": 3725702.8869773718,
+    "longitude": 457563.975903395,
+    "elevation": 4552.71044921875,
+    "difficulty": "Extreme",
+    "season": "June - September"
+  },
+  {
+    "name": "Peak_115",
+    "district": "KULG>M",
+    "latitude": 3709660.0718027293,
+    "longitude": 467367.91851012106,
+    "elevation": 4540.87646484375,
+    "difficulty": "Extreme",
+    "season": "June - September"
+  },
+  {
+    "name": "Peak_116",
+    "district": "KULG>M",
+    "latitude": 3725156.626245619,
+    "longitude": 457218.9691254457,
+    "elevation": 4538.30810546875,
+    "difficulty": "Extreme",
+    "season": "June - September"
+  },
+  {
+    "name": "Peak_117",
+    "district": "KULG>M",
+    "latitude": 3708395.046950248,
+    "longitude": 467396.66907495016,
+    "elevation": 4537.6416015625,
+    "difficulty": "Extreme",
+    "season": "June - September"
+  },
+  {
+    "name": "Peak_118",
+    "district": "KULG>M",
+    "latitude": 3704743.725216951,
+    "longitude": 484848.2619262192,
+    "elevation": 4535.845703125,
+    "difficulty": "Extreme",
+    "season": "June - September"
+  },
+  {
+    "name": "Peak_119",
+    "district": "KULG>M",
+    "latitude": 3704714.9746521222,
+    "longitude": 484848.2619262192,
+    "elevation": 4535.845703125,
+    "difficulty": "Extreme",
+    "season": "June - September"
+  },
+  {
+    "name": "Peak_120",
+    "district": "KUPWARA",
+    "latitude": 3789931.648805601,
+    "longitude": 409723.03602775786,
+    "elevation": 4360.84765625,
+    "difficulty": "Difficult",
+    "season": "May - October"
+  },
+  {
+    "name": "Peak_121",
+    "district": "KUPWARA",
+    "latitude": 3802064.387163485,
+    "longitude": 403081.6555522337,
+    "elevation": 4333.90966796875,
+    "difficulty": "Difficult",
+    "season": "May - October"
+  },
+  {
+    "name": "Peak_122",
+    "district": "KUPWARA",
+    "latitude": 3801920.634339339,
+    "longitude": 403167.90724672104,
+    "elevation": 4322.693359375,
+    "difficulty": "Difficult",
+    "season": "May - October"
+  },
+  {
+    "name": "Peak_123",
+    "district": "KUPWARA",
+    "latitude": 3801259.3713482697,
+    "longitude": 404174.17701573984,
+    "elevation": 4281.51171875,
+    "difficulty": "Difficult",
+    "season": "May - October"
+  },
+  {
+    "name": "Peak_124",
+    "district": "KUPWARA",
+    "latitude": 3791225.424222911,
+    "longitude": 411275.56652852974,
+    "elevation": 4281.00634765625,
+    "difficulty": "Difficult",
+    "season": "May - October"
+  },
+  {
+    "name": "Peak_125",
+    "district": "KUPWARA",
+    "latitude": 3802581.897330409,
+    "longitude": 402794.1499039426,
+    "elevation": 4275.59130859375,
+    "difficulty": "Difficult",
+    "season": "May - October"
+  },
+  {
+    "name": "Peak_126",
+    "district": "KUPWARA",
+    "latitude": 3800799.362311004,
+    "longitude": 404777.9388771511,
+    "elevation": 4261.849609375,
+    "difficulty": "Difficult",
+    "season": "May - October"
+  },
+  {
+    "name": "Peak_127",
+    "district": "KUPWARA",
+    "latitude": 3789730.3948517973,
+    "longitude": 410240.5461946818,
+    "elevation": 4248.80322265625,
+    "difficulty": "Difficult",
+    "season": "May - October"
+  },
+  {
+    "name": "Peak_128",
+    "district": "KUPWARA",
+    "latitude": 3800684.360051688,
+    "longitude": 404777.9388771511,
+    "elevation": 4239.1689453125,
+    "difficulty": "Difficult",
+    "season": "May - October"
+  },
+  {
+    "name": "Peak_129",
+    "district": "KUPWARA",
+    "latitude": 3801115.6185241244,
+    "longitude": 404346.68040471454,
+    "elevation": 4233.92333984375,
+    "difficulty": "Difficult",
+    "season": "May - October"
+  },
+  {
+    "name": "Peak_130",
+    "district": "PULWAMA",
+    "latitude": 3767649.961063042,
+    "longitude": 519866.44988807384,
+    "elevation": 4351.4580078125,
+    "difficulty": "Difficult",
+    "season": "May - October"
+  },
+  {
+    "name": "Peak_131",
+    "district": "PULWAMA",
+    "latitude": 3772623.8087784774,
+    "longitude": 513196.31884772057,
+    "elevation": 4286.50146484375,
+    "difficulty": "Difficult",
+    "season": "May - October"
+  },
+  {
+    "name": "Peak_132",
+    "district": "PULWAMA",
+    "latitude": 3770726.2714997563,
+    "longitude": 514288.84031122667,
+    "elevation": 4258.65283203125,
+    "difficulty": "Difficult",
+    "season": "May - October"
+  },
+  {
+    "name": "Peak_133",
+    "district": "PULWAMA",
+    "latitude": 3771128.779407364,
+    "longitude": 514173.8380519103,
+    "elevation": 4200.66796875,
+    "difficulty": "Difficult",
+    "season": "May - October"
+  },
+  {
+    "name": "Peak_134",
+    "district": "PULWAMA",
+    "latitude": 3765666.1720898333,
+    "longitude": 521505.232083333,
+    "elevation": 4197.1357421875,
+    "difficulty": "Difficult",
+    "season": "May - October"
+  },
+  {
+    "name": "Peak_135",
+    "district": "PULWAMA",
+    "latitude": 3770496.2669811235,
+    "longitude": 514662.59765400516,
+    "elevation": 4181.2001953125,
+    "difficulty": "Difficult",
+    "season": "May - October"
+  },
+  {
+    "name": "Peak_136",
+    "district": "PULWAMA",
+    "latitude": 3765464.9181360295,
+    "longitude": 521620.23434264946,
+    "elevation": 4163.59375,
+    "difficulty": "Difficult",
+    "season": "May - October"
+  },
+  {
+    "name": "Peak_137",
+    "district": "PULWAMA",
+    "latitude": 3765033.6596635925,
+    "longitude": 521677.73547230766,
+    "elevation": 4160.11669921875,
+    "difficulty": "Difficult",
+    "season": "May - October"
+  },
+  {
+    "name": "Peak_138",
+    "district": "PULWAMA",
+    "latitude": 3770927.52545356,
+    "longitude": 514633.847089176,
+    "elevation": 4151.818359375,
+    "difficulty": "Difficult",
+    "season": "May - October"
+  },
+  {
+    "name": "Peak_139",
+    "district": "PULWAMA",
+    "latitude": 3770381.264721807,
+    "longitude": 513742.57957947365,
+    "elevation": 4127.73193359375,
+    "difficulty": "Difficult",
+    "season": "May - October"
+  },
+  {
+    "name": "Peak_140",
+    "district": "R>JAURI",
+    "latitude": 3706497.509671527,
+    "longitude": 464722.8665458431,
+    "elevation": 4607.990234375,
+    "difficulty": "Extreme",
+    "season": "June - September"
+  },
+  {
+    "name": "Peak_141",
+    "district": "R>JAURI",
+    "latitude": 3706382.5074122106,
+    "longitude": 465441.6306665708,
+    "elevation": 4395.90380859375,
+    "difficulty": "Difficult",
+    "season": "May - October"
+  },
+  {
+    "name": "Peak_142",
+    "district": "R>JAURI",
+    "latitude": 3706641.262495673,
+    "longitude": 464119.1046844318,
+    "elevation": 4348.447265625,
+    "difficulty": "Difficult",
+    "season": "May - October"
+  },
+  {
+    "name": "Peak_143",
+    "district": "R>JAURI",
+    "latitude": 3706468.759106698,
+    "longitude": 463774.0979064825,
+    "elevation": 4337.0185546875,
+    "difficulty": "Difficult",
+    "season": "May - October"
+  },
+  {
+    "name": "Peak_144",
+    "district": "R>JAURI",
+    "latitude": 3706497.509671527,
+    "longitude": 463889.1001657989,
+    "elevation": 4334.1142578125,
+    "difficulty": "Difficult",
+    "season": "May - October"
+  },
+  {
+    "name": "Peak_145",
+    "district": "R>JAURI",
+    "latitude": 3706612.511930844,
+    "longitude": 464004.10242511536,
+    "elevation": 4327.7880859375,
+    "difficulty": "Difficult",
+    "season": "May - October"
+  },
+  {
+    "name": "Peak_146",
+    "district": "R>JAURI",
+    "latitude": 3707302.525486742,
+    "longitude": 461675.3066739575,
+    "elevation": 4280.39599609375,
+    "difficulty": "Difficult",
+    "season": "May - October"
+  },
+  {
+    "name": "Peak_147",
+    "district": "R>JAURI",
+    "latitude": 3707273.774921913,
+    "longitude": 461675.3066739575,
+    "elevation": 4280.39599609375,
+    "difficulty": "Difficult",
+    "season": "May - October"
+  },
+  {
+    "name": "Peak_148",
+    "district": "R>JAURI",
+    "latitude": 3707417.5277460585,
+    "longitude": 461704.05723878666,
+    "elevation": 4265.65869140625,
+    "difficulty": "Difficult",
+    "season": "May - October"
+  },
+  {
+    "name": "Peak_149",
+    "district": "R>JAURI",
+    "latitude": 3705864.9972452866,
+    "longitude": 465384.12953691254,
+    "elevation": 4196.93603515625,
+    "difficulty": "Difficult",
+    "season": "May - October"
+  },
+  {
+    "name": "Peak_150",
+    "district": "R>MBAN",
+    "latitude": 3697067.3244075794,
+    "longitude": 501149.832184324,
+    "elevation": 4503.740234375,
+    "difficulty": "Extreme",
+    "season": "June - September"
+  },
+  {
+    "name": "Peak_151",
+    "district": "R>MBAN",
+    "latitude": 3697268.578361383,
+    "longitude": 501121.0816194948,
+    "elevation": 4499.3310546875,
+    "difficulty": "Difficult",
+    "season": "May - October"
+  },
+  {
+    "name": "Peak_152",
+    "district": "R>MBAN",
+    "latitude": 3700028.6325849774,
+    "longitude": 503334.87511133624,
+    "elevation": 4366.32763671875,
+    "difficulty": "Difficult",
+    "season": "May - October"
+  },
+  {
+    "name": "Peak_153",
+    "district": "R>MBAN",
+    "latitude": 3696377.310851681,
+    "longitude": 501523.5895271024,
+    "elevation": 4261.3994140625,
+    "difficulty": "Difficult",
+    "season": "May - October"
+  },
+  {
+    "name": "Peak_154",
+    "district": "R>MBAN",
+    "latitude": 3701724.915909895,
+    "longitude": 502328.60534231743,
+    "elevation": 4255.6171875,
+    "difficulty": "Difficult",
+    "season": "May - October"
+  },
+  {
+    "name": "Peak_155",
+    "district": "R>MBAN",
+    "latitude": 3701351.1585671166,
+    "longitude": 502903.6166388996,
+    "elevation": 4252.56103515625,
+    "difficulty": "Difficult",
+    "season": "May - October"
+  },
+  {
+    "name": "Peak_156",
+    "district": "R>MBAN",
+    "latitude": 3701868.6687340406,
+    "longitude": 502242.3536478301,
+    "elevation": 4250.93896484375,
+    "difficulty": "Difficult",
+    "season": "May - October"
+  },
+  {
+    "name": "Peak_157",
+    "district": "R>MBAN",
+    "latitude": 3701839.9181692116,
+    "longitude": 502242.3536478301,
+    "elevation": 4250.93896484375,
+    "difficulty": "Difficult",
+    "season": "May - October"
+  },
+  {
+    "name": "Peak_158",
+    "district": "R>MBAN",
+    "latitude": 3701523.6619560914,
+    "longitude": 502673.6121202668,
+    "elevation": 4230.1943359375,
+    "difficulty": "Difficult",
+    "season": "May - October"
+  },
+  {
+    "name": "Peak_159",
+    "district": "R>MBAN",
+    "latitude": 3695831.0501199276,
+    "longitude": 501868.5963050517,
+    "elevation": 4228.81494140625,
+    "difficulty": "Difficult",
+    "season": "May - October"
+  },
+  {
+    "name": "Peak_160",
+    "district": "RI>SI",
+    "latitude": 3696981.072713092,
+    "longitude": 501092.33105466573,
+    "elevation": 4501.61962890625,
+    "difficulty": "Extreme",
+    "season": "June - September"
+  },
+  {
+    "name": "Peak_161",
+    "district": "RI>SI",
+    "latitude": 3704111.212790711,
+    "longitude": 485883.2822600672,
+    "elevation": 4493.08349609375,
+    "difficulty": "Difficult",
+    "season": "May - October"
+  },
+  {
+    "name": "Peak_162",
+    "district": "RI>SI",
+    "latitude": 3704139.9633555403,
+    "longitude": 485739.52943592164,
+    "elevation": 4488.16748046875,
+    "difficulty": "Difficult",
+    "season": "May - October"
+  },
+  {
+    "name": "Peak_163",
+    "district": "RI>SI",
+    "latitude": 3704082.462225882,
+    "longitude": 486027.0350842127,
+    "elevation": 4474.28125,
+    "difficulty": "Difficult",
+    "season": "May - October"
+  },
+  {
+    "name": "Peak_164",
+    "district": "RI>SI",
+    "latitude": 3703938.7094017365,
+    "longitude": 486889.552029086,
+    "elevation": 4452.87744140625,
+    "difficulty": "Difficult",
+    "season": "May - October"
+  },
+  {
+    "name": "Peak_165",
+    "district": "RI>SI",
+    "latitude": 3703996.2105313945,
+    "longitude": 486429.54299182026,
+    "elevation": 4442.75830078125,
+    "difficulty": "Difficult",
+    "season": "May - October"
+  },
+  {
+    "name": "Peak_166",
+    "district": "RI>SI",
+    "latitude": 3697814.839093136,
+    "longitude": 501006.07936017844,
+    "elevation": 4400.72607421875,
+    "difficulty": "Difficult",
+    "season": "May - October"
+  },
+  {
+    "name": "Peak_167",
+    "district": "RI>SI",
+    "latitude": 3709516.3189785834,
+    "longitude": 472888.02695731,
+    "elevation": 4391.3837890625,
+    "difficulty": "Difficult",
+    "season": "May - October"
+  },
+  {
+    "name": "Peak_168",
+    "district": "RI>SI",
+    "latitude": 3707992.539042641,
+    "longitude": 467626.67359358305,
+    "elevation": 4357.1904296875,
+    "difficulty": "Difficult",
+    "season": "May - October"
+  },
+  {
+    "name": "Peak_169",
+    "district": "RI>SI",
+    "latitude": 3706957.518708793,
+    "longitude": 466447.9004355896,
+    "elevation": 4347.83837890625,
+    "difficulty": "Difficult",
+    "season": "May - October"
+  },
+  {
+    "name": "Peak_170",
+    "district": "SHUP|YAN",
+    "latitude": 3728146.684987846,
+    "longitude": 459864.0210897237,
+    "elevation": 4471.564453125,
+    "difficulty": "Difficult",
+    "season": "May - October"
+  },
+  {
+    "name": "Peak_171",
+    "district": "SHUP|YAN",
+    "latitude": 3728434.190636137,
+    "longitude": 460812.78972908424,
+    "elevation": 4320.7626953125,
+    "difficulty": "Difficult",
+    "season": "May - October"
+  },
+  {
+    "name": "Peak_172",
+    "district": "SHUP|YAN",
+    "latitude": 3728405.440071308,
+    "longitude": 460812.78972908424,
+    "elevation": 4320.7626953125,
+    "difficulty": "Difficult",
+    "season": "May - October"
+  },
+  {
+    "name": "Peak_173",
+    "district": "SHUP|YAN",
+    "latitude": 3728060.433293359,
+    "longitude": 460755.28859942604,
+    "elevation": 4319.66357421875,
+    "difficulty": "Difficult",
+    "season": "May - October"
+  },
+  {
+    "name": "Peak_174",
+    "district": "SHUP|YAN",
+    "latitude": 3728204.1861175043,
+    "longitude": 462192.8168408815,
+    "elevation": 4242.0595703125,
+    "difficulty": "Difficult",
+    "season": "May - October"
+  },
+  {
+    "name": "Peak_175",
+    "district": "SHUP|YAN",
+    "latitude": 3728290.4378119917,
+    "longitude": 461215.29763669183,
+    "elevation": 4236.8212890625,
+    "difficulty": "Difficult",
+    "season": "May - October"
+  },
+  {
+    "name": "Peak_176",
+    "district": "SHUP|YAN",
+    "latitude": 3728060.433293359,
+    "longitude": 462077.8145815651,
+    "elevation": 4226.85888671875,
+    "difficulty": "Difficult",
+    "season": "May - October"
+  },
+  {
+    "name": "Peak_177",
+    "district": "SHUP|YAN",
+    "latitude": 3728117.934423017,
+    "longitude": 460295.2795621603,
+    "elevation": 4225.171875,
+    "difficulty": "Difficult",
+    "season": "May - October"
+  },
+  {
+    "name": "Peak_178",
+    "district": "SHUP|YAN",
+    "latitude": 3728232.9366823332,
+    "longitude": 461042.79424771713,
+    "elevation": 4221.71630859375,
+    "difficulty": "Difficult",
+    "season": "May - October"
+  },
+  {
+    "name": "Peak_179",
+    "district": "SHUP|YAN",
+    "latitude": 3728146.684987846,
+    "longitude": 460496.53351596405,
+    "elevation": 4216.7978515625,
+    "difficulty": "Difficult",
+    "season": "May - October"
+  },
+  {
+    "name": "Peak_180",
+    "district": "SR|NAGAR",
+    "latitude": 3770582.518675611,
+    "longitude": 495140.9641350402,
+    "elevation": 2004.958251953125,
+    "difficulty": "Easy",
+    "season": "Year-round"
+  },
+  {
+    "name": "Peak_181",
+    "district": "SR|NAGAR",
+    "latitude": 3770956.276018389,
+    "longitude": 485595.7766117761,
+    "elevation": 1884.2652587890625,
+    "difficulty": "Easy",
+    "season": "Year-round"
+  },
+  {
+    "name": "Peak_182",
+    "district": "SR|NAGAR",
+    "latitude": 3770956.276018389,
+    "longitude": 485337.0215283141,
+    "elevation": 1852.2864990234375,
+    "difficulty": "Easy",
+    "season": "Year-round"
+  },
+  {
+    "name": "Peak_183",
+    "district": "SR|NAGAR",
+    "latitude": 3773917.5841957876,
+    "longitude": 483094.4774716436,
+    "elevation": 1744.0423583984375,
+    "difficulty": "Easy",
+    "season": "Year-round"
+  },
+  {
+    "name": "Peak_184",
+    "district": "SR|NAGAR",
+    "latitude": 3773515.07628818,
+    "longitude": 489074.59495609824,
+    "elevation": 1712.0733642578125,
+    "difficulty": "Easy",
+    "season": "Year-round"
+  },
+  {
+    "name": "Peak_185",
+    "district": "SR|NAGAR",
+    "latitude": 3773428.8245936926,
+    "longitude": 489103.34552092734,
+    "elevation": 1708.5701904296875,
+    "difficulty": "Easy",
+    "season": "Year-round"
+  },
+  {
+    "name": "Peak_186",
+    "district": "SR|NAGAR",
+    "latitude": 3773198.82007506,
+    "longitude": 489275.84890990204,
+    "elevation": 1702.196533203125,
+    "difficulty": "Easy",
+    "season": "Year-round"
+  },
+  {
+    "name": "Peak_187",
+    "district": "SR|NAGAR",
+    "latitude": 3771732.5412687752,
+    "longitude": 485854.5316952381,
+    "elevation": 1694.195556640625,
+    "difficulty": "Easy",
+    "season": "Year-round"
+  },
+  {
+    "name": "Peak_188",
+    "district": "SR|NAGAR",
+    "latitude": 3779696.4477264383,
+    "longitude": 491920.90087418,
+    "elevation": 1682.195556640625,
+    "difficulty": "Easy",
+    "season": "Year-round"
+  },
+  {
+    "name": "Peak_189",
+    "district": "SR|NAGAR",
+    "latitude": 3780070.205069217,
+    "longitude": 491690.8963555471,
+    "elevation": 1681.4117431640625,
+    "difficulty": "Easy",
+    "season": "Year-round"
+  },
+  {
+    "name": "Peak_190",
+    "district": "LEH",
+    "latitude": 3971778.9713497143,
+    "longitude": 636536.2419645975,
+    "elevation": 8570.564453125,
+    "difficulty": "Extreme",
+    "season": "June - September"
+  },
+  {
+    "name": "Peak_191",
+    "district": "LEH",
+    "latitude": 3899586.303063822,
+    "longitude": 462652.82587814727,
+    "elevation": 8104.31005859375,
+    "difficulty": "Extreme",
+    "season": "June - September"
+  },
+  {
+    "name": "Peak_192",
+    "district": "LEH",
+    "latitude": 3899931.3098417716,
+    "longitude": 462624.0753133181,
+    "elevation": 8056.0908203125,
+    "difficulty": "Extreme",
+    "season": "June - September"
+  },
+  {
+    "name": "Peak_193",
+    "district": "LEH",
+    "latitude": 3965166.3414390194,
+    "longitude": 641337.5862910587,
+    "elevation": 8040.44140625,
+    "difficulty": "Extreme",
+    "season": "June - September"
+  },
+  {
+    "name": "Peak_194",
+    "district": "LEH",
+    "latitude": 3899385.049110018,
+    "longitude": 462710.32700780546,
+    "elevation": 8030.611328125,
+    "difficulty": "Extreme",
+    "season": "June - September"
+  },
+  {
+    "name": "Peak_195",
+    "district": "LEH",
+    "latitude": 3954787.387535711,
+    "longitude": 653614.0774730882,
+    "elevation": 7994.296875,
+    "difficulty": "Extreme",
+    "season": "June - September"
+  },
+  {
+    "name": "Peak_196",
+    "district": "LEH",
+    "latitude": 3964160.0716700004,
+    "longitude": 641538.8402448625,
+    "elevation": 7979.47314453125,
+    "difficulty": "Extreme",
+    "season": "June - September"
+  },
+  {
+    "name": "Peak_197",
+    "district": "LEH",
+    "latitude": 3964332.5750589753,
+    "longitude": 641423.837985546,
+    "elevation": 7977.6953125,
+    "difficulty": "Extreme",
+    "season": "June - September"
+  },
+  {
+    "name": "Peak_198",
+    "district": "LEH",
+    "latitude": 3964476.3278831206,
+    "longitude": 641423.837985546,
+    "elevation": 7974.19287109375,
+    "difficulty": "Extreme",
+    "season": "June - September"
+  },
+  {
+    "name": "Peak_199",
+    "district": "LEH",
+    "latitude": 3954672.3852763944,
+    "longitude": 653384.0729544553,
+    "elevation": 7970.17529296875,
+    "difficulty": "Extreme",
+    "season": "June - September"
+  },
+  {
+    "name": "Peak_200",
+    "district": "KARGIL",
+    "latitude": 3760663.5738095683,
+    "longitude": 594617.9184437569,
+    "elevation": 7072.66455078125,
+    "difficulty": "Extreme",
+    "season": "June - September"
+  },
+  {
+    "name": "Peak_201",
+    "district": "KARGIL",
+    "latitude": 3764142.3921538903,
+    "longitude": 597406.7232321803,
+    "elevation": 7041.09814453125,
+    "difficulty": "Extreme",
+    "season": "June - September"
+  },
+  {
+    "name": "Peak_202",
+    "district": "KARGIL",
+    "latitude": 3761008.5805875175,
+    "longitude": 594732.9207030733,
+    "elevation": 6887.31640625,
+    "difficulty": "Extreme",
+    "season": "June - September"
+  },
+  {
+    "name": "Peak_203",
+    "district": "KARGIL",
+    "latitude": 3765033.6596635925,
+    "longitude": 599735.5189833383,
+    "elevation": 6880.33056640625,
+    "difficulty": "Extreme",
+    "season": "June - September"
+  },
+  {
+    "name": "Peak_204",
+    "district": "KARGIL",
+    "latitude": 3763768.6348111117,
+    "longitude": 600138.0268909456,
+    "elevation": 6776.04248046875,
+    "difficulty": "Extreme",
+    "season": "June - September"
+  },
+  {
+    "name": "Peak_205",
+    "district": "KARGIL",
+    "latitude": 3763883.6370704286,
+    "longitude": 600138.0268909456,
+    "elevation": 6771.0078125,
+    "difficulty": "Extreme",
+    "season": "June - September"
+  },
+  {
+    "name": "Peak_206",
+    "district": "KARGIL",
+    "latitude": 3765924.927173295,
+    "longitude": 599850.5212426546,
+    "elevation": 6605.77001953125,
+    "difficulty": "Extreme",
+    "season": "June - September"
+  },
+  {
+    "name": "Peak_207",
+    "district": "KARGIL",
+    "latitude": 3764257.3944132067,
+    "longitude": 599965.523501971,
+    "elevation": 6577.6611328125,
+    "difficulty": "Extreme",
+    "season": "June - September"
+  },
+  {
+    "name": "Peak_208",
+    "district": "KARGIL",
+    "latitude": 3726881.660135365,
+    "longitude": 621240.9414755115,
+    "elevation": 6560.267578125,
+    "difficulty": "Extreme",
+    "season": "June - September"
+  },
+  {
+    "name": "Peak_209",
+    "district": "KARGIL",
+    "latitude": 3727054.16352434,
+    "longitude": 621039.6875217078,
+    "elevation": 6544.376953125,
+    "difficulty": "Extreme",
+    "season": "June - September"
+  },
+  {
+    "name": "Peak_210",
+    "district": "KISHTW>R",
+    "latitude": 3719119.007631506,
+    "longitude": 604939.3712174068,
+    "elevation": 6547.08837890625,
+    "difficulty": "Extreme",
+    "season": "June - September"
+  },
+  {
+    "name": "Peak_211",
+    "district": "KISHTW>R",
+    "latitude": 3719291.5110204807,
+    "longitude": 604709.366698774,
+    "elevation": 6539.7998046875,
+    "difficulty": "Extreme",
+    "season": "June - September"
+  },
+  {
+    "name": "Peak_212",
+    "district": "KISHTW>R",
+    "latitude": 3712678.8811097853,
+    "longitude": 635932.4801031862,
+    "elevation": 6480.4033203125,
+    "difficulty": "Extreme",
+    "season": "June - September"
+  },
+  {
+    "name": "Peak_213",
+    "district": "KISHTW>R",
+    "latitude": 3718026.486168,
+    "longitude": 605543.1330788182,
+    "elevation": 6408.4111328125,
+    "difficulty": "Extreme",
+    "season": "June - September"
+  },
+  {
+    "name": "Peak_214",
+    "district": "KISHTW>R",
+    "latitude": 3707647.5322646913,
+    "longitude": 597492.9749266678,
+    "elevation": 6393.98291015625,
+    "difficulty": "Extreme",
+    "season": "June - September"
+  },
+  {
+    "name": "Peak_215",
+    "district": "KISHTW>R",
+    "latitude": 3687608.388578803,
+    "longitude": 651314.0322867595,
+    "elevation": 6344.41162109375,
+    "difficulty": "Extreme",
+    "season": "June - September"
+  },
+  {
+    "name": "Peak_216",
+    "district": "KISHTW>R",
+    "latitude": 3733293.0360922567,
+    "longitude": 603530.5935407805,
+    "elevation": 6332.099609375,
+    "difficulty": "Extreme",
+    "season": "June - September"
+  },
+  {
+    "name": "Peak_217",
+    "district": "KISHTW>R",
+    "latitude": 3702299.927206477,
+    "longitude": 607383.1692278811,
+    "elevation": 6310.99169921875,
+    "difficulty": "Extreme",
+    "season": "June - September"
+  },
+  {
+    "name": "Peak_218",
+    "district": "KISHTW>R",
+    "latitude": 3741659.4504575273,
+    "longitude": 607354.418663052,
+    "elevation": 6276.95166015625,
+    "difficulty": "Extreme",
+    "season": "June - September"
+  },
+  {
+    "name": "Peak_219",
+    "district": "KISHTW>R",
+    "latitude": 3707935.0379129825,
+    "longitude": 597579.226621155,
+    "elevation": 6265.0517578125,
+    "difficulty": "Extreme",
+    "season": "June - September"
+  },
+  {
+    "name": "Peak_220",
+    "district": "DODA",
+    "latitude": 3670070.5440330463,
+    "longitude": 607440.6703575393,
+    "elevation": 5055.8916015625,
+    "difficulty": "Extreme",
+    "season": "June - September"
+  },
+  {
+    "name": "Peak_221",
+    "district": "DODA",
+    "latitude": 3657132.7898599473,
+    "longitude": 615002.068907595,
+    "elevation": 4949.37939453125,
+    "difficulty": "Extreme",
+    "season": "June - September"
+  },
+  {
+    "name": "Peak_222",
+    "district": "DODA",
+    "latitude": 3669610.5349957803,
+    "longitude": 607009.4118851027,
+    "elevation": 4931.6123046875,
+    "difficulty": "Extreme",
+    "season": "June - September"
+  },
+  {
+    "name": "Peak_223",
+    "district": "DODA",
+    "latitude": 3657449.0460730675,
+    "longitude": 615145.8217317405,
+    "elevation": 4863.78466796875,
+    "difficulty": "Extreme",
+    "season": "June - September"
+  },
+  {
+    "name": "Peak_224",
+    "district": "DODA",
+    "latitude": 3668834.2697453946,
+    "longitude": 608389.4389968999,
+    "elevation": 4858.94091796875,
+    "difficulty": "Extreme",
+    "season": "June - September"
+  },
+  {
+    "name": "Peak_225",
+    "district": "DODA",
+    "latitude": 3668891.7708750525,
+    "longitude": 608303.1873024127,
+    "elevation": 4857.63134765625,
+    "difficulty": "Extreme",
+    "season": "June - September"
+  },
+  {
+    "name": "Peak_226",
+    "district": "DODA",
+    "latitude": 3669064.2742640274,
+    "longitude": 608360.6884320709,
+    "elevation": 4849.10107421875,
+    "difficulty": "Extreme",
+    "season": "June - September"
+  },
+  {
+    "name": "Peak_227",
+    "district": "DODA",
+    "latitude": 3656816.533646827,
+    "longitude": 614599.5609999874,
+    "elevation": 4829.9580078125,
+    "difficulty": "Extreme",
+    "season": "June - September"
+  },
+  {
+    "name": "Peak_228",
+    "district": "DODA",
+    "latitude": 3656816.533646827,
+    "longitude": 614484.558740671,
+    "elevation": 4826.04443359375,
+    "difficulty": "Extreme",
+    "season": "June - September"
+  },
+  {
+    "name": "Peak_229",
+    "district": "DODA",
+    "latitude": 3655033.9986274224,
+    "longitude": 614369.5564813546,
+    "elevation": 4780.1611328125,
+    "difficulty": "Extreme",
+    "season": "June - September"
+  },
+  {
+    "name": "Peak_230",
+    "district": "L>HUL & SPITI",
+    "latitude": 3609061.8454656773,
+    "longitude": 812489.6987187436,
+    "elevation": 6361.3388671875,
+    "difficulty": "Extreme",
+    "season": "June - September"
+  },
+  {
+    "name": "Peak_231",
+    "district": "L>HUL & SPITI",
+    "latitude": 3608774.339817386,
+    "longitude": 812029.6896814778,
+    "elevation": 6290.666015625,
+    "difficulty": "Extreme",
+    "season": "June - September"
+  },
+  {
+    "name": "Peak_232",
+    "district": "L>HUL & SPITI",
+    "latitude": 3603627.9887129758,
+    "longitude": 810764.6648289971,
+    "elevation": 6258.10009765625,
+    "difficulty": "Extreme",
+    "season": "June - September"
+  },
+  {
+    "name": "Peak_233",
+    "district": "L>HUL & SPITI",
+    "latitude": 3596785.3542836476,
+    "longitude": 812834.7054966929,
+    "elevation": 6180.6552734375,
+    "difficulty": "Extreme",
+    "season": "June - September"
+  },
+  {
+    "name": "Peak_234",
+    "district": "L>HUL & SPITI",
+    "latitude": 3594514.0596621484,
+    "longitude": 812259.6942001107,
+    "elevation": 6172.68798828125,
+    "difficulty": "Extreme",
+    "season": "June - September"
+  },
+  {
+    "name": "Peak_235",
+    "district": "L>HUL & SPITI",
+    "latitude": 3680449.4979363545,
+    "longitude": 665028.0517102443,
+    "elevation": 6153.40478515625,
+    "difficulty": "Extreme",
+    "season": "June - September"
+  },
+  {
+    "name": "Peak_236",
+    "district": "L>HUL & SPITI",
+    "latitude": 3602334.2132956656,
+    "longitude": 810505.9097455351,
+    "elevation": 6139.97802734375,
+    "difficulty": "Extreme",
+    "season": "June - September"
+  },
+  {
+    "name": "Peak_237",
+    "district": "L>HUL & SPITI",
+    "latitude": 3602219.2110363496,
+    "longitude": 810563.4108751933,
+    "elevation": 6130.66845703125,
+    "difficulty": "Extreme",
+    "season": "June - September"
+  },
+  {
+    "name": "Peak_238",
+    "district": "L>HUL & SPITI",
+    "latitude": 3601960.4559528874,
+    "longitude": 810649.6625696806,
+    "elevation": 6128.611328125,
+    "difficulty": "Extreme",
+    "season": "June - September"
+  },
+  {
+    "name": "Peak_239",
+    "district": "L>HUL & SPITI",
+    "latitude": 3596641.6014595022,
+    "longitude": 813955.9775250282,
+    "elevation": 6116.8564453125,
+    "difficulty": "Extreme",
+    "season": "June - September"
+  },
+  {
+    "name": "Peak_240",
+    "district": "JAMMU",
+    "latitude": 3655005.248062593,
+    "longitude": 460410.28182147676,
+    "elevation": 1192.0081787109375,
+    "difficulty": "Easy",
+    "season": "Year-round"
+  },
+  {
+    "name": "Peak_241",
+    "district": "JAMMU",
+    "latitude": 3654085.229988062,
+    "longitude": 455551.43636535737,
+    "elevation": 1188.31494140625,
+    "difficulty": "Easy",
+    "season": "Year-round"
+  },
+  {
+    "name": "Peak_242",
+    "district": "JAMMU",
+    "latitude": 3654573.9895901564,
+    "longitude": 459490.2637469453,
+    "elevation": 1185.6680908203125,
+    "difficulty": "Easy",
+    "season": "Year-round"
+  },
+  {
+    "name": "Peak_243",
+    "district": "JAMMU",
+    "latitude": 3631027.2769951164,
+    "longitude": 511787.5411710942,
+    "elevation": 1180.82177734375,
+    "difficulty": "Easy",
+    "season": "Year-round"
+  },
+  {
+    "name": "Peak_244",
+    "district": "JAMMU",
+    "latitude": 3653941.477163916,
+    "longitude": 455752.6903191611,
+    "elevation": 1173.07763671875,
+    "difficulty": "Easy",
+    "season": "Year-round"
+  },
+  {
+    "name": "Peak_245",
+    "district": "JAMMU",
+    "latitude": 3630596.01852268,
+    "longitude": 512161.29851387267,
+    "elevation": 1166.9052734375,
+    "difficulty": "Easy",
+    "season": "Year-round"
+  },
+  {
+    "name": "Peak_246",
+    "district": "JAMMU",
+    "latitude": 3630883.524170971,
+    "longitude": 511902.5434304107,
+    "elevation": 1166.2230224609375,
+    "difficulty": "Easy",
+    "season": "Year-round"
+  },
+  {
+    "name": "Peak_247",
+    "district": "JAMMU",
+    "latitude": 3630711.020781996,
+    "longitude": 512075.0468193853,
+    "elevation": 1162.174560546875,
+    "difficulty": "Easy",
+    "season": "Year-round"
+  },
+  {
+    "name": "Peak_248",
+    "district": "JAMMU",
+    "latitude": 3631889.7939399895,
+    "longitude": 510752.5208372463,
+    "elevation": 1161.4385986328125,
+    "difficulty": "Easy",
+    "season": "Year-round"
+  },
+  {
+    "name": "Peak_249",
+    "district": "JAMMU",
+    "latitude": 3654372.7356363526,
+    "longitude": 459116.5064041668,
+    "elevation": 1158.8291015625,
+    "difficulty": "Easy",
+    "season": "Year-round"
+  }
+]

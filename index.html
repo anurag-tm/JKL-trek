@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#0f172a">
+    <meta name="description" content="JK Trek Explorer - Discover and plan mountain treks in J&K and Ladakh">
+    <title>JK Trek Explorer</title>
+    <link rel="manifest" href="manifest.json">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⛰️</text></svg>">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css" integrity="sha512-sA+Yh0LLFV9RoO0q2CTZj4Tvb3H5qvvEUV0cV5fYgeU6x2rqNN5MIu7O+fonZLbPZpMZlO8BtG4nWq5uG4fsBQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js" integrity="sha512-KZ7N5aKsrD4gN6e0XQxYxY2Yx4VYPDFlMwp6n13FbncOjqd6tXDXa+4nB3gFcsfQgSj1mp8TtQ8LL9fUlvU4nQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <style>
+        :root {
+            --bg: #020617;
+            --card: rgba(15, 23, 42, 0.95);
+            --card-strong: rgba(15, 23, 42, 1);
+            --border: #334155;
+            --text: #f8fafc;
+            --muted: #94a3b8;
+            --accent: #10b981;
+            --accent-soft: rgba(16, 185, 129, 0.12);
+            --shadow: 0 24px 60px rgba(0, 0, 0, 0.35);
+        }
+        body.theme-light {
+            --bg: #f8fafc;
+            --card: rgba(255, 255, 255, 0.96);
+            --card-strong: rgba(248, 250, 252, 1);
+            --border: #e2e8f0;
+            --text: #0f172a;
+            --muted: #64748b;
+            --accent-soft: rgba(16, 185, 129, 0.14);
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html, body { width: 100%; height: 100%; font-family: 'Segoe UI', Tahoma, Geneva, sans-serif; background: var(--bg); color: var(--text); }
+        body { overflow: hidden; }
+        .app-container { display: flex; flex-direction: column; height: 100vh; }
+        .header { padding: 16px 18px; background: linear-gradient(135deg, rgba(2,6,23,0.96), rgba(15,23,42,0.96)); border-bottom: 1px solid var(--border); box-shadow: var(--shadow); backdrop-filter: blur(10px); }
+        .header-content { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+        .header h1 { font-size: 20px; display: flex; align-items: center; gap: 10px; font-weight: 800; letter-spacing: 0.01em; }
+        .header-actions { display: flex; gap: 10px; }
+        .btn-icon, .btn-primary, .btn-secondary { border-radius: 12px; transition: transform 0.2s ease, background 0.2s ease, border-color 0.2s ease; }
+        .btn-icon { width: 40px; height: 40px; border: 1px solid var(--border); background: var(--card); color: var(--text); cursor: pointer; display: inline-flex; align-items: center; justify-content: center; }
+        .btn-icon:hover, .btn-primary:hover, .btn-secondary:hover { transform: translateY(-1px); }
+        .btn-primary { padding: 12px 16px; border: 1px solid transparent; background: var(--accent); color: #0f172a; font-weight: 700; }
+        .btn-secondary { padding: 12px 16px; border: 1px solid var(--border); background: var(--card); color: var(--text); font-weight: 700; }
+        .tabs { display: flex; border-bottom: 1px solid var(--border); background: var(--card); }
+        .tab-btn { flex: 1; padding: 14px 10px; border: none; background: transparent; color: var(--muted); cursor: pointer; font-size: 12px; font-weight: 700; text-transform: uppercase; transition: all 0.25s ease; border-bottom: 3px solid transparent; }
+        .tab-btn.active { color: var(--accent); border-bottom-color: var(--accent); background: var(--accent-soft); }
+        .content { flex: 1; position: relative; overflow: hidden; }
+        .tab-content { display: none; position: absolute; inset: 0; flex-direction: column; }
+        .tab-content.active { display: flex; }
+        #map, #map-trail { width: 100%; height: 100%; }
+        .explore-container { display: flex; flex-direction: column; gap: 14px; padding: 16px; overflow-y: auto; height: 100%; }
+        .explore-section { background: var(--card); border: 1px solid var(--border); border-radius: 18px; padding: 16px; box-shadow: inset 0 0 0 1px rgba(255,255,255,0.03); }
+        .explore-section h3 { color: var(--accent); font-size: 12px; letter-spacing: 0.08em; margin-bottom: 10px; font-weight: 800; text-transform: uppercase; }
+        .district-select, .peak-search { width: 100%; border: 1px solid var(--border); border-radius: 12px; padding: 12px 14px; background: var(--bg); color: var(--text); font-size: 13px; }
+        .peak-search { box-shadow: inset 0 0 0 1px rgba(255,255,255,0.05); }
+        .range-slider { width: 100%; height: 6px; accent-color: var(--accent); margin: 10px 0; }
+        .slider-labels { display: flex; justify-content: space-between; font-size: 12px; color: var(--muted); margin-bottom: 6px; }
+        .quick-filters { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+        .filter-btn { padding: 12px 14px; border: 1px solid var(--border); border-radius: 14px; background: var(--card); color: var(--text); cursor: pointer; font-size: 12px; font-weight: 700; }
+        .filter-btn.active { background: var(--accent); color: #0f172a; border-color: var(--accent); }
+        .peaks-list { display: grid; gap: 12px; max-height: 420px; overflow-y: auto; }
+        .peak-card { background: var(--card); border: 1px solid var(--border); border-radius: 18px; padding: 16px; cursor: pointer; transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease; }
+        .peak-card:hover { transform: translateY(-2px); border-color: var(--accent); box-shadow: 0 12px 30px rgba(0,0,0,0.18); }
+        .peak-card-title { font-weight: 800; color: var(--accent); margin-bottom: 8px; font-size: 14px; }
+        .peak-card-info { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; font-size: 12px; color: var(--muted); }
+        .trail-controls { display: grid; gap: 12px; padding: 16px; background: var(--card); border-bottom: 1px solid var(--border); }
+        .trail-buttons { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+        .trail-info { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; background: var(--bg); border: 1px solid var(--border); border-radius: 18px; padding: 14px; }
+        .trail-info-item { text-align: center; font-size: 12px; }
+        .trail-info-label { color: var(--muted); margin-bottom: 6px; font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; }
+        .trail-info-value { color: var(--text); font-weight: 800; }
+        .summit-container { display: flex; flex-direction: column; gap: 14px; padding: 16px; overflow-y: auto; }
+        .leaderboard { background: var(--card); border: 1px solid var(--border); border-radius: 18px; overflow: hidden; }
+        .leaderboard-header { background: linear-gradient(135deg, rgba(16,185,129,0.95), rgba(5,150,105,0.95)); color: #0f172a; font-weight: 800; padding: 16px; }
+        .leaderboard-item { padding: 14px 16px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 14px; }
+        .leaderboard-item:last-child { border-bottom: none; }
+        .profile-container { display: flex; flex-direction: column; gap: 14px; padding: 16px; overflow-y: auto; }
+        .profile-card { background: var(--card); border: 1px solid var(--border); border-radius: 22px; padding: 20px; }
+        .profile-card-header { display: flex; gap: 16px; align-items: center; margin-bottom: 18px; }
+        .profile-avatar { width: 60px; height: 60px; border-radius: 18px; background: var(--accent); display: flex; align-items: center; justify-content: center; font-size: 28px; }
+        .profile-stats { display: grid; gap: 12px; margin-top: 12px; }
+        .profile-stat { display: flex; justify-content: space-between; color: var(--muted); font-size: 13px; }
+        .profile-stat strong { color: var(--text); }
+        .map-overlay { position: absolute; left: 18px; top: 18px; z-index: 400; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; width: calc(100% - 36px); max-width: 760px; pointer-events: none; }
+        .stat-card { min-height: 76px; padding: 14px 16px; background: rgba(15, 23, 42, 0.92); border: 1px solid rgba(255,255,255,0.06); border-radius: 18px; box-shadow: 0 20px 40px rgba(0,0,0,0.18); }
+        .stat-card strong { display: block; font-size: 20px; font-weight: 800; margin-bottom: 6px; }
+        .stat-card span { color: var(--muted); font-size: 12px; }
+        .peak-details-card { position: absolute; right: 18px; bottom: 18px; max-width: 320px; background: var(--card); border: 1px solid var(--border); border-radius: 18px; padding: 16px; box-shadow: var(--shadow); z-index: 400; }
+        .peak-details-header { color: var(--accent); font-weight: 800; margin-bottom: 12px; }
+        .peak-details-body { display: grid; gap: 10px; }
+        .detail-line { display: flex; justify-content: space-between; color: var(--muted); font-size: 13px; }
+        .detail-line span:first-child { color: var(--text); }
+        .toast-container { position: fixed; bottom: 20px; right: 20px; display: flex; flex-direction: column; gap: 10px; z-index: 9999; }
+        .toast { min-width: 240px; padding: 14px 16px; border-radius: 14px; border-left: 4px solid var(--accent); background: var(--card); color: var(--text); box-shadow: 0 20px 50px rgba(0,0,0,0.25); }
+        .toast.error { border-color: #ef4444; }
+        .toast.warning { border-color: #f59e0b; }
+        .loading { display: inline-flex; align-items: center; gap: 10px; font-size: 13px; color: var(--muted); }
+        .spinner { width: 16px; height: 16px; border: 2px solid rgba(255,255,255,0.12); border-top-color: var(--accent); border-radius: 50%; animation: spin 1s linear infinite; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        @media (max-width: 980px) {
+            .map-overlay { grid-template-columns: 1fr; width: calc(100% - 36px); }
+            .trail-info { grid-template-columns: 1fr; }
+            .quick-filters { grid-template-columns: 1fr; }
+            .trail-buttons { grid-template-columns: 1fr; }
+        }
+        @media (max-width: 680px) {
+            .header-content { flex-direction: column; align-items: flex-start; }
+            .tabs { flex-wrap: wrap; gap: 4px; }
+            .tab-btn { font-size: 11px; }
+            .map-overlay { left: 12px; right: 12px; top: 12px; }
+            .peak-details-card { right: 12px; left: 12px; bottom: 12px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <div class="header">
+            <div class="header-content">
+                <h1>⛰️ JK Trek Explorer</h1>
+                <div class="header-actions">
+                    <button class="btn-icon" id="gps-btn" title="GPS">📍</button>
+                    <button class="btn-icon" id="dark-btn" title="Dark">🌙</button>
+                </div>
+            </div>
+        </div>
+        <div class="tabs">
+            <button class="tab-btn active" data-tab="map">Map</button>
+            <button class="tab-btn" data-tab="explore">Explore</button>
+            <button class="tab-btn" data-tab="trail">Trail</button>
+            <button class="tab-btn" data-tab="summit">Summit</button>
+            <button class="tab-btn" data-tab="profile">Profile</button>
+        </div>
+        <div class="content">
+            <div class="tab-content active" id="map-tab">
+                <div class="map-overlay" id="map-summary">
+                    <div class="stat-card"><strong id="summary-count">0</strong><span>Peaks loaded</span></div>
+                    <div class="stat-card"><strong id="summary-highest">-</strong><span>Highest peak</span></div>
+                    <div class="stat-card"><strong id="summary-districts">0</strong><span>Districts</span></div>
+                </div>
+                <div id="map"></div>
+                <div class="peak-details-card" id="peak-details-card" hidden>
+                    <div class="peak-details-header">Peak Details</div>
+                    <div class="peak-details-body">
+                        <div><strong id="detail-name">Select a peak</strong></div>
+                        <div class="detail-line"><span>District</span><span id="detail-district">-</span></div>
+                        <div class="detail-line"><span>Elevation</span><span id="detail-elevation">-</span></div>
+                        <div class="detail-line"><span>Difficulty</span><span id="detail-difficulty">-</span></div>
+                        <div class="detail-line"><span>Season</span><span id="detail-season">-</span></div>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-content" id="explore-tab">
+                <div class="explore-container">
+                    <div class="explore-section"><h3>📍 District</h3><select id="district-select" class="district-select"><option value="">All districts</option></select></div>
+                    <div class="explore-section"><h3>🔎 Search</h3><input id="peak-search" class="peak-search" type="search" placeholder="Search peak by name"></div>
+                    <div class="explore-section"><h3>⬆️ Elevation</h3><div class="slider-labels"><span id="elev-min">1000m</span><span id="elev-max">8000m</span></div><input id="elev-min-slider" class="range-slider" type="range" min="0" max="8000" value="1000"><input id="elev-max-slider" class="range-slider" type="range" min="0" max="8000" value="8000"></div>
+                    <div class="explore-section"><h3>💪 Difficulty</h3><div class="quick-filters"><button class="filter-btn active" data-difficulty="">All</button><button class="filter-btn" data-difficulty="Easy">Easy</button><button class="filter-btn" data-difficulty="Moderate">Moderate</button><button class="filter-btn" data-difficulty="Difficult">Difficult</button><button class="filter-btn" data-difficulty="Extreme">Extreme</button></div></div>
+                    <div class="explore-section"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;"><h3>🏔️ Peaks</h3><button class="btn-secondary" id="reset-filters">Reset filters</button></div><div class="peaks-list" id="peaks-list"><div class="loading"><span class="spinner"></span>Loading peaks...</div></div></div>
+                </div>
+            </div>
+            <div class="tab-content" id="trail-tab">
+                <div style="display:flex;flex-direction:column;height:100%;gap:0;">
+                    <div class="trail-controls">
+                        <div class="trail-buttons"><button class="btn-primary" id="draw-trail-btn">🖊️ Draw</button><button class="btn-secondary" id="clear-trail-btn">🗑️ Clear</button></div>
+                        <div class="trail-info"><div class="trail-info-item"><div class="trail-info-label">Distance</div><div class="trail-info-value" id="trail-distance">0 km</div></div><div class="trail-info-item"><div class="trail-info-label">Elevation</div><div class="trail-info-value" id="trail-elevation">0 m</div></div><div class="trail-info-item"><div class="trail-info-label">Difficulty</div><div class="trail-info-value" id="trail-difficulty">-</div></div></div>
+                    </div>
+                    <div id="map-trail" style="flex:1;"></div>
+                </div>
+            </div>
+            <div class="tab-content" id="summit-tab">
+                <div class="summit-container"><div class="leaderboard"><div class="leaderboard-header">🏔️ Top Peaks</div><div id="leaderboard-list"></div></div></div>
+            </div>
+            <div class="tab-content" id="profile-tab">
+                <div class="profile-container">
+                    <div class="profile-card">
+                        <div class="profile-card-header"><div class="profile-avatar">👤</div><div><div id="profile-name" style="font-weight:700;font-size:16px;">Guest Explorer</div><div id="profile-email" style="font-size:12px;color:var(--muted);">Sign in to save trails</div></div></div>
+                        <button class="btn-primary" id="login-btn" style="width:100%;">Sign in with Google</button>
+                        <div class="profile-stats"><div class="profile-stat"><span>Peaks loaded</span><strong id="profile-peak-count">0</strong></div><div class="profile-stat"><span>Map status</span><strong id="profile-map-status">Initializing</strong></div><div class="profile-stat"><span>Active district</span><strong id="profile-active-district">All</strong></div></div>
+                        <div style="display:grid;gap:12px;margin-top:16px;"><button class="btn-secondary" id="focus-top-btn">Show highest peak</button><button class="btn-secondary" id="theme-btn">Toggle theme</button></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="toast-container" id="toast-container"></div>
+    <script>
+        console.log('[Trek] Loading...');
+        class JKTrekApp {
+            constructor() {
+                this.map = null;
+                this.mapTrail = null;
+                this.peakMarkers = [];
+                this.trailPoints = [];
+                this.trailLayers = [];
+                this.peaksData = [];
+                this.currentDistrict = '';
+                this.currentDifficulty = '';
+                this.searchQuery = '';
+                this.elevationMin = 1000;
+                this.elevationMax = 8000;
+                this.isDrawingTrail = false;
+                this.selectedPeak = null;
+                this.init();
+            }
+            async init() {
+                console.log('[Trek] Initializing...');
+                this.setupUI();
+                await this.loadPeaks();
+                setTimeout(() => {
+                    this.initMaps();
+                    this.populateDistrictSelect();
+                    this.filterPeaks();
+                    this.loadLeaderboard();
+                    this.updateProfile();
+                }, 300);
+            }
+            setupUI() {
+                document.querySelectorAll('.tab-btn').forEach(btn => {
+                    btn.addEventListener('click', () => this.switchTab(btn.dataset.tab));
+                });
+                document.getElementById('district-select').addEventListener('change', e => {
+                    this.currentDistrict = e.target.value;
+                    this.updateProfile();
+                    this.filterPeaks();
+                });
+                document.getElementById('peak-search').addEventListener('input', e => {
+                    this.searchQuery = e.target.value.trim();
+                    this.filterPeaks();
+                });
+                document.getElementById('reset-filters').addEventListener('click', () => this.resetFilters());
+                document.getElementById('elev-min-slider').addEventListener('input', e => {
+                    this.elevationMin = Number(e.target.value);
+                    document.getElementById('elev-min').textContent = `${this.elevationMin}m`;
+                    this.filterPeaks();
+                });
+                document.getElementById('elev-max-slider').addEventListener('input', e => {
+                    this.elevationMax = Number(e.target.value);
+                    document.getElementById('elev-max').textContent = `${this.elevationMax}m`;
+                    this.filterPeaks();
+                });
+                document.querySelectorAll('.filter-btn').forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                        btn.classList.add('active');
+                        this.currentDifficulty = btn.dataset.difficulty;
+                        this.filterPeaks();
+                    });
+                });
+                document.getElementById('draw-trail-btn').addEventListener('click', () => this.toggleTrailMode());
+                document.getElementById('clear-trail-btn').addEventListener('click', () => this.clearTrail());
+                document.getElementById('gps-btn').addEventListener('click', () => this.centerOnLocation());
+                document.getElementById('dark-btn').addEventListener('click', () => this.toggleTheme());
+                document.getElementById('theme-btn').addEventListener('click', () => this.toggleTheme());
+                document.getElementById('login-btn').addEventListener('click', () => this.showToast('Firebase setup required', 'warning'));
+                document.getElementById('focus-top-btn').addEventListener('click', () => this.focusTopPeak());
+            }
+            initMaps() {
+                console.log('[Trek] Init maps');
+                try {
+                    this.map = L.map('map').setView([33.5, 75.5], 7);
+                    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                        attribution: '© OpenStreetMap',
+                        maxZoom: 19
+                    }).addTo(this.map);
+
+                    this.mapTrail = L.map('map-trail').setView([33.5, 75.5], 7);
+                    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                        attribution: '© OpenStreetMap',
+                        maxZoom: 19
+                    }).addTo(this.mapTrail);
+                    this.mapTrail.on('click', e => this.addTrailPoint(e.latlng));
+                    this.showToast('Maps loaded', 'success');
+                } catch (err) {
+                    console.error('[Trek] Map error:', err);
+                    this.showToast('Map error: ' + err.message, 'error');
+                }
+            }
+            async loadPeaks() {
+                console.log('[Trek] Loading peaks...');
+                try {
+                    const res = await fetch('data/peaks.json');
+                    if (!res.ok) throw new Error('HTTP ' + res.status);
+                    this.peaksData = await res.json();
+                    console.log('[Trek] Loaded', this.peaksData.length, 'peaks');
+                    this.showToast(`✓ Loaded ${this.peaksData.length} peaks`, 'success');
+                } catch (err) {
+                    console.error('[Trek] Load error:', err);
+                    this.showToast('Using sample data: ' + err.message, 'warning');
+                    this.peaksData = [
+                        { name: 'Nun Peak', district: 'Kargil', elevation: 7135, difficulty: 'Extreme', season: 'Jun-Sep', latitude: 34.6, longitude: 76.1 },
+                        { name: 'Kun Peak', district: 'Kargil', elevation: 7077, difficulty: 'Extreme', season: 'Jun-Sep', latitude: 34.7, longitude: 76.0 },
+                        { name: 'Harmukh', district: 'Ganderbal', elevation: 5142, difficulty: 'Difficult', season: 'May-Oct', latitude: 34.2, longitude: 74.7 }
+                    ];
+                }
+                this.updateProfile();
+            }
+            populateDistrictSelect() {
+                const districts = [...new Set(this.peaksData.map(p => p.district))].sort();
+                const sel = document.getElementById('district-select');
+                districts.forEach(name => {
+                    const opt = document.createElement('option');
+                    opt.value = name;
+                    opt.textContent = name;
+                    sel.appendChild(opt);
+                });
+            }
+            filterPeaks() {
+                const filtered = this.peaksData.filter(item => {
+                    const d1 = !this.currentDistrict || item.district === this.currentDistrict;
+                    const d2 = !this.currentDifficulty || item.difficulty === this.currentDifficulty;
+                    const d3 = item.elevation >= this.elevationMin && item.elevation <= this.elevationMax;
+                    const d4 = !this.searchQuery || item.name.toLowerCase().includes(this.searchQuery.toLowerCase());
+                    return d1 && d2 && d3 && d4;
+                });
+                this.renderPeakList(filtered);
+                this.renderMapMarkers(filtered);
+                this.updateSummaryCards(filtered);
+                this.loadLeaderboard();
+            }
+            renderPeakList(peaks) {
+                const container = document.getElementById('peaks-list');
+                container.innerHTML = '';
+                if (!peaks.length) {
+                    container.innerHTML = '<div style="color:var(--muted);">No peaks found.</div>';
+                    return;
+                }
+                peaks.slice(0, 50).forEach(peak => {
+                    const card = document.createElement('div');
+                    card.className = 'peak-card';
+                    card.innerHTML = `<div class="peak-card-title">${peak.name}</div>
+                        <div class="peak-card-info"><div>${peak.district}</div><div>${Math.round(peak.elevation)}m</div></div>
+                        <div class="peak-card-info"><div>${peak.difficulty}</div><div>${peak.season}</div></div>`;
+                    card.addEventListener('click', () => {
+                        if (this.map) {
+                            this.map.flyTo([peak.latitude, peak.longitude], 12);
+                            this.showPeakDetails(peak);
+                            this.showToast(`Selected: ${peak.name}`, 'success');
+                        }
+                    });
+                    container.appendChild(card);
+                });
+            }
+            renderMapMarkers(peaks) {
+                this.peakMarkers.forEach(m => {
+                    try { this.map.removeLayer(m); } catch (e) {}
+                });
+                this.peakMarkers = [];
+                if (!this.map) return;
+                peaks.forEach(item => {
+                    try {
+                        const marker = L.circleMarker([item.latitude, item.longitude], {
+                            radius: 6,
+                            color: '#10b981',
+                            fillColor: '#10b981',
+                            fillOpacity: 0.9,
+                            weight: 2
+                        }).addTo(this.map);
+                        marker.bindPopup(`${item.name}<br>${Math.round(item.elevation)}m<br>${item.district}`);
+                        marker.on('click', () => this.showPeakDetails(item));
+                        this.peakMarkers.push(marker);
+                    } catch (e) { }
+                });
+            }
+            showPeakDetails(peak) {
+                this.selectedPeak = peak;
+                const card = document.getElementById('peak-details-card');
+                document.getElementById('detail-name').textContent = peak.name;
+                document.getElementById('detail-district').textContent = peak.district;
+                document.getElementById('detail-elevation').textContent = `${Math.round(peak.elevation)} m`;
+                document.getElementById('detail-difficulty').textContent = peak.difficulty;
+                document.getElementById('detail-season').textContent = peak.season;
+                card.hidden = false;
+            }
+            updateSummaryCards(peaks) {
+                const count = peaks.length;
+                const districts = new Set(peaks.map(p => p.district)).size;
+                const top = peaks.slice().sort((a, b) => b.elevation - a.elevation)[0];
+                document.getElementById('summary-count').textContent = count;
+                document.getElementById('summary-highest').textContent = top ? top.name : '-';
+                document.getElementById('summary-districts').textContent = districts;
+            }
+            resetFilters() {
+                this.currentDistrict = '';
+                this.currentDifficulty = '';
+                this.searchQuery = '';
+                this.elevationMin = 1000;
+                this.elevationMax = 8000;
+                document.getElementById('district-select').value = '';
+                document.getElementById('peak-search').value = '';
+                document.getElementById('elev-min-slider').value = 1000;
+                document.getElementById('elev-max-slider').value = 8000;
+                document.getElementById('elev-min').textContent = '1000m';
+                document.getElementById('elev-max').textContent = '8000m';
+                document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                document.querySelector('.filter-btn[data-difficulty=""]').classList.add('active');
+                this.switchTab('explore');
+                this.filterPeaks();
+                this.showToast('Filters reset', 'success');
+            }
+            focusTopPeak() {
+                const topPeak = this.peaksData.slice().sort((a, b) => b.elevation - a.elevation)[0];
+                if (!topPeak) {
+                    this.showToast('No peak data available', 'warning');
+                    return;
+                }
+                if (this.map) this.map.flyTo([topPeak.latitude, topPeak.longitude], 12);
+                this.showPeakDetails(topPeak);
+                this.showToast(`Focusing on ${topPeak.name}`, 'success');
+            }
+            toggleTheme() {
+                document.body.classList.toggle('theme-light');
+                const isLight = document.body.classList.contains('theme-light');
+                this.showToast(isLight ? 'Light mode enabled' : 'Dark mode enabled', 'success');
+            }
+            addTrailPoint(latlng) {
+                if (!this.isDrawingTrail || !this.mapTrail) return;
+                this.trailPoints.push(latlng);
+                const m = L.circleMarker(latlng, { radius: 5, fillColor: '#10b981', color: '#020617', weight: 2, fillOpacity: 0.9 }).addTo(this.mapTrail);
+                this.trailLayers.push(m);
+                if (this.trailPoints.length > 1) {
+                    const seg = L.polyline([this.trailPoints[this.trailPoints.length - 2], latlng], { color: '#10b981', weight: 3 }).addTo(this.mapTrail);
+                    this.trailLayers.push(seg);
+                }
+                this.updateTrailStats();
+            }
+            clearTrail() {
+                this.trailPoints = [];
+                this.trailLayers.forEach(l => {
+                    try { this.mapTrail.removeLayer(l); } catch (e) {}
+                });
+                this.trailLayers = [];
+                this.updateTrailStats();
+                this.showToast('Trail cleared');
+            }
+            toggleTrailMode() {
+                this.isDrawingTrail = !this.isDrawingTrail;
+                const btn = document.getElementById('draw-trail-btn');
+                btn.classList.toggle('active');
+                this.showToast(this.isDrawingTrail ? 'Tap map to add points' : 'Drawing disabled', 'success');
+            }
+            updateTrailStats() {
+                let dist = 0;
+                for (let i = 1; i < this.trailPoints.length; i++) {
+                    dist += this.trailPoints[i].distanceTo(this.trailPoints[i - 1]);
+                }
+                document.getElementById('trail-distance').textContent = `${(dist / 1000).toFixed(2)}km`;
+                document.getElementById('trail-elevation').textContent = `${Math.max(0, Math.round(dist * 0.02))}m`;
+                document.getElementById('trail-difficulty').textContent = dist > 20000 ? 'Extreme' : dist > 12000 ? 'Difficult' : dist > 5000 ? 'Moderate' : '-';
+            }
+            loadLeaderboard() {
+                const topPeaks = this.peaksData.slice().sort((a, b) => b.elevation - a.elevation).slice(0, 5);
+                const container = document.getElementById('leaderboard-list');
+                container.innerHTML = '';
+                topPeaks.forEach((peak, index) => {
+                    const row = document.createElement('div');
+                    row.className = 'leaderboard-item';
+                    row.innerHTML = `<div style="font-weight:700;min-width:30px;">${index === 0 ? '🥇' : index === 1 ? '🥈' : index === 2 ? '🥉' : index + 1}</div><div><div style="font-weight:700;font-size:13px;">${peak.name}</div><div style="font-size:11px;color:var(--muted);">${peak.district} • ${Math.round(peak.elevation)}m</div></div>`;
+                    container.appendChild(row);
+                });
+            }
+            updateProfile() {
+                document.getElementById('profile-peak-count').textContent = this.peaksData.length;
+                document.getElementById('profile-map-status').textContent = this.map ? 'Ready' : 'Loading';
+                document.getElementById('profile-active-district').textContent = this.currentDistrict || 'All';
+            }
+            centerOnLocation() {
+                if (!navigator.geolocation) {
+                    this.showToast('Geolocation not available', 'error');
+                    return;
+                }
+                navigator.geolocation.getCurrentPosition(pos => {
+                    if (this.map) this.map.flyTo([pos.coords.latitude, pos.coords.longitude], 13);
+                    this.showToast('Location found', 'success');
+                }, () => this.showToast('Permission denied', 'error'));
+            }
+            switchTab(name) {
+                document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+                document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+                document.getElementById(name + '-tab').classList.add('active');
+                document.querySelector(`[data-tab="${name}"]`).classList.add('active');
+                setTimeout(() => {
+                    if (this.map && name === 'map') this.map.invalidateSize();
+                    if (this.mapTrail && name === 'trail') this.mapTrail.invalidateSize();
+                }, 120);
+            }
+            showToast(msg, type = 'success') {
+                const toast = document.createElement('div');
+                toast.className = `toast ${type}`;
+                toast.textContent = msg;
+                document.getElementById('toast-container').appendChild(toast);
+                console.log(`[${type}] ${msg}`);
+                setTimeout(() => toast.remove(), 3000);
+            }
+        }
+        document.addEventListener('DOMContentLoaded', () => {
+            if (!window.app) {
+                console.log('[Trek] DOM ready');
+                window.app = new JKTrekApp();
+            }
+        });
+        if (!window.app && (document.readyState === 'interactive' || document.readyState === 'complete')) {
+            console.log('[Trek] DOM already ready');
+            window.app = new JKTrekApp();
+        }
+    </script>
+</body>
+</html>
