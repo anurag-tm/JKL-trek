@@ -13,11 +13,13 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
-    <!-- Firebase SDKs -->
+    <!-- Firebase SDKs (Compat version for simplicity) -->
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-storage-compat.js"></script>
+
+    <!-- Supabase SDK (For Free Photo Storage) -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
@@ -97,7 +99,6 @@
 
         #map, #map-trail { width: 100%; height: 100%; z-index: 1; background: #000; }
 
-        /* Floating Controls */
         .map-fab {
             position: absolute;
             right: 16px;
@@ -151,7 +152,6 @@
             margin-bottom: 12px;
         }
 
-        /* Trail Controls */
         .trail-hud {
             position: absolute;
             top: 16px;
@@ -180,7 +180,6 @@
         .hud-btn.accent { background: var(--accent); color: #020617; border: none; }
         .hud-btn.danger { color: var(--danger); }
 
-        /* Community Feed */
         .feed-item {
             background: var(--card);
             border-radius: 18px;
@@ -191,7 +190,6 @@
         .feed-img { width: 100%; aspect-ratio: 4/3; object-fit: cover; background: #1e293b; }
         .feed-info { padding: 12px; }
 
-        /* Profile Styles */
         .profile-header { text-align: center; padding: 24px 0; }
         .profile-avatar { width: 90px; height: 90px; border-radius: 45px; background: var(--accent); margin: 0 auto 16px; overflow: hidden; display: flex; align-items: center; justify-content: center; font-size: 40px; border: 4px solid var(--border); }
         .profile-avatar img { width: 100%; height: 100%; object-fit: cover; }
@@ -202,12 +200,35 @@
         }
         .spinner { width: 40px; height: 40px; border: 4px solid var(--border); border-top-color: var(--accent); border-radius: 50%; animation: spin 1s linear infinite; }
         @keyframes spin { to { transform: rotate(360deg); } }
+
+        .toast-container { position: fixed; bottom: 100px; left: 20px; right: 20px; z-index: 2000; display: flex; flex-direction: column; gap: 8px; pointer-events: none; }
+        .toast {
+            padding: 12px 16px;
+            border-radius: 12px;
+            background: var(--card);
+            border-left: 4px solid var(--accent);
+            color: var(--text);
+            font-size: 13px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+            animation: slideIn 0.3s ease-out;
+        }
+
+        @keyframes slideIn { from { opacity: 0; transform: translateX(-20px); } to { opacity: 1; transform: translateX(0); } }
+
+        .detail-line { display: flex; justify-content: space-between; padding: 6px 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
+        .detail-line:last-child { border-bottom: none; }
+        .detail-line span:first-child { color: var(--muted); font-size: 12px; }
+        .detail-line span:last-child { color: var(--text); font-size: 13px; font-weight: 600; }
+
+        .peak-card { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 14px; margin-bottom: 10px; }
+        .peak-name { font-weight: 700; font-size: 15px; margin-bottom: 4px; }
+        .peak-meta { display: flex; gap: 12px; font-size: 12px; color: var(--muted); }
     </style>
 </head>
 <body>
     <div id="loading" class="loading-overlay">
         <div class="spinner"></div>
-        <p>Loading Terrain Data...</p>
+        <p>Initializing Systems...</p>
     </div>
 
     <div class="app-container">
@@ -230,7 +251,6 @@
         </nav>
 
         <main class="content">
-            <!-- 1. Home / Map Page -->
             <div class="tab-content active" id="map-tab">
                 <div id="map"></div>
                 <div class="map-fab">
@@ -238,7 +258,6 @@
                 </div>
             </div>
 
-            <!-- 2. Explore Page -->
             <div class="tab-content" id="explore-tab">
                 <div class="scroll-container">
                     <div class="card-section">
@@ -252,7 +271,6 @@
                             <span id="elev-val" style="font-weight:800; min-width:80px; color:var(--accent);">2500m+</span>
                         </div>
                     </div>
-                    <div id="explore-results-meta" style="font-size:12px; color:var(--muted); margin-bottom:12px; padding:0 8px;"></div>
                     <div id="peaks-list"></div>
                 </div>
                 <div class="peak-details-card" id="peak-details-card" hidden>
@@ -262,7 +280,6 @@
                 </div>
             </div>
 
-            <!-- 3. Track Planning -->
             <div class="tab-content" id="trail-tab">
                 <div class="trail-hud">
                     <button class="hud-btn accent" id="draw-btn">🖊️ Record</button>
@@ -275,19 +292,17 @@
                 </div>
             </div>
 
-            <!-- 5. Community Feed -->
             <div class="tab-content" id="community-tab">
                 <div class="scroll-container">
                     <div class="card-section">
                         <h3>Community Treks</h3>
                         <div id="community-feed">
-                            <p style="color:var(--muted); text-align:center; padding:20px;">Sign in to see community photos</p>
+                            <p style="color:var(--muted); text-align:center; padding:20px;">Loading treks...</p>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- 4. User Profile -->
             <div class="tab-content" id="profile-tab">
                 <div class="scroll-container">
                     <div id="auth-section" class="card-section" style="text-align:center;">
@@ -301,17 +316,15 @@
                         <h3 style="color:var(--accent);">Syncing Data...</h3>
                         <p id="pending-count" style="font-size:12px;">0 items in queue</p>
                     </div>
-                    <div class="card-section">
-                        <h3>My Adventure History</h3>
-                        <div id="user-history" style="font-size:13px; color:var(--muted); text-align:center; padding:20px;">No treks recorded yet</div>
-                    </div>
                 </div>
             </div>
         </main>
     </div>
 
+    <div class="toast-container" id="toast-container"></div>
+
     <script>
-        // CONFIGURATION (Using your actual Firebase keys)
+        // CONFIGURATION (Using your actual keys)
         const firebaseConfig = {
           apiKey: "AIzaSyCNLIytp9XDkAPbbEJLiDSIK4RxKaEyT_8",
           authDomain: "jkl-trekker.firebaseapp.com",
@@ -319,16 +332,17 @@
           projectId: "jkl-trekker",
           storageBucket: "jkl-trekker.firebasestorage.app",
           messagingSenderId: "223565435587",
-          appId: "1:223565435587:web:4ffde8a8dec648fc3dc876",
-          measurementId: "G-ZEMQ16RTP4"
+          appId: "1:223565435587:web:4ffde8a8dec648fc3dc876"
         };
+
+        const SUPABASE_URL = "https://vxhvcttfzmikxhjtfntd.supabase.co";
+        const SUPABASE_KEY = "sb_publishable_lMmFY-WQH_78SdZ6-CBlbA_TjDPij8d";
 
         class JKTrekApp {
             constructor() {
                 this.map = null;
                 this.mapTrail = null;
                 this.boundaryLayer = null;
-                this.districtLayers = {};
                 this.peakMarkers = [];
                 this.trailPoints = [];
                 this.trailLayers = [];
@@ -337,12 +351,17 @@
                 this.isDrawing = false;
                 this.clearTimer = null;
                 this.offlineQueue = JSON.parse(localStorage.getItem('trek_upload_queue') || '[]');
+                this.supabase = null;
 
                 this.init();
             }
 
             async init() {
-                try { firebase.initializeApp(firebaseConfig); } catch(e) {}
+                try {
+                    firebase.initializeApp(firebaseConfig);
+                    this.supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+                } catch(e) { console.error("Initialization error:", e); }
+
                 this.setupAuth();
                 this.setupUI();
                 await this.loadData();
@@ -373,7 +392,6 @@
                 const loginBtn = document.getElementById('login-btn');
                 const logoutBtn = document.getElementById('logout-btn');
                 const name = document.getElementById('profile-name');
-                const bio = document.getElementById('profile-bio');
                 const avatar = document.getElementById('main-avatar');
                 const miniProfile = document.getElementById('user-mini-profile');
 
@@ -381,7 +399,6 @@
                     loginBtn.style.display = 'none';
                     logoutBtn.style.display = 'flex';
                     name.textContent = user.displayName;
-                    bio.textContent = "Mountain Explorer since " + new Date(user.metadata.creationTime).toLocaleDateString();
                     avatar.innerHTML = `<img src="${user.photoURL}">`;
                     miniProfile.style.display = 'flex';
                     document.getElementById('header-user-name').textContent = user.displayName.split(' ')[0];
@@ -402,14 +419,12 @@
 
                 document.getElementById('gps-btn').onclick = () => this.centerOnLocation();
 
-                // Explore Filters
                 document.getElementById('district-select').onchange = (e) => this.filterByDistrict(e.target.value);
                 document.getElementById('elev-min-slider').oninput = (e) => {
                     document.getElementById('elev-val').textContent = e.target.value + 'm+';
                     this.filterPeaks();
                 };
 
-                // Track Controls
                 document.getElementById('draw-btn').onclick = () => {
                     this.isDrawing = !this.isDrawing;
                     document.getElementById('draw-btn').classList.toggle('accent');
@@ -422,12 +437,14 @@
                 clearBtn.onmousedown = clearBtn.ontouchstart = () => {
                     this.clearTimer = setTimeout(() => {
                         if(confirm("Clear entire track?")) this.clearFullTrack();
+                        this.clearTimer = null;
                     }, 2000);
                 };
                 clearBtn.onmouseup = clearBtn.ontouchend = () => {
                     if (this.clearTimer) {
                         clearTimeout(this.clearTimer);
                         this.undoLastPoint();
+                        this.clearTimer = null;
                     }
                 };
             }
@@ -450,7 +467,6 @@
                     if(this.isDrawing) this.addTrailPoint(e.latlng);
                 });
 
-                // Load Initial Boundaries
                 this.loadBoundaries();
             }
 
@@ -465,14 +481,12 @@
             }
 
             loadBoundaries() {
-                // Mock boundaries if not found in data/
-                // In production, user should place geojson in data/boundaries.json
                 fetch('data/boundaries.json').then(r => r.json()).then(data => {
                     this.boundaryLayer = L.geoJSON(data, {
                         style: { color: '#10b981', weight: 2, fillOpacity: 0 }
                     }).addTo(this.map);
                 }).catch(() => {
-                    this.showToast("No boundary data found in /data");
+                    this.showToast("No boundary data found in /data", "danger");
                 });
             }
 
@@ -497,10 +511,8 @@
                     (!district || p.district === district) && p.elevation >= minElev
                 );
 
-                // Sort by elevation
                 filtered.sort((a,b) => b.elevation - a.elevation);
 
-                // Buffer-Based Filtering (500m)
                 const buffered = [];
                 for (const p of filtered) {
                     if (buffered.length >= 40) break;
@@ -539,9 +551,6 @@
                         <div class="peak-meta"><span>🏔️ ${p.elevation}m</span><span>📍 ${p.district}</span></div>
                     </div>
                 `).join('');
-
-                document.getElementById('summary-count').textContent = peaks.length;
-                document.getElementById('summary-highest').textContent = peaks[0] ? peaks[0].name : '-';
             }
 
             showPeakInfo(p) {
@@ -569,12 +578,14 @@
             undoLastPoint() {
                 if (this.trailPoints.length === 0) return;
                 this.trailPoints.pop();
-                const lastLayer = this.trailLayers.pop();
-                if (lastLayer) this.mapTrail.removeLayer(lastLayer);
-                // If it was a line, we need to pop twice (dot + line)
-                if (this.trailLayers.length > 0 && this.trailPoints.length > 0) {
-                   const lineLayer = this.trailLayers.pop();
-                   if (lineLayer) this.mapTrail.removeLayer(lineLayer);
+
+                // Pop both line and marker if applicable
+                const last = this.trailLayers.pop();
+                if (last) this.mapTrail.removeLayer(last);
+
+                if (this.trailPoints.length > 0 && this.trailLayers.length > 0) {
+                    const next = this.trailLayers.pop();
+                    if (next) this.mapTrail.removeLayer(next);
                 }
             }
 
@@ -605,7 +616,7 @@
                         };
 
                         if (navigator.onLine) {
-                            this.uploadPhoto(file, metadata);
+                            this.uploadPhotoSupabase(file, metadata);
                         } else {
                             this.saveToOfflineQueue(file, metadata);
                         }
@@ -614,12 +625,27 @@
                 input.click();
             }
 
-            async uploadPhoto(file, meta) {
-                this.showToast("Uploading trek photo...");
-                const ref = firebase.storage().ref(`treks/${Date.now()}_${file.name}`);
-                await ref.put(file);
-                const url = await ref.getDownloadURL();
-                await firebase.firestore().collection('community_treks').add({ ...meta, imageUrl: url });
+            async uploadPhotoSupabase(file, meta) {
+                this.showToast("Uploading trek photo to Supabase...");
+                const fileName = `${Date.now()}_${file.name}`;
+
+                const { data, error } = await this.supabase.storage
+                    .from('treks')
+                    .upload(fileName, file);
+
+                if (error) {
+                    this.showToast("Upload Error: " + error.message, "danger");
+                    return;
+                }
+
+                const { data: urlData } = this.supabase.storage
+                    .from('treks')
+                    .getPublicUrl(fileName);
+
+                const imageUrl = urlData.publicUrl;
+
+                // Save meta to Firestore
+                await firebase.firestore().collection('community_treks').add({ ...meta, imageUrl });
                 this.showToast("Trek shared with community!");
                 this.loadCommunityFeed();
             }
@@ -637,11 +663,9 @@
 
             async syncOfflineQueue() {
                 if (!navigator.onLine || this.offlineQueue.length === 0) return;
-
                 const item = this.offlineQueue[0];
-                // Convert dataURL back to blob for upload
                 const blob = await fetch(item.fileData).then(r => r.blob());
-                await this.uploadPhoto(blob, item.meta);
+                await this.uploadPhotoSupabase(blob, item.meta);
                 this.offlineQueue.shift();
                 localStorage.setItem('trek_upload_queue', JSON.stringify(this.offlineQueue));
                 this.updateOfflineUI();
@@ -654,16 +678,11 @@
                 if (this.offlineQueue.length > 0) {
                     div.style.display = 'block';
                     count.textContent = `${this.offlineQueue.length} items in sync queue`;
-                } else {
-                    div.style.display = 'none';
-                }
+                } else { div.style.display = 'none'; }
             }
 
             checkConnectivity() {
-                window.addEventListener('online', () => {
-                    this.showToast("Back online! Syncing...");
-                    this.syncOfflineQueue();
-                });
+                window.addEventListener('online', () => { this.showToast("Back online! Syncing..."); this.syncOfflineQueue(); });
                 window.addEventListener('offline', () => this.showToast("Working offline", "muted"));
                 this.updateOfflineUI();
             }
@@ -709,9 +728,11 @@
             }
 
             centerOnLocation() {
+                if (!navigator.geolocation) return this.showToast("GPS not supported", "danger");
                 navigator.geolocation.getCurrentPosition(pos => {
                     this.map.flyTo([pos.coords.latitude, pos.coords.longitude], 14);
-                });
+                    L.marker([pos.coords.latitude, pos.coords.longitude]).addTo(this.map).bindPopup('You are here').openPopup();
+                }, () => this.showToast("GPS access denied", "danger"));
             }
         }
 
