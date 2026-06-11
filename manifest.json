@@ -42,7 +42,7 @@
       "src": "assets/icons/icon-512.png",
       "sizes": "512x512",
       "type": "image/png",
-      "form_factor": "wide",
+      "form_factor": "narrow",
       "label": "JKL Trek Explorer home"
     }
   ],

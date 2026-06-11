@@ -32,8 +32,8 @@ class OfflineStorage {
         return new Promise((resolve, reject) => {
             const tx = db.transaction(storeName, mode);
             const store = tx.objectStore(storeName);
-            const result = operation(store);
-            tx.oncomplete = () => resolve(result);
+            const request = operation(store);
+            tx.oncomplete = () => resolve(request ? request.result : undefined);
             tx.onerror = () => reject(tx.error);
         });
     }
@@ -67,7 +67,10 @@ class OfflineStorage {
     }
 
     async saveFavorite(peak) {
-        return this.put('favorites', { id: `peak_${peak.name}_${peak.latitude}_${peak.longitude}`, ...peak, updatedAt: Date.now() });
+        const safeName = encodeURIComponent(peak.name || 'peak');
+        const lat = Number(peak.latitude).toFixed(5);
+        const lng = Number(peak.longitude).toFixed(5);
+        return this.put('favorites', { id: `peak_${safeName}_${lat}_${lng}`, ...peak, updatedAt: Date.now() });
     }
 
     async removeFavorite(id) {

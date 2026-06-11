@@ -18,7 +18,9 @@ const STATIC_ASSETS = [
 ];
 
 function isMapTileRequest(url) {
-  return url.includes('/vt/lyrs=') || url.includes('tile.openstreetmap.org');
+  const isGoogleTile = url.hostname.endsWith('.google.com') && url.pathname === '/vt' && url.searchParams.has('lyrs');
+  const isOsmTile = url.hostname === 'tile.openstreetmap.org';
+  return isGoogleTile || isOsmTile;
 }
 
 function isApiRequest(url) {
@@ -37,7 +39,7 @@ async function cacheFirst(request, cacheName) {
   return response;
 }
 
-async function networkFirst(request, cacheName) {
+async function networkFirst(request, cacheName, requestUrl) {
   try {
     const response = await fetch(request);
     if (response && (response.ok || response.type === 'opaque')) {
@@ -53,7 +55,7 @@ async function networkFirst(request, cacheName) {
       return caches.match(OFFLINE_PAGE);
     }
 
-    if (isApiRequest(new URL(request.url))) {
+    if (isApiRequest(requestUrl || new URL(request.url))) {
       return new Response('[]', { headers: { 'Content-Type': 'application/json' } });
     }
 
@@ -81,20 +83,20 @@ self.addEventListener('fetch', event => {
 
   const requestUrl = new URL(event.request.url);
 
-  if (isMapTileRequest(requestUrl.href)) {
+  if (isMapTileRequest(requestUrl)) {
     event.respondWith(cacheFirst(event.request, MAP_CACHE));
     return;
   }
 
   if (isApiRequest(requestUrl)) {
-    event.respondWith(networkFirst(event.request, DYNAMIC_CACHE));
+    event.respondWith(networkFirst(event.request, DYNAMIC_CACHE, requestUrl));
     return;
   }
 
-  if (event.request.destination === 'document' || event.request.destination === 'script' || event.request.destination === 'style' || event.request.destination === 'image') {
+  if (['document', 'script', 'style', 'image'].includes(event.request.destination)) {
     event.respondWith(cacheFirst(event.request, STATIC_CACHE).catch(() => caches.match(OFFLINE_PAGE)));
     return;
   }
 
-  event.respondWith(networkFirst(event.request, DYNAMIC_CACHE));
+  event.respondWith(networkFirst(event.request, DYNAMIC_CACHE, requestUrl));
 });

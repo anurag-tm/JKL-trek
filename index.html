@@ -687,9 +687,14 @@
             saveToOfflineQueue(file, meta) {
                 const reader = new FileReader();
                 reader.onload = async () => {
-                    await this.offlineManager.enqueueMutation('photo_upload', { fileData: reader.result, meta, fileName: file.name });
-                    this.updateOfflineUI();
-                    this.showToast("Saved offline. Will sync when connected.");
+                    try {
+                        await this.offlineManager.enqueueMutation('photo_upload', { fileData: reader.result, meta, fileName: file.name });
+                        this.updateOfflineUI();
+                        this.showToast("Saved offline. Will sync when connected.");
+                    } catch (err) {
+                        console.error("Offline queue save error:", err);
+                        this.showToast("Couldn't save offline. Please retry.", "danger");
+                    }
                 };
                 reader.readAsDataURL(file);
             }
