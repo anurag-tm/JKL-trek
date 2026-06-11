@@ -68,8 +68,10 @@ class OfflineStorage {
 
     async saveFavorite(peak) {
         const safeName = encodeURIComponent(peak.name || 'peak');
-        const lat = Number(peak.latitude).toFixed(5);
-        const lng = Number(peak.longitude).toFixed(5);
+        const latNum = Number(peak.latitude);
+        const lngNum = Number(peak.longitude);
+        const lat = Number.isFinite(latNum) ? latNum.toFixed(5) : 'unknown-lat';
+        const lng = Number.isFinite(lngNum) ? lngNum.toFixed(5) : 'unknown-lng';
         return this.put('favorites', { id: `peak_${safeName}_${lat}_${lng}`, ...peak, updatedAt: Date.now() });
     }
 

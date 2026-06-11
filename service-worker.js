@@ -18,7 +18,7 @@ const STATIC_ASSETS = [
 ];
 
 function isMapTileRequest(url) {
-  const isGoogleTile = url.hostname.endsWith('.google.com') && url.pathname === '/vt' && url.searchParams.has('lyrs');
+  const isGoogleTile = /^mt[0-3]\.google\.com$/.test(url.hostname) && url.pathname === '/vt' && url.searchParams.has('lyrs');
   const isOsmTile = url.hostname === 'tile.openstreetmap.org';
   return isGoogleTile || isOsmTile;
 }
@@ -55,7 +55,7 @@ async function networkFirst(request, cacheName, requestUrl) {
       return caches.match(OFFLINE_PAGE);
     }
 
-    if (isApiRequest(requestUrl || new URL(request.url))) {
+    if (isApiRequest(requestUrl)) {
       return new Response('[]', { headers: { 'Content-Type': 'application/json' } });
     }
 
