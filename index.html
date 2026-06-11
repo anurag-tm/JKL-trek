@@ -64,6 +64,19 @@
 
         .header-content { display: flex; justify-content: space-between; align-items: center; }
         .header h1 { font-size: 18px; font-weight: 800; display: flex; align-items: center; gap: 8px; }
+        .network-status-indicator {
+            padding: 6px 20px;
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--accent);
+            background: #03140f;
+            border-bottom: 1px solid var(--border);
+            z-index: 999;
+        }
+        .network-status-indicator.offline {
+            color: #f59e0b;
+            background: #1f1305;
+        }
 
         .tabs {
             display: flex;
@@ -241,6 +254,7 @@
                 </div>
             </div>
         </header>
+        <div id="network-status-indicator" class="network-status-indicator">🟢 Online</div>
 
         <nav class="tabs">
             <button class="tab-btn active" data-tab="map">Map</button>
@@ -323,6 +337,8 @@
 
     <div class="toast-container" id="toast-container"></div>
 
+    <script src="js/offline-storage.js"></script>
+    <script src="js/offline-manager.js"></script>
     <script>
         // CONFIGURATION (Using your actual keys)
         const firebaseConfig = {
@@ -350,7 +366,9 @@
                 this.currentUser = null;
                 this.isDrawing = false;
                 this.clearTimer = null;
-                this.offlineQueue = JSON.parse(localStorage.getItem('trek_upload_queue') || '[]');
+                this.offlineQueue = [];
+                this.offlineStorage = window.offlineStorage;
+                this.offlineManager = null;
                 this.supabase = null;
 
                 this.init();
@@ -360,6 +378,14 @@
                 try {
                     firebase.initializeApp(firebaseConfig);
                     this.supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+                    await this.offlineStorage.init();
+                    this.offlineManager = new OfflineManager(this.offlineStorage, {
+                        statusElementId: 'network-status-indicator',
+                        queueContainerId: 'offline-status',
+                        pendingElementId: 'pending-count'
+                    });
+                    this.offlineManager.setSyncHandler(item => this.processQueuedMutation(item));
+                    await this.offlineManager.init();
                 } catch(e) { console.error("Initialization error:", e); }
 
                 this.setupAuth();
@@ -473,11 +499,16 @@
             async loadData() {
                 try {
                     const res = await fetch('data/peaks.json');
-                    this.peaksData = res.ok ? await res.json() : [];
-                    const districts = [...new Set(this.peaksData.map(p => p.district))].sort();
-                    const sel = document.getElementById('district-select');
-                    districts.forEach(d => sel.add(new Option(d, d)));
-                } catch(e) {}
+                    if (!res.ok) throw new Error('Unable to load peaks data');
+                    this.peaksData = await res.json();
+                    await this.offlineStorage.savePeaksData(this.peaksData);
+                } catch(e) {
+                    this.peaksData = await this.offlineStorage.getPeaksData();
+                    if (this.peaksData.length > 0) this.showToast("Using cached peaks data");
+                }
+                const districts = [...new Set(this.peaksData.map(p => p.district))].sort();
+                const sel = document.getElementById('district-select');
+                districts.forEach(d => sel.add(new Option(d, d)));
             }
 
             loadBoundaries() {
@@ -573,6 +604,7 @@
                     const line = L.polyline([this.trailPoints[this.trailPoints.length-2], latlng], { color: '#10b981', weight: 4 }).addTo(this.mapTrail);
                     this.trailLayers.push(line);
                 }
+                this.offlineStorage.saveProgress('trail_points', this.trailPoints.map(p => ({ lat: p.lat, lng: p.lng })));
             }
 
             undoLastPoint() {
@@ -587,12 +619,14 @@
                     const next = this.trailLayers.pop();
                     if (next) this.mapTrail.removeLayer(next);
                 }
+                this.offlineStorage.saveProgress('trail_points', this.trailPoints.map(p => ({ lat: p.lat, lng: p.lng })));
             }
 
             clearFullTrack() {
                 this.trailPoints = [];
                 this.trailLayers.forEach(l => this.mapTrail.removeLayer(l));
                 this.trailLayers = [];
+                this.offlineStorage.saveProgress('trail_points', []);
                 this.showToast("Track cleared");
             }
 
@@ -652,9 +686,8 @@
 
             saveToOfflineQueue(file, meta) {
                 const reader = new FileReader();
-                reader.onload = () => {
-                    this.offlineQueue.push({ fileData: reader.result, meta, fileName: file.name });
-                    localStorage.setItem('trek_upload_queue', JSON.stringify(this.offlineQueue));
+                reader.onload = async () => {
+                    await this.offlineManager.enqueueMutation('photo_upload', { fileData: reader.result, meta, fileName: file.name });
                     this.updateOfflineUI();
                     this.showToast("Saved offline. Will sync when connected.");
                 };
@@ -662,28 +695,41 @@
             }
 
             async syncOfflineQueue() {
-                if (!navigator.onLine || this.offlineQueue.length === 0) return;
-                const item = this.offlineQueue[0];
-                const blob = await fetch(item.fileData).then(r => r.blob());
-                await this.uploadPhotoSupabase(blob, item.meta);
-                this.offlineQueue.shift();
-                localStorage.setItem('trek_upload_queue', JSON.stringify(this.offlineQueue));
+                if (!this.offlineManager) return;
+                await this.offlineManager.syncQueuedChanges();
                 this.updateOfflineUI();
-                this.syncOfflineQueue();
             }
 
-            updateOfflineUI() {
+            async processQueuedMutation(item) {
+                if (item.type !== 'photo_upload') return;
+                const blob = await fetch(item.payload.fileData).then(r => r.blob());
+                await this.uploadPhotoSupabase(blob, item.payload.meta);
+            }
+
+            async updateOfflineUI() {
                 const div = document.getElementById('offline-status');
                 const count = document.getElementById('pending-count');
-                if (this.offlineQueue.length > 0) {
+                this.offlineQueue = await this.offlineStorage.getQueuedChanges();
+                if (this.offlineQueue.length > 0 || !navigator.onLine) {
                     div.style.display = 'block';
-                    count.textContent = `${this.offlineQueue.length} items in sync queue`;
-                } else { div.style.display = 'none'; }
+                    count.textContent = this.offlineQueue.length > 0
+                        ? `${this.offlineQueue.length} items in sync queue`
+                        : 'Offline mode active. Changes will sync automatically.';
+                } else {
+                    div.style.display = 'none';
+                }
             }
 
             checkConnectivity() {
-                window.addEventListener('online', () => { this.showToast("Back online! Syncing..."); this.syncOfflineQueue(); });
-                window.addEventListener('offline', () => this.showToast("Working offline", "muted"));
+                window.addEventListener('online', async () => {
+                    this.showToast("Back online! Syncing...");
+                    await this.syncOfflineQueue();
+                    if (this.offlineManager) await this.offlineManager.updateStatusIndicator();
+                });
+                window.addEventListener('offline', async () => {
+                    this.showToast("Working offline", "muted");
+                    if (this.offlineManager) await this.offlineManager.updateStatusIndicator();
+                });
                 this.updateOfflineUI();
             }
 
@@ -737,6 +783,14 @@
         }
 
         window.app = new JKTrekApp();
+
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/service-worker.js').catch((err) => {
+                    console.error('Service worker registration failed:', err);
+                });
+            });
+        }
     </script>
 </body>
 </html>
