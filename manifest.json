@@ -2,11 +2,50 @@
   "name": "JK Trek Explorer",
   "short_name": "Trek Explorer",
   "description": "Mountain trek planner for Jammu & Kashmir and Ladakh.",
-  "start_url": ".",
-  "scope": ".",
+  "start_url": "/index.html",
+  "scope": "/",
   "display": "standalone",
+  "orientation": "portrait-primary",
   "background_color": "#0f172a",
   "theme_color": "#10b981",
+  "categories": ["travel", "navigation", "sports"],
+  "shortcuts": [
+    {
+      "name": "Explore Peaks",
+      "short_name": "Peaks",
+      "description": "Browse cached peaks data offline",
+      "url": "/index.html#explore",
+      "icons": [
+        {
+          "src": "assets/icons/icon-192.png",
+          "sizes": "192x192",
+          "type": "image/png"
+        }
+      ]
+    },
+    {
+      "name": "Track Route",
+      "short_name": "Track",
+      "description": "Open trek track view quickly",
+      "url": "/index.html#trail",
+      "icons": [
+        {
+          "src": "assets/icons/icon-192.png",
+          "sizes": "192x192",
+          "type": "image/png"
+        }
+      ]
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "assets/icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "JKL Trek Explorer home"
+    }
+  ],
   "icons": [
     {
       "src": "assets/icons/icon-192.png",
