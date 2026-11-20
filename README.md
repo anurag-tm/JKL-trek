@@ -1,46 +1,96 @@
-# JK Trek Explorer
+# JKL Trekker
 
-Interactive web app for Jammu & Kashmir / Ladakh trek peaks.
+Offline-friendly web app for exploring summits and recording GPS tracks in the
+Jammu & Kashmir and Ladakh Himalayas.
 
-## What is included
+**Live app:** https://jkl-trekker.web.app
 
-- `index.html` — main app UI with Leaflet map and peak explorer
-- `data/peaks.json` — extracted peak data from DEM processing
-- `process_dem.py` — Python pipeline for DEM peak extraction
-- `manifest.json` and `service-worker.js` — PWA support
-- `assets/icons/` — app icon files for installable web app
-- `debug.html` — diagnostics page for local testing
+## Features
 
-## Local development
+- Topo, satellite and street basemaps with J&K / Ladakh district boundaries
+- 70 summits extracted from the Copernicus GLO-30 DEM, filterable by district and elevation
+- GPS track recording (distance, elevation gain, time), route sketching, GPX export
+- Works offline after the first visit: app, data and recently viewed map tiles are cached
+- Installable on phones (Add to Home Screen), or as an Android app (APK) with background GPS recording
+- Community photo feed (Google sign-in, Firestore + Supabase storage)
 
-Run a local web server from the project folder:
+## Repository layout
 
-```powershell
-cd "C:\Users\anura\Downloads\trek"
+```
+web/                  the app (this folder is what gets deployed)
+  index.html          UI and app logic
+  config.js           public Firebase / Supabase client config
+  service-worker.js   offline caching (bump VERSION after changing app files)
+  data/peaks.json     summits (WGS84)
+  data/boundaries.json district boundaries (WGS84 GeoJSON)
+  vendor/leaflet/     Leaflet 1.9.4, bundled for offline use
+tools/                Python scripts that build web/data
+firestore.rules       Firestore security rules
+supabase-storage-policies.sql   storage limits for the photo bucket
+android/              Android app project (Capacitor), see BUILD_ANDROID.md
+capacitor.config.json Android app settings
+```
+
+## Run locally
+
+```bash
+cd web
 python -m http.server 8000
 ```
 
-Open `http://localhost:8000` in your browser.
+Open http://localhost:8000.
 
-## GitHub Deployment
+## Deploy (Firebase Hosting)
 
-1. Open GitHub Desktop.
-2. Choose `File` → `Add local repository` and select this folder.
-3. Click `Publish repository`.
-4. Use a repository name like `jk-trek-explorer`.
-5. After publishing, open the repo on GitHub.
-6. Go to `Settings` → `Pages` and publish from the `main` branch.
+```bash
+npm install -g firebase-tools
+firebase login
+firebase deploy --only hosting,firestore
+```
 
-Then your app will be available as a GitHub Pages site.
+Only the `web/` folder is uploaded. After deploying:
 
-## Android App Wrapper
+1. Firebase Console → Authentication → Settings → **Authorized domains**: make sure
+   `jkl-trekker.web.app` (and `localhost` for testing) are listed.
+2. Google Cloud Console → APIs & Services → Credentials → restrict the browser API key
+   to `https://jkl-trekker.web.app/*` and `http://localhost/*`.
+3. Supabase → SQL Editor → run `supabase-storage-policies.sql`.
 
-An Android WebView wrapper is available in the `android-app` folder.
+GitHub Pages also deploys `web/` on every push to `master`, but Google sign-in
+redirects only work on the Firebase domain, so use https://jkl-trekker.web.app as the main link.
 
-- Open `android-app` in Android Studio.
-- Update `MainActivity.kt` with your published GitHub Pages URL once the site is live.
-- For emulator testing before publishing, the app is configured to load `http://10.0.2.2:8000`.
+## Android app
 
-## Next step
+See [BUILD_ANDROID.md](BUILD_ANDROID.md). Short version:
 
-After publishing the web site, we can build an Android app wrapper that loads the GitHub Pages URL in a WebView.
+```bash
+npm install
+npx cap sync android
+npx cap open android   # then press Run in Android Studio
+```
+
+## Rebuild the data
+
+Requires `pip install geopandas rasterio scipy`.
+
+```bash
+# District boundaries from the SOI Administrative Boundary Database
+python tools/convert_boundaries.py "path/to/DISTRICT_BOUNDARY.shp"
+
+# Summits from a projected (UTM) DEM
+python tools/process_dem.py --dem path/to/JK_COP_DEM_GLO30_mosaic_UTM_CLIP.tif \
+    --districts "path/to/DISTRICT_BOUNDARY.shp"
+```
+
+Options: `--min-sep 3000` (minimum distance between summits in metres),
+`--top 10` (summits per district), `--window 1000` (local-maximum search window).
+
+## Known limits
+
+- In the browser version, phones pause GPS when the screen is off. Keep the screen
+  on while recording, or use the Android app, which records in the background.
+- Peak names are placeholders (`Peak 5,821 m`). Adding names from OpenStreetMap
+  (`natural=peak`) is the next data step.
+- Difficulty is an altitude class only, not a route grade.
+- Google sign-in inside the Android app needs a one-time Firebase setup
+  (BUILD_ANDROID.md, step 4).

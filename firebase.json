@@ -4,14 +4,26 @@
     "indexes": "firestore.indexes.json"
   },
   "hosting": {
-    "public": ".",
-    "ignore": [
-      "firebase.json",
-      "**/.*",
-      "**/node_modules/**",
-      "android-app/**",
-      "convert_boundaries.py",
-      "process_dem.py"
+    "public": "web",
+    "headers": [
+      {
+        "source": "**/@(service-worker.js|index.html|config.js|manifest.json)",
+        "headers": [
+          {
+            "key": "Cache-Control",
+            "value": "no-cache"
+          }
+        ]
+      },
+      {
+        "source": "data/**",
+        "headers": [
+          {
+            "key": "Cache-Control",
+            "value": "public, max-age=3600"
+          }
+        ]
+      }
     ]
   }
 }

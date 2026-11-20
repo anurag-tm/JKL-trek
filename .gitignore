@@ -1,16 +1,38 @@
-# Ignore local data and large artifacts
+# Python
 __pycache__/
-*.pyc
-*.pyo
-*.pyd
-*.sqlite
-*.db
+*.py[cod]
+.venv/
+
+# Large GIS inputs / outputs (keep them outside the repo)
 *.tif
+*.tiff
 *.shp
 *.shx
 *.dbf
 *.prj
-data/tiles/
-.DS_Store
+*.cpg
+*.sbn
+*.sbx
+*.db
+*.sqlite
+web/data/tiles/
+tools/input/
+
+# Node / Firebase
 node_modules/
+.firebase/
+firebase-debug.log
+firestore-debug.log
+
+# Android (android/ has its own .gitignore for build output)
+android/app/google-services.json
+*.apk
+*.aab
+*.keystore
+*.jks
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.vscode/
 .env

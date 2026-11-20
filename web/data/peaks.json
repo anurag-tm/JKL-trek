@@ -1,0 +1,702 @@
+[
+ {
+  "id": 1,
+  "name": "Peak 5,408 m",
+  "district": "Anantnag",
+  "latitude": 34.14634,
+  "longitude": 75.54701,
+  "elevation": 5408,
+  "difficulty": "Extreme",
+  "season": "June - September"
+ },
+ {
+  "id": 2,
+  "name": "Peak 5,404 m",
+  "district": "Anantnag",
+  "latitude": 34.16502,
+  "longitude": 75.32753,
+  "elevation": 5404,
+  "difficulty": "Extreme",
+  "season": "June - September"
+ },
+ {
+  "id": 3,
+  "name": "Peak 5,194 m",
+  "district": "Anantnag",
+  "latitude": 34.22463,
+  "longitude": 75.4907,
+  "elevation": 5194,
+  "difficulty": "Extreme",
+  "season": "June - September"
+ },
+ {
+  "id": 4,
+  "name": "Peak 5,184 m",
+  "district": "Anantnag",
+  "latitude": 34.21139,
+  "longitude": 75.55554,
+  "elevation": 5184,
+  "difficulty": "Extreme",
+  "season": "June - September"
+ },
+ {
+  "id": 5,
+  "name": "Peak 5,118 m",
+  "district": "Anantnag",
+  "latitude": 34.03892,
+  "longitude": 75.50489,
+  "elevation": 5118,
+  "difficulty": "Extreme",
+  "season": "June - September"
+ },
+ {
+  "id": 6,
+  "name": "Peak 5,286 m",
+  "district": "Bandipora",
+  "latitude": 34.53802,
+  "longitude": 75.36533,
+  "elevation": 5286,
+  "difficulty": "Extreme",
+  "season": "June - September"
+ },
+ {
+  "id": 7,
+  "name": "Peak 5,193 m",
+  "district": "Bandipora",
+  "latitude": 34.43648,
+  "longitude": 75.3289,
+  "elevation": 5193,
+  "difficulty": "Extreme",
+  "season": "June - September"
+ },
+ {
+  "id": 8,
+  "name": "Peak 5,165 m",
+  "district": "Bandipora",
+  "latitude": 34.41823,
+  "longitude": 75.36512,
+  "elevation": 5165,
+  "difficulty": "Extreme",
+  "season": "June - September"
+ },
+ {
+  "id": 9,
+  "name": "Peak 5,117 m",
+  "district": "Bandipora",
+  "latitude": 34.40059,
+  "longitude": 74.90866,
+  "elevation": 5117,
+  "difficulty": "Extreme",
+  "season": "June - September"
+ },
+ {
+  "id": 10,
+  "name": "Peak 4,388 m",
+  "district": "Baramulla",
+  "latitude": 34.2298,
+  "longitude": 74.02822,
+  "elevation": 4388,
+  "difficulty": "Difficult",
+  "season": "May - October"
+ },
+ {
+  "id": 11,
+  "name": "Peak 4,733 m",
+  "district": "Budgam",
+  "latitude": 33.7502,
+  "longitude": 74.46669,
+  "elevation": 4733,
+  "difficulty": "Extreme",
+  "season": "June - September"
+ },
+ {
+  "id": 12,
+  "name": "Peak 4,584 m",
+  "district": "Budgam",
+  "latitude": 33.90587,
+  "longitude": 74.42996,
+  "elevation": 4584,
+  "difficulty": "Extreme",
+  "season": "June - September"
+ },
+ {
+  "id": 13,
+  "name": "Peak 5,056 m",
+  "district": "Doda",
+  "latitude": 33.1641,
+  "longitude": 76.15224,
+  "elevation": 5056,
+  "difficulty": "Extreme",
+  "season": "June - September"
+ },
+ {
+  "id": 14,
+  "name": "Peak 4,949 m",
+  "district": "Doda",
+  "latitude": 33.04665,
+  "longitude": 76.23169,
+  "elevation": 4949,
+  "difficulty": "Extreme",
+  "season": "June - September"
+ },
+ {
+  "id": 15,
+  "name": "Peak 5,202 m",
+  "district": "Ganderbal",
+  "latitude": 34.3658,
+  "longitude": 75.38521,
+  "elevation": 5202,
+  "difficulty": "Extreme",
+  "season": "June - September"
+ },
+ {
+  "id": 16,
+  "name": "Peak 5,174 m",
+  "district": "Ganderbal",
+  "latitude": 34.39074,
+  "longitude": 75.36719,
+  "elevation": 5174,
+  "difficulty": "Extreme",
+  "season": "June - September"
+ },
+ {
+  "id": 17,
+  "name": "Peak 5,097 m",
+  "district": "Ganderbal",
+  "latitude": 34.32275,
+  "longitude": 75.38783,
+  "elevation": 5097,
+  "difficulty": "Extreme",
+  "season": "June - September"
+ },
+ {
+  "id": 18,
+  "name": "Peak 1,192 m",
+  "district": "Jammu",
+  "latitude": 33.03282,
+  "longitude": 74.57604,
+  "elevation": 1192,
+  "difficulty": "Easy",
+  "season": "Year-round"
+ },
+ {
+  "id": 19,
+  "name": "Peak 1,188 m",
+  "district": "Jammu",
+  "latitude": 33.02433,
+  "longitude": 74.52406,
+  "elevation": 1188,
+  "difficulty": "Easy",
+  "season": "Year-round"
+ },
+ {
+  "id": 20,
+  "name": "Peak 7,073 m",
+  "district": "Kargil",
+  "latitude": 33.98228,
+  "longitude": 76.02435,
+  "elevation": 7073,
+  "difficulty": "Extreme",
+  "season": "June - September"
+ },
+ {
+  "id": 21,
+  "name": "Peak 7,041 m",
+  "district": "Kargil",
+  "latitude": 34.01339,
+  "longitude": 76.05492,
+  "elevation": 7041,
+  "difficulty": "Extreme",
+  "season": "June - September"
+ },
+ {
+  "id": 22,
+  "name": "Peak 6,606 m",
+  "district": "Kargil",
+  "latitude": 34.02923,
+  "longitude": 76.08159,
+  "elevation": 6606,
+  "difficulty": "Extreme",
+  "season": "June - September"
+ },
+ {
+  "id": 23,
+  "name": "Peak 6,560 m",
+  "district": "Kargil",
+  "latitude": 33.67493,
+  "longitude": 76.30787,
+  "elevation": 6560,
+  "difficulty": "Extreme",
+  "season": "June - September"
+ },
+ {
+  "id": 24,
+  "name": "Peak 3,965 m",
+  "district": "Kathua",
+  "latitude": 32.83267,
+  "longitude": 75.70008,
+  "elevation": 3965,
+  "difficulty": "Difficult",
+  "season": "May - October"
+ },
+ {
+  "id": 25,
+  "name": "Peak 6,547 m",
+  "district": "Kishtwar",
+  "latitude": 33.60667,
+  "longitude": 76.13113,
+  "elevation": 6547,
+  "difficulty": "Extreme",
+  "season": "June - September"
+ },
+ {
+  "id": 26,
+  "name": "Peak 6,480 m",
+  "district": "Kishtwar",
+  "latitude": 33.5451,
+  "longitude": 76.46414,
+  "elevation": 6480,
+  "difficulty": "Extreme",
+  "season": "June - September"
+ },
+ {
+  "id": 27,
+  "name": "Peak 6,394 m",
+  "district": "Kishtwar",
+  "latitude": 33.50393,
+  "longitude": 76.04963,
+  "elevation": 6394,
+  "difficulty": "Extreme",
+  "season": "June - September"
+ },
+ {
+  "id": 28,
+  "name": "Peak 6,344 m",
+  "district": "Kishtwar",
+  "latitude": 33.31699,
+  "longitude": 76.62554,
+  "elevation": 6344,
+  "difficulty": "Extreme",
+  "season": "June - September"
+ },
+ {
+  "id": 29,
+  "name": "Peak 6,332 m",
+  "district": "Kishtwar",
+  "latitude": 33.73462,
+  "longitude": 76.1176,
+  "elevation": 6332,
+  "difficulty": "Extreme",
+  "season": "June - September"
+ },
+ {
+  "id": 30,
+  "name": "Peak 6,311 m",
+  "district": "Kishtwar",
+  "latitude": 33.45476,
+  "longitude": 76.15545,
+  "elevation": 6311,
+  "difficulty": "Extreme",
+  "season": "June - September"
+ },
+ {
+  "id": 31,
+  "name": "Peak 6,277 m",
+  "district": "Kishtwar",
+  "latitude": 33.80969,
+  "longitude": 76.15989,
+  "elevation": 6277,
+  "difficulty": "Extreme",
+  "season": "June - September"
+ },
+ {
+  "id": 32,
+  "name": "Peak 5,750 m",
+  "district": "Kishtwar",
+  "latitude": 33.20358,
+  "longitude": 76.5525,
+  "elevation": 5750,
+  "difficulty": "Extreme",
+  "season": "June - September"
+ },
+ {
+  "id": 33,
+  "name": "Peak 5,672 m",
+  "district": "Kishtwar",
+  "latitude": 33.16796,
+  "longitude": 76.66009,
+  "elevation": 5672,
+  "difficulty": "Extreme",
+  "season": "June - September"
+ },
+ {
+  "id": 34,
+  "name": "Peak 5,298 m",
+  "district": "Kishtwar",
+  "latitude": 33.20324,
+  "longitude": 76.59907,
+  "elevation": 5298,
+  "difficulty": "Extreme",
+  "season": "June - September"
+ },
+ {
+  "id": 35,
+  "name": "Peak 4,654 m",
+  "district": "Kulgam",
+  "latitude": 33.55689,
+  "longitude": 74.65031,
+  "elevation": 4654,
+  "difficulty": "Extreme",
+  "season": "June - September"
+ },
+ {
+  "id": 36,
+  "name": "Peak 4,634 m",
+  "district": "Kulgam",
+  "latitude": 33.48854,
+  "longitude": 74.82483,
+  "elevation": 4634,
+  "difficulty": "Extreme",
+  "season": "June - September"
+ },
+ {
+  "id": 37,
+  "name": "Peak 4,608 m",
+  "district": "Kulgam",
+  "latitude": 33.49742,
+  "longitude": 74.62022,
+  "elevation": 4608,
+  "difficulty": "Extreme",
+  "season": "June - September"
+ },
+ {
+  "id": 38,
+  "name": "Peak 4,541 m",
+  "district": "Kulgam",
+  "latitude": 33.52603,
+  "longitude": 74.64858,
+  "elevation": 4541,
+  "difficulty": "Extreme",
+  "season": "June - September"
+ },
+ {
+  "id": 39,
+  "name": "Peak 4,334 m",
+  "district": "Kupwara",
+  "latitude": 34.35538,
+  "longitude": 73.94612,
+  "elevation": 4334,
+  "difficulty": "Difficult",
+  "season": "May - October"
+ },
+ {
+  "id": 40,
+  "name": "Peak 4,281 m",
+  "district": "Kupwara",
+  "latitude": 34.25838,
+  "longitude": 74.03633,
+  "elevation": 4281,
+  "difficulty": "Difficult",
+  "season": "May - October"
+ },
+ {
+  "id": 41,
+  "name": "Peak 8,571 m",
+  "district": "Leh",
+  "latitude": 35.88075,
+  "longitude": 76.51259,
+  "elevation": 8571,
+  "difficulty": "Extreme",
+  "season": "June - September"
+ },
+ {
+  "id": 42,
+  "name": "Peak 8,104 m",
+  "district": "Leh",
+  "latitude": 35.23865,
+  "longitude": 74.58953,
+  "elevation": 8104,
+  "difficulty": "Extreme",
+  "season": "June - September"
+ },
+ {
+  "id": 43,
+  "name": "Peak 8,040 m",
+  "district": "Leh",
+  "latitude": 35.82047,
+  "longitude": 76.56459,
+  "elevation": 8040,
+  "difficulty": "Extreme",
+  "season": "June - September"
+ },
+ {
+  "id": 44,
+  "name": "Peak 7,994 m",
+  "district": "Leh",
+  "latitude": 35.72509,
+  "longitude": 76.69845,
+  "elevation": 7994,
+  "difficulty": "Extreme",
+  "season": "June - September"
+ },
+ {
+  "id": 45,
+  "name": "Peak 6,361 m",
+  "district": "Leh",
+  "latitude": 32.57499,
+  "longitude": 78.32848,
+  "elevation": 6361,
+  "difficulty": "Extreme",
+  "season": "June - September"
+ },
+ {
+  "id": 46,
+  "name": "Peak 6,181 m",
+  "district": "Leh",
+  "latitude": 32.46433,
+  "longitude": 78.32807,
+  "elevation": 6181,
+  "difficulty": "Extreme",
+  "season": "June - September"
+ },
+ {
+  "id": 47,
+  "name": "Peak 1,602 m",
+  "district": "Mirpur",
+  "latitude": 33.59369,
+  "longitude": 74.08623,
+  "elevation": 1602,
+  "difficulty": "Easy",
+  "season": "Year-round"
+ },
+ {
+  "id": 48,
+  "name": "Peak 1,580 m",
+  "district": "Mirpur",
+  "latitude": 33.47884,
+  "longitude": 74.05526,
+  "elevation": 1580,
+  "difficulty": "Easy",
+  "season": "Year-round"
+ },
+ {
+  "id": 49,
+  "name": "Peak 1,557 m",
+  "district": "Mirpur",
+  "latitude": 33.3872,
+  "longitude": 74.07572,
+  "elevation": 1557,
+  "difficulty": "Easy",
+  "season": "Year-round"
+ },
+ {
+  "id": 50,
+  "name": "Peak 6,114 m",
+  "district": "Muzaffarabad",
+  "latitude": 35.1062,
+  "longitude": 74.464,
+  "elevation": 6114,
+  "difficulty": "Extreme",
+  "season": "June - September"
+ },
+ {
+  "id": 51,
+  "name": "Peak 5,714 m",
+  "district": "Muzaffarabad",
+  "latitude": 35.09577,
+  "longitude": 74.51044,
+  "elevation": 5714,
+  "difficulty": "Extreme",
+  "season": "June - September"
+ },
+ {
+  "id": 52,
+  "name": "Peak 5,710 m",
+  "district": "Muzaffarabad",
+  "latitude": 35.10369,
+  "longitude": 74.42364,
+  "elevation": 5710,
+  "difficulty": "Extreme",
+  "season": "June - September"
+ },
+ {
+  "id": 53,
+  "name": "Peak 4,725 m",
+  "district": "Poonch",
+  "latitude": 33.68022,
+  "longitude": 74.54002,
+  "elevation": 4725,
+  "difficulty": "Extreme",
+  "season": "June - September"
+ },
+ {
+  "id": 54,
+  "name": "Peak 4,685 m",
+  "district": "Poonch",
+  "latitude": 33.70476,
+  "longitude": 74.51599,
+  "elevation": 4685,
+  "difficulty": "Extreme",
+  "season": "June - September"
+ },
+ {
+  "id": 55,
+  "name": "Peak 4,351 m",
+  "district": "Pulwama",
+  "latitude": 34.04936,
+  "longitude": 75.21525,
+  "elevation": 4351,
+  "difficulty": "Difficult",
+  "season": "May - October"
+ },
+ {
+  "id": 56,
+  "name": "Peak 4,287 m",
+  "district": "Pulwama",
+  "latitude": 34.09432,
+  "longitude": 75.14306,
+  "elevation": 4287,
+  "difficulty": "Difficult",
+  "season": "May - October"
+ },
+ {
+  "id": 57,
+  "name": "Peak 4,160 m",
+  "district": "Pulwama",
+  "latitude": 34.02573,
+  "longitude": 75.23481,
+  "elevation": 4160,
+  "difficulty": "Difficult",
+  "season": "May - October"
+ },
+ {
+  "id": 58,
+  "name": "Peak 4,280 m",
+  "district": "Rajauri",
+  "latitude": 33.50457,
+  "longitude": 74.58738,
+  "elevation": 4280,
+  "difficulty": "Difficult",
+  "season": "May - October"
+ },
+ {
+  "id": 59,
+  "name": "Peak 4,504 m",
+  "district": "Ramban",
+  "latitude": 33.41294,
+  "longitude": 75.01237,
+  "elevation": 4504,
+  "difficulty": "Extreme",
+  "season": "June - September"
+ },
+ {
+  "id": 60,
+  "name": "Peak 4,366 m",
+  "district": "Ramban",
+  "latitude": 33.43965,
+  "longitude": 75.03588,
+  "elevation": 4366,
+  "difficulty": "Difficult",
+  "season": "May - October"
+ },
+ {
+  "id": 61,
+  "name": "Peak 4,453 m",
+  "district": "Riasi",
+  "latitude": 33.47484,
+  "longitude": 74.85889,
+  "elevation": 4453,
+  "difficulty": "Difficult",
+  "season": "May - October"
+ },
+ {
+  "id": 62,
+  "name": "Peak 4,391 m",
+  "district": "Riasi",
+  "latitude": 33.52488,
+  "longitude": 74.70803,
+  "elevation": 4391,
+  "difficulty": "Difficult",
+  "season": "May - October"
+ },
+ {
+  "id": 63,
+  "name": "Peak 4,321 m",
+  "district": "Shopian",
+  "latitude": 33.69488,
+  "longitude": 74.57716,
+  "elevation": 4321,
+  "difficulty": "Difficult",
+  "season": "May - October"
+ },
+ {
+  "id": 64,
+  "name": "Peak 2,005 m",
+  "district": "Srinagar",
+  "latitude": 34.07599,
+  "longitude": 74.94734,
+  "elevation": 2005,
+  "difficulty": "Easy",
+  "season": "Year-round"
+ },
+ {
+  "id": 65,
+  "name": "Peak 1,884 m",
+  "district": "Srinagar",
+  "latitude": 34.07927,
+  "longitude": 74.84388,
+  "elevation": 1884,
+  "difficulty": "Easy",
+  "season": "Year-round"
+ },
+ {
+  "id": 66,
+  "name": "Peak 1,744 m",
+  "district": "Srinagar",
+  "latitude": 34.10594,
+  "longitude": 74.81671,
+  "elevation": 1744,
+  "difficulty": "Easy",
+  "season": "Year-round"
+ },
+ {
+  "id": 67,
+  "name": "Peak 1,712 m",
+  "district": "Srinagar",
+  "latitude": 34.10239,
+  "longitude": 74.88155,
+  "elevation": 1712,
+  "difficulty": "Easy",
+  "season": "Year-round"
+ },
+ {
+  "id": 68,
+  "name": "Peak 1,682 m",
+  "district": "Srinagar",
+  "latitude": 34.15816,
+  "longitude": 74.91235,
+  "elevation": 1682,
+  "difficulty": "Easy",
+  "season": "Year-round"
+ },
+ {
+  "id": 69,
+  "name": "Peak 4,302 m",
+  "district": "Udhampur",
+  "latitude": 32.86752,
+  "longitude": 75.68099,
+  "elevation": 4302,
+  "difficulty": "Difficult",
+  "season": "May - October"
+ },
+ {
+  "id": 70,
+  "name": "Peak 1,181 m",
+  "district": "Udhampur",
+  "latitude": 32.81718,
+  "longitude": 75.12592,
+  "elevation": 1181,
+  "difficulty": "Easy",
+  "season": "Year-round"
+ }
+]

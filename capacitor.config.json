@@ -1,0 +1,17 @@
+{
+  "appId": "com.jktrek.explorer",
+  "appName": "JKL Trekker",
+  "webDir": "web",
+  "android": {
+    "backgroundColor": "#020617",
+    "useLegacyBridge": true
+  },
+  "plugins": {
+    "FirebaseAuthentication": {
+      "skipNativeAuth": true,
+      "providers": [
+        "google.com"
+      ]
+    }
+  }
+}

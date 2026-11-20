@@ -1,0 +1,12 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">JKL Trekker</string>
+    <string name="title_activity_main">JKL Trekker</string>
+    <string name="package_name">com.jktrek.explorer</string>
+    <string name="custom_url_scheme">com.jktrek.explorer</string>
+
+    <!-- Background GPS notification (capacitor-community/background-geolocation) -->
+    <string name="capacitor_background_geolocation_notification_channel_name">Track recording</string>
+    <string name="capacitor_background_geolocation_notification_icon">drawable/ic_tracking</string>
+    <string name="capacitor_background_geolocation_notification_color">#10b981</string>
+</resources>

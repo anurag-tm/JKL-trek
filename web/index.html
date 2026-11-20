@@ -1,0 +1,992 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="theme-color" content="#020617">
+    <meta name="description" content="JKL Trekker - Discover and plan mountain treks in Jammu & Kashmir and Ladakh">
+    <title>JKL Trekker</title>
+    <link rel="manifest" href="manifest.json">
+    <link rel="icon" type="image/png" href="assets/icons/icon-192.png">
+    <link rel="apple-touch-icon" href="assets/icons/icon-192.png">
+
+    <!-- Leaflet is bundled locally so the map works offline -->
+    <link rel="stylesheet" href="vendor/leaflet/leaflet.css">
+    <script src="vendor/leaflet/leaflet.js"></script>
+    <script src="config.js"></script>
+
+    <!-- Optional online features. The app still works if these fail to load. -->
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js" defer></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js" defer></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.119.2/dist/umd/supabase.js" defer></script>
+
+    <style>
+        :root {
+            --bg: #020617;
+            --card: #0f172a;
+            --card-hover: #1e293b;
+            --border: #334155;
+            --text: #f8fafc;
+            --muted: #94a3b8;
+            --accent: #10b981;
+            --danger: #ef4444;
+            --warn: #f59e0b;
+            /* Capacitor (Android app) sets --safe-area-inset-*; browsers use env() */
+            --safe-top: var(--safe-area-inset-top, env(safe-area-inset-top, 0px));
+            --safe-bottom: var(--safe-area-inset-bottom, env(safe-area-inset-bottom, 0px));
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        html, body {
+            width: 100%; height: 100%;
+            font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+            background: var(--bg); color: var(--text); overflow: hidden;
+        }
+        button { font-family: inherit; cursor: pointer; }
+        .app-container { display: flex; flex-direction: column; height: 100vh; height: 100dvh; }
+
+        .header { padding: calc(10px + var(--safe-top)) 16px 10px; border-bottom: 1px solid var(--border); }
+        .header-content { display: flex; justify-content: space-between; align-items: center; }
+        .header h1 { font-size: 18px; font-weight: 800; }
+        .net-dot { display: inline-block; width: 8px; height: 8px; border-radius: 4px; background: var(--accent); margin-left: 6px; vertical-align: middle; }
+        .net-dot.off { background: var(--warn); }
+        #user-mini { display: none; align-items: center; gap: 8px; font-size: 12px; font-weight: 600; }
+        #user-mini img { width: 28px; height: 28px; border-radius: 14px; object-fit: cover; }
+
+        .tabs { display: flex; padding: 2px 4px; border-bottom: 1px solid var(--border); }
+        .tab-btn {
+            flex: 1; padding: 12px 2px; border: none; background: transparent; color: var(--muted);
+            font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .03em;
+        }
+        .tab-btn.active { color: var(--accent); box-shadow: inset 0 -2px 0 var(--accent); }
+
+        .content { flex: 1; position: relative; overflow: hidden; }
+        .tab-content { display: none; position: absolute; inset: 0; flex-direction: column; }
+        .tab-content.active { display: flex; }
+        #map, #map-trail { width: 100%; height: 100%; background: #0b1220; }
+
+        .map-fab { position: absolute; right: 14px; bottom: calc(24px + var(--safe-bottom)); z-index: 1000; display: flex; flex-direction: column; gap: 12px; }
+        .fab-btn {
+            width: 50px; height: 50px; border-radius: 25px; background: var(--accent); color: #020617;
+            border: none; box-shadow: 0 4px 12px rgba(0,0,0,.5); font-size: 20px;
+            display: flex; align-items: center; justify-content: center;
+        }
+
+        .scroll-container { padding: 16px; overflow-y: auto; height: 100%; }
+        .card-section { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 16px; margin-bottom: 16px; }
+        .card-section h3 { font-size: 11px; color: var(--accent); text-transform: uppercase; letter-spacing: .1em; margin-bottom: 10px; }
+        .custom-input {
+            width: 100%; padding: 12px; background: var(--bg); border: 1px solid var(--border);
+            border-radius: 12px; color: var(--text); font: inherit; margin-bottom: 14px;
+        }
+        .muted { color: var(--muted); font-size: 13px; }
+
+        .peak-card {
+            display: block; width: 100%; text-align: left; color: var(--text);
+            background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 12px 14px; margin-bottom: 10px;
+        }
+        .peak-card:active { background: var(--card-hover); }
+        .peak-name { font-weight: 700; font-size: 15px; margin-bottom: 4px; }
+        .peak-meta { display: flex; flex-wrap: wrap; gap: 12px; font-size: 12px; color: var(--muted); }
+
+        .trail-hud { position: absolute; top: 12px; left: 12px; right: 64px; z-index: 1000; display: flex; flex-wrap: wrap; gap: 8px; pointer-events: none; }
+        .hud-btn {
+            padding: 9px 13px; border-radius: 12px; background: rgba(15,23,42,.92); border: 1px solid var(--border);
+            color: var(--text); font-weight: 700; font-size: 12px; pointer-events: auto; display: inline-flex; align-items: center; gap: 6px;
+        }
+        .hud-btn.accent, .hud-btn.on { background: var(--accent); color: #020617; border-color: var(--accent); }
+        .hud-btn.recording { background: var(--danger); color: #fff; border-color: var(--danger); }
+        .hud-btn.danger { color: var(--danger); }
+        .hud-btn:disabled { opacity: .45; }
+        .track-stats {
+            position: absolute; left: 12px; right: 76px; bottom: calc(34px + var(--safe-bottom)); z-index: 1000;
+            display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px;
+            background: rgba(15,23,42,.92); border: 1px solid var(--border); border-radius: 14px; padding: 10px;
+        }
+        .track-stats div { text-align: center; }
+        .track-stats b { display: block; font-size: 15px; }
+        .track-stats span { font-size: 10px; color: var(--muted); text-transform: uppercase; }
+
+        .feed-item { background: var(--bg); border-radius: 14px; overflow: hidden; margin-bottom: 14px; border: 1px solid var(--border); }
+        .feed-img { width: 100%; aspect-ratio: 4/3; object-fit: cover; background: #1e293b; display: block; }
+        .feed-info { padding: 10px 12px; }
+        .feed-user { font-weight: 800; font-size: 14px; }
+        .feed-loc { font-size: 11px; color: var(--accent); }
+        .feed-time { font-size: 10px; color: var(--muted); margin-top: 4px; }
+
+        .profile-avatar { width: 88px; height: 88px; border-radius: 44px; background: var(--accent); margin: 0 auto 14px; overflow: hidden; display: flex; align-items: center; justify-content: center; font-size: 40px; border: 4px solid var(--border); }
+        .profile-avatar img { width: 100%; height: 100%; object-fit: cover; }
+        .wide { width: 100%; justify-content: center; margin-top: 10px; }
+
+        .loading-overlay { position: fixed; inset: 0; background: var(--bg); z-index: 9999; display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 16px; }
+        .spinner { width: 40px; height: 40px; border: 4px solid var(--border); border-top-color: var(--accent); border-radius: 50%; animation: spin 1s linear infinite; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        .toast-container { position: fixed; bottom: calc(96px + var(--safe-bottom)); left: 16px; right: 16px; z-index: 2000; display: flex; flex-direction: column; gap: 8px; pointer-events: none; }
+        .toast { padding: 12px 14px; border-radius: 12px; background: var(--card); border-left: 4px solid var(--accent); font-size: 13px; box-shadow: 0 8px 24px rgba(0,0,0,.35); animation: slideIn .25s ease-out; }
+        .toast.danger { border-left-color: var(--danger); }
+        .toast.muted { border-left-color: var(--warn); }
+        @keyframes slideIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+
+        /* Leaflet popups in the dark theme */
+        .leaflet-popup-content-wrapper, .leaflet-popup-tip { background: var(--card); color: var(--text); }
+        .leaflet-popup-content { margin: 12px 14px; font-size: 13px; }
+        .leaflet-container a.leaflet-popup-close-button { color: var(--muted); }
+        .popup-title { color: var(--accent); font-weight: 800; font-size: 15px; margin-bottom: 6px; }
+        .detail-line { display: flex; justify-content: space-between; gap: 16px; padding: 3px 0; border-bottom: 1px solid rgba(255,255,255,.06); }
+        .detail-line span:first-child { color: var(--muted); }
+        .popup-actions { display: flex; gap: 6px; margin-top: 10px; }
+        .popup-actions a, .popup-actions button {
+            flex: 1; text-align: center; padding: 7px 8px; border-radius: 10px; font-size: 12px; font-weight: 700;
+            background: var(--accent); color: #020617 !important; border: none; text-decoration: none;
+        }
+        .popup-actions .secondary { background: var(--card-hover); color: var(--text) !important; }
+        .peak-label { background: transparent; border: none; box-shadow: none; color: #fff; font-weight: 700; font-size: 11px; text-shadow: 0 0 3px #000, 0 0 3px #000; }
+        .peak-label::before { display: none; }
+    </style>
+</head>
+<body>
+    <div id="loading" class="loading-overlay">
+        <div class="spinner"></div>
+        <p>Loading map…</p>
+    </div>
+
+    <div class="app-container">
+        <header class="header">
+            <div class="header-content">
+                <h1>🏔️ JKL Trekker<span id="net-dot" class="net-dot" title="Online"></span></h1>
+                <div id="user-mini"><span id="header-user-name"></span><img id="header-avatar" alt="" referrerpolicy="no-referrer"></div>
+            </div>
+        </header>
+
+        <nav class="tabs">
+            <button class="tab-btn active" data-tab="map">Map</button>
+            <button class="tab-btn" data-tab="explore">Explore</button>
+            <button class="tab-btn" data-tab="trail">Track</button>
+            <button class="tab-btn" data-tab="community">Community</button>
+            <button class="tab-btn" data-tab="profile">Profile</button>
+        </nav>
+
+        <main class="content">
+            <section class="tab-content active" id="map-tab">
+                <div id="map"></div>
+                <div class="map-fab"><button class="fab-btn" id="gps-btn" title="Show my location">📍</button></div>
+            </section>
+
+            <section class="tab-content" id="explore-tab">
+                <div class="scroll-container">
+                    <div class="card-section">
+                        <h3>District</h3>
+                        <select id="district-select" class="custom-input">
+                            <option value="">All of J&amp;K and Ladakh</option>
+                        </select>
+                        <h3>Minimum elevation</h3>
+                        <div style="display:flex; align-items:center; gap:12px;">
+                            <input id="elev-min-slider" type="range" min="0" max="7000" step="100" value="2500" style="flex:1; accent-color:var(--accent);">
+                            <span id="elev-val" style="font-weight:800; min-width:72px; color:var(--accent);">2,500 m+</span>
+                        </div>
+                        <p class="muted" style="margin-top:10px;">Summits are extracted automatically from a 30 m DEM. Difficulty is based on altitude only, not on route conditions.</p>
+                    </div>
+                    <p id="peaks-count" class="muted" style="margin:0 4px 10px;"></p>
+                    <div id="peaks-list"></div>
+                </div>
+            </section>
+
+            <section class="tab-content" id="trail-tab">
+                <div class="trail-hud">
+                    <button class="hud-btn" id="record-btn">● Record GPS</button>
+                    <button class="hud-btn" id="draw-btn">✏️ Draw</button>
+                    <button class="hud-btn" id="undo-btn">↩️ Undo</button>
+                    <button class="hud-btn danger" id="clear-btn">🗑️ Clear</button>
+                    <button class="hud-btn" id="gpx-btn">⬇️ GPX</button>
+                </div>
+                <div id="map-trail"></div>
+                <div class="track-stats">
+                    <div><b id="st-dist">0.00</b><span>km</span></div>
+                    <div><b id="st-gain">0</b><span>m gain</span></div>
+                    <div><b id="st-alt">–</b><span>m alt</span></div>
+                    <div><b id="st-time">0:00</b><span>time</span></div>
+                </div>
+                <div class="map-fab"><button class="fab-btn" id="photo-btn" title="Share a photo">📸</button></div>
+            </section>
+
+            <section class="tab-content" id="community-tab">
+                <div class="scroll-container">
+                    <div class="card-section">
+                        <h3>Community Treks</h3>
+                        <div id="community-feed"><p class="muted" style="text-align:center; padding:20px;">Loading…</p></div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="tab-content" id="profile-tab">
+                <div class="scroll-container">
+                    <div class="card-section" style="text-align:center;">
+                        <div class="profile-avatar" id="main-avatar">👤</div>
+                        <h2 id="profile-name">Guest Explorer</h2>
+                        <p id="profile-bio" class="muted" style="margin:6px 0 10px;">Sign in with Google to share photos with the community.</p>
+                        <button class="hud-btn accent wide" id="login-btn">Sign in with Google</button>
+                        <button class="hud-btn wide" id="logout-btn" style="display:none;">Sign out</button>
+                    </div>
+                    <div id="offline-status" class="card-section" style="display:none;">
+                        <h3>Waiting to upload</h3>
+                        <p id="pending-count" class="muted">0 photos</p>
+                        <button class="hud-btn wide" id="sync-btn">Upload now</button>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <div class="toast-container" id="toast-container"></div>
+
+    <script>
+    'use strict';
+
+    const CFG = window.APP_CONFIG;
+    const $ = id => document.getElementById(id);
+    const TRACK_KEY = 'jkl_track_v2';
+
+    // Running inside the Android app (Capacitor)? Then use native plugins when present.
+    const NATIVE = !!(window.Capacitor && Capacitor.isNativePlatform && Capacitor.isNativePlatform());
+    const nativePlugin = name => (NATIVE && Capacitor.isPluginAvailable(name)) ? Capacitor.registerPlugin(name) : null;
+    const BgGeo = nativePlugin('BackgroundGeolocation');          // GPS that keeps running with the screen off
+    const NativeAuth = nativePlugin('FirebaseAuthentication');    // optional native Google sign-in
+
+    /* ---------- small helpers ---------- */
+    function el(tag, props = {}, children = []) {
+        const node = document.createElement(tag);
+        for (const [k, v] of Object.entries(props)) {
+            if (k === 'class') node.className = v;
+            else if (k === 'text') node.textContent = v;
+            else if (k.startsWith('on')) node.addEventListener(k.slice(2), v);
+            else node.setAttribute(k, v);
+        }
+        for (const c of [].concat(children)) if (c) node.append(c);
+        return node;
+    }
+    const fmtInt = n => Math.round(n).toLocaleString('en-IN');
+    function haversine(a, b) {
+        const R = 6371e3, rad = Math.PI / 180;
+        const dLat = (b.lat - a.lat) * rad, dLng = (b.lng - a.lng) * rad;
+        const h = Math.sin(dLat / 2) ** 2 + Math.cos(a.lat * rad) * Math.cos(b.lat * rad) * Math.sin(dLng / 2) ** 2;
+        return 2 * R * Math.asin(Math.sqrt(h));
+    }
+    function fmtDuration(ms) {
+        const s = Math.floor(ms / 1000), h = Math.floor(s / 3600), m = Math.floor((s % 3600) / 60);
+        return h ? `${h}:${String(m).padStart(2, '0')}` : `${m}:${String(s % 60).padStart(2, '0')}`;
+    }
+    function getPosition(timeout = 15000) {
+        return new Promise((resolve, reject) => {
+            if (!navigator.geolocation) return reject(new Error('GPS not supported'));
+            navigator.geolocation.getCurrentPosition(resolve, reject, { enableHighAccuracy: true, timeout, maximumAge: 60000 });
+        });
+    }
+
+    /* ---------- photo queue in IndexedDB (localStorage is too small for photos) ---------- */
+    const PhotoQueue = {
+        db: null,
+        open() {
+            if (this.db) return Promise.resolve(this.db);
+            return new Promise((resolve, reject) => {
+                const req = indexedDB.open('jkl-trekker', 1);
+                req.onupgradeneeded = () => req.result.createObjectStore('uploads', { keyPath: 'id', autoIncrement: true });
+                req.onsuccess = () => resolve(this.db = req.result);
+                req.onerror = () => reject(req.error);
+            });
+        },
+        async run(mode, fn) {
+            const db = await this.open();
+            return new Promise((resolve, reject) => {
+                const tx = db.transaction('uploads', mode);
+                const req = fn(tx.objectStore('uploads'));
+                tx.oncomplete = () => resolve(req && req.result);
+                tx.onerror = () => reject(tx.error);
+            });
+        },
+        add(item) { return this.run('readwrite', s => s.add(item)); },
+        all() { return this.run('readonly', s => s.getAll()); },
+        remove(id) { return this.run('readwrite', s => s.delete(id)); }
+    };
+
+    /* Shrink a camera photo to max 1600 px JPEG so uploads are fast on mountain networks. */
+    async function compressImage(file, maxSide = 1600, quality = 0.8) {
+        try {
+            const bmp = await createImageBitmap(file);
+            const scale = Math.min(1, maxSide / Math.max(bmp.width, bmp.height));
+            const canvas = el('canvas');
+            canvas.width = Math.round(bmp.width * scale);
+            canvas.height = Math.round(bmp.height * scale);
+            canvas.getContext('2d').drawImage(bmp, 0, 0, canvas.width, canvas.height);
+            return await new Promise(r => canvas.toBlob(r, 'image/jpeg', quality)) || file;
+        } catch (e) {
+            return file; // unsupported format: upload as is
+        }
+    }
+
+    class JKTrekApp {
+        constructor() {
+            this.peaks = [];
+            this.peakLayer = null;
+            this.markersById = new Map();
+            this.boundaryLayer = null;
+            this.user = null;
+            this.firebaseReady = false;
+            this.supabase = null;
+            this.syncing = false;
+            this.track = { points: [], startedAt: null, recording: false, drawing: false, watchId: null };
+            this.wakeLock = null;
+            this.meMarker = null;
+            this.meCircle = null;
+        }
+
+        async init() {
+            try {
+                this.setupUI();
+                this.initMaps();
+                await this.loadData();
+                this.restoreTrack();
+                this.updateNetStatus();
+                this.registerServiceWorker();
+                await this.initOnlineServices();
+                await this.refreshQueueUI();
+            } catch (e) {
+                console.error(e);
+                this.toast('Something went wrong while loading: ' + e.message, 'danger');
+            } finally {
+                $('loading').style.display = 'none';
+                this.map && this.map.invalidateSize();
+            }
+        }
+
+        /* ---------- UI wiring ---------- */
+        setupUI() {
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.addEventListener('click', () => this.switchTab(btn.dataset.tab)));
+            $('gps-btn').onclick = () => this.centerOnLocation();
+            $('district-select').onchange = () => this.applyFilters(true);
+            $('elev-min-slider').oninput = () => this.applyFilters(false);
+
+            $('record-btn').onclick = () => this.track.recording ? this.stopRecording() : this.startRecording();
+            $('draw-btn').onclick = () => this.toggleDrawing();
+            $('undo-btn').onclick = () => this.undoPoint();
+            $('clear-btn').onclick = () => this.clearTrack();
+            $('gpx-btn').onclick = () => this.exportGPX();
+            $('photo-btn').onclick = () => this.capturePhoto();
+
+            $('login-btn').onclick = () => this.signIn();
+            $('logout-btn').onclick = () => {
+                if (NativeAuth) NativeAuth.signOut().catch(() => {});
+                if (this.firebaseReady) firebase.auth().signOut();
+            };
+            $('sync-btn').onclick = () => this.syncQueue(true);
+
+            window.addEventListener('online', () => { this.updateNetStatus(); this.toast('Back online'); this.syncQueue(); });
+            window.addEventListener('offline', () => { this.updateNetStatus(); this.toast('Offline — map, peaks and tracking still work', 'muted'); });
+            document.addEventListener('visibilitychange', () => {
+                if (document.visibilityState === 'visible' && this.track.recording) this.requestWakeLock();
+            });
+        }
+
+        switchTab(name) {
+            document.querySelectorAll('.tab-content, .tab-btn').forEach(n => n.classList.remove('active'));
+            $(`${name}-tab`).classList.add('active');
+            document.querySelector(`[data-tab="${name}"]`).classList.add('active');
+            requestAnimationFrame(() => {
+                this.map.invalidateSize();
+                this.mapTrail.invalidateSize();
+                // A hidden map has no size, so set the Track view the first time it is shown.
+                if (name === 'trail' && !this.trailViewSet) {
+                    this.trailViewSet = true;
+                    if (this.track.points.length > 1) this.mapTrail.fitBounds(this.trackLine.getBounds(), { padding: [40, 40] });
+                    else if (this.regionBounds) this.mapTrail.fitBounds(this.regionBounds);
+                }
+            });
+            if (name === 'community') this.loadCommunityFeed();
+        }
+
+        toast(msg, type = 'accent') {
+            const t = el('div', { class: `toast ${type}`, text: msg });
+            $('toast-container').append(t);
+            setTimeout(() => t.remove(), 4000);
+        }
+
+        updateNetStatus() {
+            $('net-dot').classList.toggle('off', !navigator.onLine);
+            $('net-dot').title = navigator.onLine ? 'Online' : 'Offline';
+        }
+
+        /* ---------- maps ---------- */
+        baseLayers() {
+            return {
+                'Satellite': L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+                    maxZoom: 18, attribution: 'Imagery &copy; Esri, Maxar, Earthstar Geographics'
+                }),
+                'Topo': L.tileLayer('https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png', {
+                    maxZoom: 17, subdomains: 'abc',
+                    attribution: '&copy; OpenStreetMap contributors, SRTM | &copy; OpenTopoMap (CC-BY-SA)'
+                }),
+                'Streets': L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                    maxZoom: 19, attribution: '&copy; OpenStreetMap contributors'
+                })
+            };
+        }
+
+        initMaps() {
+            const view = [CFG.mapCenter, CFG.mapZoom];
+
+            const base = this.baseLayers();
+            this.map = L.map('map', { zoomControl: false }).setView(...view);
+            base['Topo'].addTo(this.map);
+            L.control.zoom({ position: 'topleft' }).addTo(this.map);
+            L.control.scale({ imperial: false, position: 'bottomleft' }).addTo(this.map);
+            this.peakLayer = L.layerGroup().addTo(this.map);
+            this.layerControl = L.control.layers(base, { 'Peaks': this.peakLayer }, { position: 'topright' }).addTo(this.map);
+
+            const baseTrail = this.baseLayers();
+            this.mapTrail = L.map('map-trail', { zoomControl: false }).setView(...view);
+            baseTrail['Topo'].addTo(this.mapTrail);
+            L.control.layers(baseTrail, null, { position: 'topright' }).addTo(this.mapTrail);
+            L.control.scale({ imperial: false, position: 'bottomleft' }).addTo(this.mapTrail);
+            this.trackLine = L.polyline([], { color: '#10b981', weight: 4 }).addTo(this.mapTrail);
+            this.trackEnd = L.circleMarker([0, 0], { radius: 6, color: '#fff', weight: 2, fillColor: '#10b981', fillOpacity: 1 });
+            this.mapTrail.on('click', e => {
+                if (this.track.drawing) this.addPoint({ lat: e.latlng.lat, lng: e.latlng.lng, ele: null, time: null });
+            });
+        }
+
+        async loadData() {
+            const [peaksRes, bRes] = await Promise.allSettled([
+                fetch('data/peaks.json').then(r => { if (!r.ok) throw new Error(r.status); return r.json(); }),
+                fetch('data/boundaries.json').then(r => { if (!r.ok) throw new Error(r.status); return r.json(); })
+            ]);
+
+            if (bRes.status === 'fulfilled') {
+                this.boundaryLayer = L.geoJSON(bRes.value, {
+                    style: { color: '#10b981', weight: 1.5, fillOpacity: 0, opacity: 0.8 },
+                    onEachFeature: (f, layer) => layer.bindTooltip(f.properties.name, { sticky: true })
+                }).addTo(this.map);
+                this.boundaryLayer.bringToBack();
+                this.regionBounds = this.boundaryLayer.getBounds();
+                this.map.fitBounds(this.regionBounds);
+                this.layerControl.addOverlay(this.boundaryLayer, 'Districts');
+                const names = bRes.value.features.map(f => f.properties.name).sort();
+                names.forEach(n => $('district-select').add(new Option(n, n)));
+            } else {
+                this.toast('District boundaries could not be loaded', 'danger');
+            }
+
+            if (peaksRes.status === 'fulfilled') {
+                this.peaks = peaksRes.value.filter(p =>
+                    Number.isFinite(p.latitude) && Math.abs(p.latitude) <= 90 &&
+                    Number.isFinite(p.longitude) && Math.abs(p.longitude) <= 180);
+            } else {
+                this.toast('Peak data could not be loaded', 'danger');
+            }
+            this.applyFilters(false);
+        }
+
+        applyFilters(zoomToDistrict) {
+            const district = $('district-select').value;
+            const minElev = Number($('elev-min-slider').value);
+            $('elev-val').textContent = `${fmtInt(minElev)} m+`;
+
+            if (this.boundaryLayer) {
+                this.boundaryLayer.eachLayer(layer => {
+                    const sel = layer.feature.properties.name === district;
+                    layer.setStyle(!district ? { weight: 1.5, opacity: 0.8, fillOpacity: 0 }
+                        : sel ? { weight: 3, opacity: 1, fillOpacity: 0.08, fillColor: '#10b981' }
+                              : { weight: 1, opacity: 0.25, fillOpacity: 0 });
+                    if (sel && zoomToDistrict) this.map.fitBounds(layer.getBounds(), { padding: [20, 20] });
+                });
+                if (!district && zoomToDistrict) this.map.fitBounds(this.regionBounds);
+            }
+
+            const list = this.peaks
+                .filter(p => (!district || p.district === district) && p.elevation >= minElev)
+                .sort((a, b) => b.elevation - a.elevation);
+            this.renderPeaks(list);
+        }
+
+        popupFor(p) {
+            const nav = `https://www.google.com/maps/dir/?api=1&destination=${p.latitude},${p.longitude}`;
+            const box = el('div', {}, [
+                el('div', { class: 'popup-title', text: p.name }),
+                ...[['Elevation', `${fmtInt(p.elevation)} m`], ['District', p.district],
+                    ['Altitude class', p.difficulty], ['Best season', p.season],
+                    ['Coordinates', `${p.latitude.toFixed(4)}, ${p.longitude.toFixed(4)}`]]
+                    .map(([k, v]) => el('div', { class: 'detail-line' }, [el('span', { text: k }), el('span', { text: v })])),
+                el('div', { class: 'popup-actions' }, [
+                    el('a', NATIVE ? { href: nav, text: 'Directions' } : { href: nav, target: '_blank', rel: 'noopener', text: 'Directions' }),
+                    el('button', { class: 'secondary', text: 'Plan on Track', onclick: () => this.planTo(p) })
+                ])
+            ]);
+            return box;
+        }
+
+        renderPeaks(peaks) {
+            this.peakLayer.clearLayers();
+            this.markersById.clear();
+            for (const p of peaks) {
+                const m = L.circleMarker([p.latitude, p.longitude], {
+                    radius: 7, color: '#020617', weight: 1.5, fillColor: '#10b981', fillOpacity: 0.95
+                }).bindPopup(() => this.popupFor(p))
+                  .bindTooltip(`${fmtInt(p.elevation)} m`, { permanent: false, direction: 'right', className: 'peak-label' });
+                m.addTo(this.peakLayer);
+                this.markersById.set(p.id, m);
+            }
+
+            $('peaks-count').textContent = `${peaks.length} peak${peaks.length === 1 ? '' : 's'}`;
+            const list = $('peaks-list');
+            list.replaceChildren(...peaks.map(p => el('button', { class: 'peak-card', onclick: () => this.showPeak(p) }, [
+                el('div', { class: 'peak-name', text: p.name }),
+                el('div', { class: 'peak-meta' }, [
+                    el('span', { text: `🏔️ ${fmtInt(p.elevation)} m` }),
+                    el('span', { text: `📍 ${p.district}` }),
+                    el('span', { text: p.difficulty })
+                ])
+            ])));
+            if (!peaks.length) list.append(el('p', { class: 'muted', text: 'No peaks match these filters. Try a lower elevation.' }));
+        }
+
+        showPeak(p) {
+            this.switchTab('map');
+            setTimeout(() => {
+                this.map.flyTo([p.latitude, p.longitude], 12, { duration: 0.8 });
+                this.map.once('moveend', () => { const m = this.markersById.get(p.id); m && m.openPopup(); });
+            }, 50);
+        }
+
+        planTo(p) {
+            this.map.closePopup();
+            this.switchTab('trail');
+            this.trailViewSet = true;
+            setTimeout(() => {
+                this.mapTrail.setView([p.latitude, p.longitude], 12);
+                L.circleMarker([p.latitude, p.longitude], { radius: 8, color: '#f59e0b', weight: 3, fillOpacity: 0 })
+                    .bindTooltip(p.name).addTo(this.mapTrail);
+                this.toast('Tap ✏️ Draw, then tap the map to sketch your route');
+            }, 50);
+        }
+
+        centerOnLocation() {
+            this.toast('Finding your location…');
+            getPosition().then(pos => {
+                const ll = [pos.coords.latitude, pos.coords.longitude];
+                if (!this.meMarker) {
+                    this.meCircle = L.circle(ll, { radius: pos.coords.accuracy, color: '#3b82f6', weight: 1, fillOpacity: 0.15 }).addTo(this.map);
+                    this.meMarker = L.circleMarker(ll, { radius: 7, color: '#fff', weight: 2, fillColor: '#3b82f6', fillOpacity: 1 }).addTo(this.map);
+                } else {
+                    this.meMarker.setLatLng(ll);
+                    this.meCircle.setLatLng(ll).setRadius(pos.coords.accuracy);
+                }
+                this.map.flyTo(ll, 13);
+                const alt = pos.coords.altitude != null ? ` · ${fmtInt(pos.coords.altitude)} m` : '';
+                this.meMarker.bindPopup(`You are here (±${fmtInt(pos.coords.accuracy)} m${alt})`).openPopup();
+            }).catch(e => this.toast(e.code === 1 ? 'Location permission denied' : 'Could not get your location', 'danger'));
+        }
+
+        /* ---------- track recording ---------- */
+        startRecording() {
+            if (!navigator.geolocation) return this.toast('GPS not supported on this device', 'danger');
+            if (this.track.drawing) this.toggleDrawing();
+            this.track.recording = true;
+            this.track.startedAt = this.track.startedAt || Date.now();
+            $('record-btn').textContent = '■ Stop';
+            $('record-btn').classList.add('recording');
+            this.timer = setInterval(() => this.updateStats(), 1000);
+
+            if (BgGeo) {
+                BgGeo.addWatcher({
+                    backgroundTitle: 'JKL Trekker is recording your track',
+                    backgroundMessage: 'Tap to open the app. Stop recording to end tracking.',
+                    requestPermissions: true,
+                    stale: false,
+                    distanceFilter: 5
+                }, (loc, err) => {
+                    if (err) return this.onNativeGpsError(err);
+                    this.onGpsFix({
+                        coords: { latitude: loc.latitude, longitude: loc.longitude, accuracy: loc.accuracy, altitude: loc.altitude },
+                        timestamp: loc.time || Date.now()
+                    });
+                }).then(id => { this.track.watchId = id; });
+                this.toast('Recording — keeps going with the screen off or in other apps.');
+                return;
+            }
+
+            this.track.watchId = navigator.geolocation.watchPosition(
+                pos => this.onGpsFix(pos),
+                err => this.onGpsError(err),
+                { enableHighAccuracy: true, maximumAge: 5000, timeout: 30000 }
+            );
+            this.requestWakeLock();
+            this.toast('Recording. Keep the screen on — phones pause GPS in background browser tabs.');
+        }
+
+        onGpsError(err) {
+            if (err.code === 1) { this.toast('Location permission denied', 'danger'); return this.stopRecording(); }
+            const now = Date.now();
+            if (now - (this.lastGpsWarn || 0) > 30000) { this.lastGpsWarn = now; this.toast('Weak GPS signal — still trying…', 'muted'); }
+        }
+
+        onNativeGpsError(err) {
+            if (err.code === 'NOT_AUTHORIZED') {
+                this.stopRecording();
+                if (confirm('JKL Trekker needs location permission to record tracks. Open settings now?')) BgGeo.openSettings();
+            } else {
+                this.onGpsError({ code: 2 });
+            }
+        }
+
+        stopRecording() {
+            if (BgGeo) { if (this.track.watchId != null) BgGeo.removeWatcher({ id: this.track.watchId }); }
+            else navigator.geolocation.clearWatch(this.track.watchId);
+            this.track.watchId = null;
+            clearInterval(this.timer);
+            this.track.recording = false;
+            $('record-btn').textContent = '● Record GPS';
+            $('record-btn').classList.remove('recording');
+            if (this.wakeLock) { this.wakeLock.release().catch(() => {}); this.wakeLock = null; }
+            this.saveTrack();
+            this.toast('Recording stopped and saved on this device');
+        }
+
+        async requestWakeLock() {
+            try { if ('wakeLock' in navigator) this.wakeLock = await navigator.wakeLock.request('screen'); } catch (e) { /* not critical */ }
+        }
+
+        onGpsFix(pos) {
+            const c = pos.coords;
+            if (c.accuracy > 50) return; // ignore poor fixes
+            const pt = { lat: c.latitude, lng: c.longitude, ele: c.altitude, time: pos.timestamp };
+            const last = this.track.points[this.track.points.length - 1];
+            if (last && haversine(last, pt) < Math.max(5, c.accuracy / 2)) return; // jitter
+            if (!last || this.mapTrail.getZoom() < 13) this.mapTrail.setView([pt.lat, pt.lng], 15);
+            this.addPoint(pt, true);
+        }
+
+        toggleDrawing() {
+            if (this.track.recording) return this.toast('Stop GPS recording first', 'muted');
+            this.track.drawing = !this.track.drawing;
+            $('draw-btn').classList.toggle('on', this.track.drawing);
+            this.toast(this.track.drawing ? 'Draw mode: tap the map to add points' : 'Draw mode off');
+            if (!this.track.drawing) this.saveTrack();
+        }
+
+        addPoint(pt, follow = false) {
+            this.track.points.push(pt);
+            this.redrawTrack();
+            if (follow) this.mapTrail.panTo([pt.lat, pt.lng]);
+            if (NATIVE || this.track.points.length % 10 === 0) this.saveTrack();
+        }
+
+        undoPoint() {
+            if (!this.track.points.length) return;
+            this.track.points.pop();
+            this.redrawTrack();
+            this.saveTrack();
+        }
+
+        clearTrack() {
+            if (!this.track.points.length) return;
+            if (!confirm('Delete the current track?')) return;
+            if (this.track.recording) this.stopRecording();
+            this.track.points = [];
+            this.track.startedAt = null;
+            this.redrawTrack();
+            this.saveTrack();
+            this.toast('Track cleared');
+        }
+
+        redrawTrack() {
+            const pts = this.track.points;
+            this.trackLine.setLatLngs(pts.map(p => [p.lat, p.lng]));
+            if (pts.length) {
+                this.trackEnd.setLatLng([pts[pts.length - 1].lat, pts[pts.length - 1].lng]).addTo(this.mapTrail);
+            } else {
+                this.trackEnd.remove();
+            }
+            this.updateStats();
+        }
+
+        trackStats() {
+            const pts = this.track.points;
+            let dist = 0, gain = 0, lastEle = null;
+            for (let i = 0; i < pts.length; i++) {
+                if (i) dist += haversine(pts[i - 1], pts[i]);
+                const e = pts[i].ele;
+                if (e != null) {
+                    if (lastEle != null && e - lastEle > 3) gain += e - lastEle; // 3 m threshold against GPS noise
+                    if (lastEle == null || Math.abs(e - lastEle) > 3) lastEle = e;
+                }
+            }
+            const last = pts[pts.length - 1];
+            return { dist, gain, alt: last && last.ele != null ? last.ele : null };
+        }
+
+        updateStats() {
+            const s = this.trackStats();
+            $('st-dist').textContent = (s.dist / 1000).toFixed(2);
+            $('st-gain').textContent = fmtInt(s.gain);
+            $('st-alt').textContent = s.alt != null ? fmtInt(s.alt) : '–';
+            $('st-time').textContent = this.track.startedAt && this.track.recording
+                ? fmtDuration(Date.now() - this.track.startedAt)
+                : (this.track.points.length > 1 && this.track.points[0].time
+                    ? fmtDuration(this.track.points[this.track.points.length - 1].time - this.track.points[0].time) : '0:00');
+        }
+
+        saveTrack() {
+            try {
+                localStorage.setItem(TRACK_KEY, JSON.stringify({ points: this.track.points, startedAt: this.track.startedAt }));
+            } catch (e) { this.toast('Could not save track: storage full', 'danger'); }
+        }
+
+        restoreTrack() {
+            try {
+                const saved = JSON.parse(localStorage.getItem(TRACK_KEY) || 'null');
+                if (saved && Array.isArray(saved.points) && saved.points.length) {
+                    this.track.points = saved.points;
+                    this.track.startedAt = saved.startedAt;
+                    this.redrawTrack();
+                }
+            } catch (e) { /* corrupt data: ignore */ }
+        }
+
+        exportGPX() {
+            const pts = this.track.points;
+            if (pts.length < 2) return this.toast('Record or draw a track first', 'muted');
+            const name = `JKL track ${new Date().toISOString().slice(0, 10)}`;
+            const trkpts = pts.map(p => {
+                let s = `      <trkpt lat="${p.lat.toFixed(6)}" lon="${p.lng.toFixed(6)}">`;
+                if (p.ele != null) s += `<ele>${p.ele.toFixed(1)}</ele>`;
+                if (p.time) s += `<time>${new Date(p.time).toISOString()}</time>`;
+                return s + '</trkpt>';
+            }).join('\n');
+            const gpx = `<?xml version="1.0" encoding="UTF-8"?>
+<gpx version="1.1" creator="JKL Trekker" xmlns="http://www.topografix.com/GPX/1/1">
+  <trk><name>${name}</name>
+    <trkseg>
+${trkpts}
+    </trkseg>
+  </trk>
+</gpx>`;
+            const a = el('a', { href: URL.createObjectURL(new Blob([gpx], { type: 'application/gpx+xml' })), download: name.replace(/\s+/g, '_') + '.gpx' });
+            document.body.append(a); a.click(); a.remove();
+            setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+        }
+
+        /* ---------- online services: Firebase auth/Firestore + Supabase storage ---------- */
+        async initOnlineServices() {
+            if (typeof firebase === 'undefined') {
+                $('login-btn').disabled = true;
+                $('profile-bio').textContent = 'Sign-in needs an internet connection. Reopen the app when online.';
+                $('community-feed').replaceChildren(el('p', { class: 'muted', text: 'Community feed is not available offline.' }));
+                return;
+            }
+            try {
+                firebase.initializeApp(CFG.firebase);
+                this.firebaseReady = true;
+                if (typeof supabase !== 'undefined') this.supabase = supabase.createClient(CFG.supabase.url, CFG.supabase.key);
+            } catch (e) {
+                console.error('Firebase init failed', e);
+                return;
+            }
+
+            firebase.auth().onAuthStateChanged(user => {
+                this.user = user;
+                this.updateProfileUI();
+                if (user) this.syncQueue();
+            });
+
+            // Finish a redirect sign-in (used on phones where popups are blocked)
+            if (!NATIVE) firebase.auth().getRedirectResult()
+                .then(r => r && r.user && this.toast(`Welcome, ${r.user.displayName || 'trekker'}!`))
+                .catch(e => this.authError(e));
+
+            this.loadCommunityFeed();
+        }
+
+        async signIn() {
+            if (!this.firebaseReady) return this.toast('Sign-in is not available offline', 'muted');
+            if (NATIVE) {
+                // Google blocks sign-in pages inside app WebViews, so the app needs the native plugin.
+                if (!NativeAuth) return this.toast('Google sign-in in the app needs one extra setup step (see BUILD_ANDROID.md)', 'muted');
+                try {
+                    const r = await NativeAuth.signInWithGoogle();
+                    const cred = firebase.auth.GoogleAuthProvider.credential(r.credential && r.credential.idToken);
+                    await firebase.auth().signInWithCredential(cred);
+                } catch (e) { this.authError(e); }
+                return;
+            }
+            const provider = new firebase.auth.GoogleAuthProvider();
+            firebase.auth().signInWithPopup(provider).catch(e => {
+                if (['auth/popup-blocked', 'auth/operation-not-supported-in-this-environment', 'auth/cancelled-popup-request'].includes(e.code)) {
+                    return firebase.auth().signInWithRedirect(provider);
+                }
+                this.authError(e);
+            });
+        }
+
+        authError(e) {
+            if (!e || e.code === 'auth/popup-closed-by-user') return;
+            const msg = e.code === 'auth/unauthorized-domain'
+                ? 'This website is not in Firebase Authorized domains'
+                : (e.message || 'Sign-in failed');
+            this.toast(msg, 'danger');
+        }
+
+        updateProfileUI() {
+            const u = this.user;
+            const name = (u && (u.displayName || u.email)) || 'Guest Explorer';
+            $('login-btn').style.display = u ? 'none' : 'flex';
+            $('logout-btn').style.display = u ? 'flex' : 'none';
+            $('profile-name').textContent = name;
+            $('profile-bio').textContent = u ? 'Photos you take on the Track tab are shared with the community.' : 'Sign in with Google to share photos with the community.';
+            $('user-mini').style.display = u ? 'flex' : 'none';
+            $('header-user-name').textContent = name.split(' ')[0];
+            const avatar = $('main-avatar');
+            if (u && u.photoURL) {
+                avatar.replaceChildren(el('img', { src: u.photoURL, alt: '', referrerpolicy: 'no-referrer' }));
+                $('header-avatar').src = u.photoURL;
+            } else {
+                avatar.textContent = '👤';
+                $('header-avatar').removeAttribute('src');
+            }
+        }
+
+        capturePhoto() {
+            if (!this.user) {
+                this.toast('Sign in on the Profile tab to share photos', 'muted');
+                return this.switchTab('profile');
+            }
+            const input = el('input', { type: 'file', accept: 'image/*', capture: 'environment' });
+            input.onchange = async () => {
+                const file = input.files[0];
+                if (!file) return;
+                let lat, lng, elev = null;
+                try {
+                    const pos = await getPosition(15000);
+                    ({ latitude: lat, longitude: lng } = pos.coords);
+                    elev = pos.coords.altitude != null ? Math.round(pos.coords.altitude) : null;
+                } catch (e) {
+                    const last = this.track.points[this.track.points.length - 1];
+                    if (!last) return this.toast('Need a GPS fix to tag the photo location', 'danger');
+                    ({ lat, lng } = last); elev = last.ele != null ? Math.round(last.ele) : null;
+                }
+                const blob = await compressImage(file);
+                await PhotoQueue.add({
+                    blob,
+                    meta: { userId: this.user.uid, userName: this.user.displayName || 'Trekker', lat, lng, elev, time: Date.now() }
+                });
+                await this.refreshQueueUI();
+                if (navigator.onLine) this.syncQueue(true);
+                else this.toast('Saved on this device. It will upload when you are back online.');
+            };
+            input.click();
+        }
+
+        async uploadOne(item) {
+            if (!this.supabase) throw new Error('Photo storage not reachable');
+            const path = `${item.meta.userId}/${item.meta.time}.jpg`;
+            const { error } = await this.supabase.storage.from(CFG.supabase.bucket)
+                .upload(path, item.blob, { contentType: 'image/jpeg', upsert: false });
+            if (error) throw error;
+            const { data } = this.supabase.storage.from(CFG.supabase.bucket).getPublicUrl(path);
+            await firebase.firestore().collection('community_treks').add({
+                ...item.meta,
+                imageUrl: data.publicUrl,
+                createdAt: firebase.firestore.FieldValue.serverTimestamp()
+            });
+        }
+
+        async syncQueue(showResult = false) {
+            if (this.syncing || !navigator.onLine || !this.user || !this.firebaseReady) return;
+            this.syncing = true;
+            let done = 0, failed = 0;
+            try {
+                for (const item of await PhotoQueue.all()) {
+                    if (item.meta.userId !== this.user.uid) continue;
+                    try {
+                        this.toast('Uploading photo…');
+                        await this.uploadOne(item);
+                        await PhotoQueue.remove(item.id); // only removed after a successful upload
+                        done++;
+                    } catch (e) {
+                        console.error('Upload failed', e);
+                        failed++;
+                        this.toast('Upload failed: ' + (e.message || e), 'danger');
+                        break; // try again later instead of hammering a bad connection
+                    }
+                }
+            } finally {
+                this.syncing = false;
+                await this.refreshQueueUI();
+            }
+            if (done) { this.toast(`${done} photo${done > 1 ? 's' : ''} shared with the community`); this.loadCommunityFeed(); }
+            else if (showResult && !failed) this.toast('Nothing to upload');
+        }
+
+        async refreshQueueUI() {
+            let n = 0;
+            try { n = (await PhotoQueue.all()).length; } catch (e) { /* IndexedDB blocked (private mode) */ }
+            $('offline-status').style.display = n ? 'block' : 'none';
+            $('pending-count').textContent = `${n} photo${n === 1 ? '' : 's'} waiting`;
+        }
+
+        loadCommunityFeed() {
+            if (!this.firebaseReady) return;
+            const feed = $('community-feed');
+            firebase.firestore().collection('community_treks').orderBy('time', 'desc').limit(30).get()
+                .then(snap => {
+                    if (snap.empty && snap.metadata.fromCache) return feed.replaceChildren(el('p', { class: 'muted', text: 'Could not reach the server. Check your connection.' }));
+                    if (snap.empty) return feed.replaceChildren(el('p', { class: 'muted', text: 'No photos yet. Be the first to share one from the Track tab!' }));
+                    const items = [];
+                    snap.forEach(doc => {
+                        const d = doc.data();
+                        if (typeof d.imageUrl !== 'string' || !d.imageUrl.startsWith(CFG.supabase.url + '/')) return;
+                        const loc = Number.isFinite(d.lat) && Number.isFinite(d.lng) ? `📍 ${d.lat.toFixed(3)}, ${d.lng.toFixed(3)}` : '';
+                        const ele = Number.isFinite(d.elev) ? ` · 🏔️ ${fmtInt(d.elev)} m` : '';
+                        items.push(el('div', { class: 'feed-item' }, [
+                            el('img', { class: 'feed-img', src: d.imageUrl, alt: 'Trek photo', loading: 'lazy' }),
+                            el('div', { class: 'feed-info' }, [
+                                el('div', { class: 'feed-user', text: String(d.userName || 'Trekker').slice(0, 60) }),
+                                el('div', { class: 'feed-loc', text: loc + ele }),
+                                el('div', { class: 'feed-time', text: Number.isFinite(d.time) ? new Date(d.time).toLocaleString() : '' })
+                            ])
+                        ]));
+                    });
+                    feed.replaceChildren(...items);
+                })
+                .catch(e => {
+                    console.error('Feed error', e);
+                    feed.replaceChildren(el('p', { class: 'muted', text: e.code === 'permission-denied'
+                        ? 'Community feed is unavailable (database rules).'
+                        : 'Could not load the community feed. Check your connection.' }));
+                });
+        }
+
+        registerServiceWorker() {
+            if (!('serviceWorker' in navigator) || location.protocol === 'file:') return;
+            navigator.serviceWorker.register('service-worker.js').then(reg => {
+                reg.addEventListener('updatefound', () => {
+                    const nw = reg.installing;
+                    nw && nw.addEventListener('statechange', () => {
+                        if (nw.state === 'installed' && navigator.serviceWorker.controller) {
+                            this.toast('A new version is ready — reopen the app to update');
+                        }
+                    });
+                });
+            }).catch(e => console.warn('Service worker not registered', e));
+        }
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+        if (typeof L === 'undefined') {
+            $('loading').querySelector('p').textContent = 'Map library failed to load. Please reload.';
+            return;
+        }
+        window.app = new JKTrekApp();
+        window.app.init();
+    });
+    </script>
+</body>
+</html>
